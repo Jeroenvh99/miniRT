@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 20:04:50 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/05/17 20:26:45 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/05/18 18:06:06 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 	ray.z = camera.z + factor * (direction.z);
 }*/
 
-double	sp_interfer(t_sphere sphere, t_ray ray)
+double	hit_sphere(t_sphere sphere, t_ray ray)
 {
 	double	a;
 	double	b;
@@ -61,7 +61,7 @@ t_colour	pixel_colour(t_sphere sphere, t_ray ray, t_ambient ambient)
 	//t_colour	sphere_colour;
 	t_colour	result_colour;
 
-	if (sp_interfer(sphere, ray) < 0)
+	if (hit_sphere(sphere, ray) < 0)
 	{
 		//sphere_colour = light_effect(sphere.colour, source.brightness);
 		result_colour = light_effect(sphere.colour, ambient.intensity);
