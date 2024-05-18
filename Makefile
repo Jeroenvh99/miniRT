@@ -17,6 +17,8 @@ SRC_FILES	:= main.c\
 				parse/parse_check_3.c\
 				resize_geometry/resize_geometry.c\
 				resize_geometry/resize_utils.c\
+				sphere.c\
+				vec_operations.c
 
 OBJ_FILES	:= $(patsubst %.c,%.o,$(SRC_FILES))
 HDR_FILES	:= miniRT.h\

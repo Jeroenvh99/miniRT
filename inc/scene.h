@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   scene.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jvan-hal <jvan-hal@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/01/10 14:20:28 by jvan-hal      #+#    #+#                 */
-/*   Updated: 2024/03/20 13:43:45 by jvan-hal      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   scene.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/10 14:20:28 by jvan-hal          #+#    #+#             */
+/*   Updated: 2024/05/17 20:05:21 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ typedef struct s_colour
 
 typedef struct s_ambient
 {
-	unsigned char	ratio;
-	t_colour		colour;
-}					t_ambient;
+	t_colour	colour;
+	double	intensity;
+}	t_ambient;
 
 typedef struct s_camera
 {
@@ -49,10 +49,10 @@ typedef struct s_camera
 
 typedef struct s_lighting
 {
-	t_XYZ			pos;
-	unsigned char	brightness;
-	t_colour		colour;
-}					t_lighting;
+	t_XYZ	direction;
+	t_colour	colour;
+	double	brightness;
+}	t_lighting;
 
 typedef struct s_sphere
 {
@@ -89,6 +89,12 @@ typedef struct s_geometry
 		t_cylinder	*cylinder;
 	} elem;
 }					t_geometry;
+
+typedef struct s_ray
+{
+	t_XYZ	origin;
+	t_XYZ	dir;
+}	t_ray;
 
 typedef struct s_scene
 {

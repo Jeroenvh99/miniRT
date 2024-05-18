@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   setup_scene.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jvan-hal <jvan-hal@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/01/10 14:22:01 by jvan-hal      #+#    #+#                 */
-/*   Updated: 2024/03/20 13:52:06 by jvan-hal      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   setup_scene.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/10 14:22:01 by jvan-hal          #+#    #+#             */
+/*   Updated: 2024/05/17 20:02:48 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_scene	*initscene(void)
 	if (!scene)
 		exit(1);
 	scene->isresized = 0;
-	scene->amb.ratio = 101;
+	scene->amb.intensity = 101;
 	scene->cam.fov = 181;
 	scene->lighting.list = NULL;
 	scene->geometry.list = NULL;
@@ -161,17 +161,17 @@ int	checklightcollision(t_scene *scene)
 		{
 			geom = (t_geometry *)geometry->content;
 			if (ft_strncmp(geom->elemtype, "sphere", 7) == 0
-				&& spherecollision(&spot->pos, geom->elem.sphere))
+				&& spherecollision(&spot->direction, geom->elem.sphere))
 			{
 				return (1);
 			}
 			else if (ft_strncmp(geom->elemtype, "plane", 6) == 0
-				&& planecollission(&spot->pos, geom->elem.plane))
+				&& planecollission(&spot->direction, geom->elem.plane))
 			{
 				return (1);
 			}
 			else if (ft_strncmp(geom->elemtype, "cylinder", 9) == 0
-				&& cylindercollission(&spot->pos, geom->elem.cylinder))
+				&& cylindercollission(&spot->direction, geom->elem.cylinder))
 			{
 				return (1);
 			}
@@ -184,7 +184,7 @@ int	checklightcollision(t_scene *scene)
 
 int	checkscene(t_scene *scene)
 {
-	if (scene->amb.ratio == 101)
+	if (scene->amb.intensity == 101)
 	{
 		write(2, "Error\nThe scene doesn't contain ambient lighting\n", 49);
 		return (0);
