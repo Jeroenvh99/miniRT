@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 20:04:50 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/05/18 18:06:06 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/05/20 16:02:49 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,18 @@ double	hit_sphere(t_sphere sphere, t_ray ray)
 		return (-1.0);
 	sol1 = (-b - sqrt(delta) / (2.0 * a));
 	sol2 = (-b + sqrt(delta) / (2.0 * a));
-	if (sol1 > sol2)
-		sol1 = sol2;
-	if (sol1 < 0)
+	if (sol1 > 0 && sol2 > 0)
+	{
+		if (sol1 > sol2)
+			sol1 = sol2;
+		return (sol1);
+	}
+	else if (sol1 > 0)
+		return (sol1);
+	else if (sol2 > 0)
+		return (sol2);
+	else
 		return (-1.0);
-	return (sol1);
 }
 
 t_colour	light_effect(t_colour colour, double intensity)
@@ -106,7 +113,7 @@ uint32_t pack_colour(t_colour colour)
 {
 	return (colour.red >> 16 | colour.green >> 8 | colour.blue);
 }
-void	draw_sphere(t_rt *rt)
+void	draw_sphere(t_rt *rt, t_sphere sphere)
 {
 	int	x;
 	int	y;
@@ -121,10 +128,62 @@ void	draw_sphere(t_rt *rt)
 		{
 			ray.origin = rt->scene->cam.pos;
 			ray.dir = ray_castor(rt->scene->cam, x, y, rt->width, rt->height);
-			colour = pixel_colour(rt->scene->geometry.sphere, ray, rt->scene->amb);
+			colour = pixel_colour(sphere, ray, rt->scene->amb);
 			mlx_put_pixel(rt->image, x, y, pack_colour(colour));
 			x++;
 		}
 		y++;
 	}
 }
+
+/*#include <math.h>
+#include <stdint.h>
+
+// Define your existing structures and vector operations here
+
+uint32_t pixel_colour(t_sphere sphere, t_ray ray, t_ambient ambient, t_light light) {
+    t_colour result_colour = {0, 0, 0};
+    double t = hit_sphere(sphere, ray);
+    if (t >= 0) {
+        t_XYZ intersection = vec_addition(ray.origin, vec_multiplication(t, ray.dir));
+        t_XYZ normal = norm_vec(vec_subtraction(intersection, sphere.centre));
+        t_XYZ light_dir = norm_vec(vec_subtraction(light.position, intersection));
+        t_XYZ view_dir = norm_vec(vec_subtraction(ray.origin, intersection));
+        t_XYZ reflect_dir = vec_subtraction(vec_multiplication(2.0 * dot_vec(normal, light_dir), normal), light_dir);
+
+        // Ambient component
+        double ambient_component = ambient.ratio;
+        t_colour ambient_color = {
+            (uint8_t)(sphere.colour.red * ambient_component * (ambient.colour.red / 255.0)),
+            (uint8_t)(sphere.colour.green * ambient_component * (ambient.colour.green / 255.0)),
+            (uint8_t)(sphere.colour.blue * ambient_component * (ambient.colour.blue / 255.0))
+        };
+
+        // Diffuse component
+        double diffuse = max(0.0, dot_vec(normal, light_dir)) * light.intensity;
+        t_colour diffuse_color = {
+            (uint8_t)(sphere.colour.red * diffuse * (light.colour.red / 255.0)),
+            (uint8_t)(sphere.colour.green * diffuse * (light.colour.green / 255.0)),
+            (uint8_t)(sphere.colour.blue * diffuse * (light.colour.blue / 255.0))
+        };
+
+        // Specular component
+        double shininess = 32.0;  // Adjust shininess factor as needed
+        double specular = pow(max(0.0, dot_vec(view_dir, reflect_dir)), shininess) * light.intensity;
+        t_colour specular_color = {
+            (uint8_t)(255 * specular * (light.colour.red / 255.0)),
+            (uint8_t)(255 * specular * (light.colour.green / 255.0)),
+            (uint8_t)(255 * specular * (light.colour.blue / 255.0))
+        };
+
+        // Combine components and clamp values to [0, 255]
+        result_colour.red = min(255, ambient_color.red + diffuse_color.red + specular_color.red);
+        result_colour.green = min(255, ambient_color.green + diffuse_color.green + specular_color.green);
+        result_colour.blue = min(255, ambient_color.blue + diffuse_color.blue + specular_color.blue);
+    }
+
+    // Pack the color components into a single uint32_t
+    return ((uint32_t)result_colour.red << 16) | ((uint32_t)result_colour.green << 8) | (uint32_t)result_colour.blue;
+}
+
+// Include other required functions and definitions here*/

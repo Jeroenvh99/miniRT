@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:20:05 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/05/17 19:58:53 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/05/20 16:03:19 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,6 @@ void			changecolour(t_colour *colour);
 void			set_resize(mlx_key_data_t keydata, void *rt);
 
 // draw functions
-void	draw_sphere(t_rt *rt);
+void	draw_sphere(t_rt *rt, t_sphere sphere);
 
 #endif
