@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <stdio.h>
+
 void	set_pixel_colour(uint8_t *pixels, t_colour *colour)
 {
 	*(pixels++) = (uint8_t)(colour->red);
@@ -44,34 +46,6 @@ void	buildcamtransform(t_rt *rt)
 	rt->camtransform[2][2] = forward->z;
 }
 
-// void	draw_objects(t_rt *rt)
-// {
-// 	int			y;
-// 	t_colour	*colour;
-// 	int			x;
-// 	t_hit		*hit;
-
-// 	y = 0;
-// 	colour = &rt->scene->amb.colour;
-// 	while (y < rt->height)
-// 	{
-// 		x = 0;
-// 		while (x < rt->width)
-// 		{
-// 			hit = get_nearest_obj(rt);
-// 			// ray.x = (2.0 * (x + 0.5) / (float)rt->width - 1.0)
-// 			// 	* rt->aspectratio;
-// 			// ray.y = (1.0 - 2.0 * (y + 0.5) / (float)rt->height);
-// 			// ray.z = 1.0;
-// 			// hit = get_nearest_obj(ray, rt);
-// 			set_pixel_colour(rt->image->pixels + ((x + (y * rt->width)) * 4),
-// 				colour);
-// 			++x;
-// 		}
-// 		++y;
-// 	}
-// }
-
 void	write_scene(t_scene *scene)
 {
 	int	fd;
@@ -79,6 +53,21 @@ void	write_scene(t_scene *scene)
 	fd = open(scene->filename, O_RDONLY | O_WRONLY | O_TRUNC);
 	print_scene(fd, scene);
 	close(fd);
+}
+
+void	draw_objects(t_rt *rt)
+{
+	t_geometry **objects = rt->scene->geometry.array;
+	int i = 0;
+	while (i < rt->scene->geomsize)
+	{
+		if (!ft_strncmp(objects[i]->elemtype, "sphere", 7))
+		{
+			printf("here");
+			draw_sphere(rt, *(objects[i]->elem.sphere));
+		}
+		++i;
+	}
 }
 
 void	init_rt(t_rt *rt)
@@ -91,8 +80,8 @@ void	init_rt(t_rt *rt)
 		rt->aspectratio = rt->height / rt->width;
 	rt->mlx = mlx_init(rt->width, rt->height, "miniRT", false);
 	rt->image = mlx_new_image(rt->mlx, rt->width, rt->height);
+	draw_objects(rt);
 	mlx_image_to_window(rt->mlx, rt->image, 0, 0);
-	// draw_objects(rt);
 }
 
 void	exit_rt(t_rt *rt)

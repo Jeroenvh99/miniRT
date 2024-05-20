@@ -27,7 +27,6 @@ int	main(int argc, char **argv)
 	}
 	build_arrays(rt.scene);
 	init_rt(&rt);
-	draw_sphere(&rt);
 	mlx_key_hook(rt.mlx, set_resize, &rt);
 	mlx_loop(rt.mlx);
 	exit_rt(&rt);
