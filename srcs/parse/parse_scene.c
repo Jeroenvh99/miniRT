@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   parse_scene.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jvan-hal <jvan-hal@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/01/12 13:16:25 by jvan-hal      #+#    #+#                 */
-/*   Updated: 2024/03/20 13:56:17 by jvan-hal      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   parse_scene.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/12 13:16:25 by jvan-hal          #+#    #+#             */
+/*   Updated: 2024/05/17 20:00:27 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	parseambient(t_scene *scene, char *line)
 {
 	char	**parts;
 
-	if (scene->amb.ratio <= 100)
+	if (scene->amb.intensity <= 100)
 	{
 		write(2, "Error\nAmbient lighting is already defined\n", 42);
 		return (0);
@@ -32,7 +32,7 @@ static int	parseambient(t_scene *scene, char *line)
 		free_split(parts);
 		return (0);
 	}
-	scene->amb.ratio = ft_atof(parts[1]) * 100;
+	scene->amb.intensity = ft_atof(parts[1]);
 	parse_colour(parts[2], &scene->amb.colour);
 	free_split(parts);
 	return (1);
@@ -72,8 +72,8 @@ static int	parselight(t_scene *scene, char *line)
 		free_split(parts);
 		return (0);
 	}
-	parse_xyz(parts[1], &spot->pos);
-	spot->brightness = ft_atof(parts[2]) * 100;
+	parse_xyz(parts[1], &spot->direction);
+	spot->brightness = ft_atof(parts[2]);
 	parse_colour(parts[3], &spot->colour);
 	ft_lstadd_back(&scene->lighting.list, ft_lstnew(spot));
 	free_split(parts);

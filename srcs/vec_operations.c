@@ -6,11 +6,11 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 19:33:23 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/05/16 20:40:31 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/05/20 16:01:42 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
+#include "miniRT.h"
 
 t_XYZ	vec_addition(t_XYZ vec1, t_XYZ vec2)
 {

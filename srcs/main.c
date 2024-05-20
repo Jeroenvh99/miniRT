@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jvan-hal <jvan-hal@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/01/08 18:23:54 by jvan-hal      #+#    #+#                 */
-/*   Updated: 2024/02/07 15:22:28 by jvan-hal      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/08 18:23:54 by jvan-hal          #+#    #+#             */
+/*   Updated: 2024/05/20 16:16:22 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(int argc, char **argv)
 	}
 	build_arrays(rt.scene);
 	init_rt(&rt);
+	draw_sphere(&rt);
 	mlx_key_hook(rt.mlx, set_resize, &rt);
 	mlx_loop(rt.mlx);
 	exit_rt(&rt);

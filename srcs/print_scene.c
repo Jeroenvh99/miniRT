@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   print_scene.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jvan-hal <jvan-hal@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/01/11 13:02:18 by jvan-hal      #+#    #+#                 */
-/*   Updated: 2024/03/20 13:59:28 by jvan-hal      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   print_scene.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/11 13:02:18 by jvan-hal          #+#    #+#             */
+/*   Updated: 2024/05/17 20:06:51 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static void	print_lighting(int fd, t_lighting **lights)
 	{
 		light = *lights;
 		dprintf(fd, "L ");
-		print_XYZ(fd, &light->pos);
-		dprintf(fd, " %i ", light->brightness);
+		print_XYZ(fd, &light->direction);
+		dprintf(fd, " %f ", light->brightness);
 		print_colour(fd, &light->colour);
 		dprintf(fd, "\n");
 		++lights;
@@ -95,9 +95,9 @@ void	print_geometry(int fd, t_geometry **arr)
 
 void	print_scene(int fd, t_scene *scene)
 {
-	if (scene->amb.ratio <= 100)
+	if (scene->amb.intensity <= 100)
 	{
-		dprintf(fd, "A %i ", scene->amb.ratio);
+		dprintf(fd, "A %f ", scene->amb.intensity);
 		print_colour(fd, &scene->amb.colour);
 		dprintf(fd, "\n");
 	}
