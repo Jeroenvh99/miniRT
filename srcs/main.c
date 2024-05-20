@@ -11,13 +11,17 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
+#include <unistd.h>
 
 int	main(int argc, char **argv)
 {
 	t_rt	rt;
 
 	if (argc != 2)
+	{
+		write(2, "Please provide a scene to render\n", 33);
 		return (1);
+	}
 	rt.scene = initscene();
 	readscene(rt.scene, argv[1]);
 	if (checkscene(rt.scene) == 0)
