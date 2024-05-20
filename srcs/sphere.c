@@ -113,6 +113,7 @@ uint32_t pack_colour(t_colour colour)
 {
 	return (colour.red << 24 | colour.green << 16 | colour.blue << 8 | 0xff);
 }
+
 void	draw_sphere(t_rt *rt, t_sphere sphere)
 {
 	int	x;
