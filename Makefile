@@ -18,7 +18,8 @@ SRC_FILES	:= main.c\
 				resize_geometry/resize_geometry.c\
 				resize_geometry/resize_utils.c\
 				sphere.c\
-				vec_operations.c
+				vec_operations.c\
+				vec_operations_2.c
 
 OBJ_FILES	:= $(patsubst %.c,%.o,$(SRC_FILES))
 HDR_FILES	:= miniRT.h\
@@ -36,7 +37,7 @@ OBJ_SUBDIRS := $(SRC_SUBDIRS)
 HDR_DIR		:= ./inc/
 LIB_DIR		:= ./lib/
 
-CFLAGS		+= -Wall -Wextra -Werror -I$(LIB_DIR)libft/ -I$(LIB_DIR)MLX42/include/MLX42 -I$(HDR_DIR) -g -fsanitize=address
+CFLAGS		+= -Wall -Wextra -Werror -I$(LIB_DIR)libft/ -I$(LIB_DIR)MLX42/include/MLX42 -I$(HDR_DIR) -g
 
 .PHONY: all bonus clean fclean re
 

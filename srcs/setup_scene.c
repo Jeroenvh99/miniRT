@@ -106,7 +106,7 @@ int	planecollission(t_XYZ *lightpos, t_plane *plane)
 	}
 	right = (lightpos->x * plane->normal.x + lightpos->y * plane->normal.y
 			+ lightpos->z * plane->normal.z);
-	left = dot_prod(&plane->point, &plane->normal);
+	left = dot_vec(plane->point, plane->normal);
 	if (right >= left * 0.99 && right <= left * 1.01)
 	{
 		return (1);
