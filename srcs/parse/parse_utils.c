@@ -27,8 +27,8 @@ void	tabtospace(char *str)
 	while (*str)
 	{
 		if (*str == '\t')
-		++str;
 			*str = ' ';
+		++str;
 	}
 }
 

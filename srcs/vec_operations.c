@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
+#include <math.h>
 
 t_XYZ	vec_addition(t_XYZ vec1, t_XYZ vec2)
 {
