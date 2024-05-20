@@ -15,8 +15,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <stdio.h>
-
 void	set_pixel_colour(uint8_t *pixels, t_colour *colour)
 {
 	*(pixels++) = (uint8_t)(colour->red);
@@ -61,11 +59,18 @@ void	draw_objects(t_rt *rt)
 	int i = 0;
 	while (i < rt->scene->geomsize)
 	{
-		if (!ft_strncmp(objects[i]->elemtype, "sphere", 7))
+		if (ft_strncmp(objects[i]->elemtype, "sphere", 7) == 0)
 		{
-			printf("here");
 			draw_sphere(rt, *(objects[i]->elem.sphere));
 		}
+		// else if (!ft_strncmp(objects[i]->elemtype, "cylinder", 9))
+		// {
+		// 	draw_cylinder(rt, *(objects[i]->elem.cylinder));
+		// }
+		// else if (!ft_strncmp(objects[i]->elemtype, "plane", 6))
+		// {
+		// 	draw_plane(rt, *(objects[i]->elem.plane));
+		// }
 		++i;
 	}
 }
@@ -79,9 +84,16 @@ void	init_rt(t_rt *rt)
 	else
 		rt->aspectratio = rt->height / rt->width;
 	rt->mlx = mlx_init(rt->width, rt->height, "miniRT", false);
+	if (!rt->mlx)
+	{
+		exit(1);
+	}
 	rt->image = mlx_new_image(rt->mlx, rt->width, rt->height);
+	if (!rt->image || mlx_image_to_window(rt->mlx, rt->image, 0, 0) < 0)
+	{
+		exit(1);
+	}
 	draw_objects(rt);
-	mlx_image_to_window(rt->mlx, rt->image, 0, 0);
 }
 
 void	exit_rt(t_rt *rt)

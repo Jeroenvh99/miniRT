@@ -59,6 +59,7 @@ void			changecolour(t_colour *colour);
 void			set_resize(mlx_key_data_t keydata, void *rt);
 
 // draw functions
+void	draw_objects(t_rt *rt);
 void	draw_sphere(t_rt *rt, t_sphere sphere);
 
 #endif
