@@ -32,7 +32,7 @@ int	parsesphere(t_scene *scene, char *line)
 	sphere->diameter = ft_atof(parts[2]);
 	sphere->radius = sphere->diameter * 0.5;
 	parse_colour(parts[3], &sphere->colour);
-	geom->elemtype = ft_strdup("sphere");
+	geom->elemtype = 1;
 	geom->elem.sphere = sphere;
 	ft_lstadd_back(&scene->geometry.list, ft_lstnew(geom));
 	free_split(parts);
@@ -56,7 +56,7 @@ int	parseplane(t_scene *scene, char *line)
 	parse_xyz(parts[1], &plane->point);
 	parse_xyz(parts[2], &plane->normal);
 	parse_colour(parts[3], &plane->colour);
-	geom->elemtype = ft_strdup("plane");
+	geom->elemtype = 2;
 	geom->elem.plane = plane;
 	ft_lstadd_back(&scene->geometry.list, ft_lstnew(geom));
 	free_split(parts);
@@ -83,7 +83,7 @@ int	parsecylinder(t_scene *scene, char *line)
 	cylinder->radius = cylinder->diameter * 0.5;
 	cylinder->height = ft_atof(parts[4]);
 	parse_colour(parts[5], &cylinder->colour);
-	geom->elemtype = ft_strdup("cylinder");
+	geom->elemtype = 3;
 	geom->elem.cylinder = cylinder;
 	ft_lstadd_back(&scene->geometry.list, ft_lstnew(geom));
 	free_split(parts);

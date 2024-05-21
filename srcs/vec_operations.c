@@ -13,6 +13,16 @@
 #include "miniRT.h"
 #include <math.h>
 
+t_XYZ	vector(double x, double y, double z)
+{
+	t_XYZ	vec;
+
+	vec.x = x;
+	vec.y = y;
+	vec.z = z;
+	return (vec);
+}
+
 double	dot_vec(t_XYZ vec1, t_XYZ vec2)
 {
 	double	res;

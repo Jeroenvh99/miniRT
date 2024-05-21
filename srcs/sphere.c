@@ -56,7 +56,6 @@ double	hit_sphere(t_sphere sphere, t_ray ray)
 
 /*t_colour	pixel_colour(t_sphere sphere, t_ray ray)
 {
-	//t_colour	sphere_colour;
 	t_colour	result_colour;
 
 	if (hit_sphere(sphere, ray) > 0)
@@ -228,7 +227,7 @@ t_colour	pixel_colour(t_sphere sphere, t_ray ray, t_ambient ambient, t_lighting 
 	double t;
 	t = hit_sphere(sphere, ray);
 	if (t < 0)
-		return ((t_colour){0, 0, 0});
+		return ((t_colour){256, 256, 256});
 	else
 	{
 		t_XYZ hit_point = vec_addition(ray.origin, vec_multiplication(t, ray.dir));
@@ -265,7 +264,10 @@ void	draw_sphere(t_rt *rt, t_sphere sphere)
 		{
 			ray = ray_launcher(rt, ray, x, y);
 			colour = pixel_colour(sphere, ray, rt->scene->amb, *(rt->scene->lighting.array[0]), SHINE);
-			mlx_put_pixel(rt->image, x, y, pack_colour(colour));
+			if (colour.red < 256 && colour.blue < 256 && colour.green < 256)
+			{
+				mlx_put_pixel(rt->image, x, y, pack_colour(colour));
+			}
 			x++;
 		}
 		y++;

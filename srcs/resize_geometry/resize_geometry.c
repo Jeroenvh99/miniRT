@@ -117,18 +117,16 @@ void	resize_elements(t_rt *rt)
 			i = ft_atoi(num);
 			free(num);
 		}
-		printf("Element type: %s\n", rt->scene->geometry.array[i]->elemtype);
-		if (ft_strncmp(rt->scene->geometry.array[i]->elemtype, "plane", 6) == 0)
+		printf("Element type: %i\n 1 = sphere, 2 = plane, 3 = cylinder\n", rt->scene->geometry.array[i]->elemtype);
+		if (rt->scene->geometry.array[i]->elemtype == 2)
 		{
 			resize_plane(rt->scene->geometry.array[i]->elem.plane);
 		}
-		else if (ft_strncmp(rt->scene->geometry.array[i]->elemtype, "sphere",
-				7) == 0)
+		else if (rt->scene->geometry.array[i]->elemtype == 1)
 		{
 			resize_sphere(rt->scene->geometry.array[i]->elem.sphere);
 		}
-		else if (ft_strncmp(rt->scene->geometry.array[i]->elemtype, "cylinder",
-				9) == 0)
+		else if (rt->scene->geometry.array[i]->elemtype == 3)
 		{
 			resize_cylinder(rt->scene->geometry.array[i]->elem.cylinder);
 		}
