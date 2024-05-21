@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:20:05 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/05/20 16:03:19 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/05/21 15:47:41 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "debug.h"
 # include "libft.h"
 # include "scene.h"
+# define SHINE 50
 
 typedef struct s_rt
 {
@@ -48,6 +49,9 @@ double	dot_vec(t_XYZ vec1, t_XYZ vec2);
 t_XYZ	cross_vec(t_XYZ vec1, t_XYZ vec2);
 double	mag_vec(t_XYZ vector);
 t_XYZ	norm_vec(t_XYZ vector);
+t_XYZ	vec_packer(double x, double y, double z);
+t_ray	ray_launcher(t_rt *rt, t_ray ray, double x, double y);
+void	default_matrix(t_rt *rt);
 
 // resize geometry functions
 void			resize_elements(t_rt *rt);

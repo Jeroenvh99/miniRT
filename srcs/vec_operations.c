@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 19:33:23 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/05/20 16:01:42 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/05/21 15:02:52 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,15 @@ t_XYZ	norm_vec(t_XYZ vector)
 	res.x = vector.x / mag_vec(vector);
 	res.y = vector.y / mag_vec(vector);
 	res.z = vector.z / mag_vec(vector);
+	return (res);
+}
+
+t_XYZ	vec_packer(double x, double y, double z)
+{
+	t_XYZ	res;
+
+	res.x = x;
+	res.y = y;
+	res.z = z;
 	return (res);
 }

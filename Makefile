@@ -18,7 +18,8 @@ SRC_FILES	:= main.c\
 				resize_geometry/resize_geometry.c\
 				resize_geometry/resize_utils.c\
 				sphere.c\
-				vec_operations.c
+				vec_operations.c\
+				ray_launcher.c
 
 OBJ_FILES	:= $(patsubst %.c,%.o,$(SRC_FILES))
 HDR_FILES	:= miniRT.h\
