@@ -28,9 +28,9 @@ typedef struct s_XYZ
 
 typedef struct s_colour
 {
-	unsigned char	red;
-	unsigned char	green;
-	unsigned char	blue;
+	unsigned int	red;
+	unsigned int	green;
+	unsigned int	blue;
 }					t_colour;
 
 typedef struct s_ambient
