@@ -65,12 +65,10 @@ t_colour	light_effect(t_colour colour, double intensity)
 
 t_colour	pixel_colour(t_sphere sphere, t_ray ray, t_ambient ambient)
 {
-	//t_colour	sphere_colour;
 	t_colour	result_colour;
 
 	if (hit_sphere(sphere, ray) < 0)
 	{
-		//sphere_colour = light_effect(sphere.colour, source.brightness);
 		result_colour = light_effect(sphere.colour, ambient.intensity);
 	}
 	else

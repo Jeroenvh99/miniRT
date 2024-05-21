@@ -1,27 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   vector_utils.c                                     :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jvan-hal <jvan-hal@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/01/19 15:59:23 by jvan-hal      #+#    #+#                 */
-/*   Updated: 2024/01/30 12:15:44 by jvan-hal      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   vec_operations.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 19:33:23 by sjeddi            #+#    #+#             */
+/*   Updated: 2024/05/20 16:01:42 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include <math.h>
-
-t_XYZ	vector(double x, double y, double z)
-{
-	t_XYZ	vec;
-
-	vec.x = x;
-	vec.y = y;
-	vec.z = z;
-	return (vec);
-}
 
 int	same_point(t_XYZ *p1, t_XYZ *p2)
 {

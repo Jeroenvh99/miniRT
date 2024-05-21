@@ -33,13 +33,8 @@ void			exit_rt(t_rt *rt);
 
 // vector functions
 t_XYZ			vector(double x, double y, double z);
-t_XYZ			vec_subtract(t_XYZ *v1, t_XYZ *v2);
-double			veclen(t_XYZ *vec);
 double			distance(t_XYZ *p1, t_XYZ *p2);
 double			distancetoline(t_XYZ *p, t_XYZ *linepoint, t_XYZ *dir);
-t_XYZ			cross_prod(t_XYZ *v1, t_XYZ *v2);
-double			dot_prod(t_XYZ *p1, t_XYZ *p2);
-t_XYZ			*normalize(t_XYZ *vec);
 int				same_point(t_XYZ *p1, t_XYZ *p2);
 t_XYZ			vec_addition(t_XYZ vec1, t_XYZ vec2);
 t_XYZ			vec_multiplication(double factor, t_XYZ vector);

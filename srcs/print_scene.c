@@ -77,15 +77,15 @@ void	print_geometry(int fd, t_geometry **arr)
 	while (*arr)
 	{
 		geom = *arr;
-		if (ft_strncmp(geom->elemtype, "sphere", 7) == 0)
+		if (geom->elemtype == 1)
 		{
 			print_sphere(fd, geom->elem.sphere);
 		}
-		else if (ft_strncmp(geom->elemtype, "plane", 6) == 0)
+		else if (geom->elemtype == 2)
 		{
 			print_plane(fd, geom->elem.plane);
 		}
-		else if (ft_strncmp(geom->elemtype, "cylinder", 9) == 0)
+		else if (geom->elemtype == 3)
 		{
 			print_cylinder(fd, geom->elem.cylinder);
 		}

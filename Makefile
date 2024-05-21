@@ -6,7 +6,6 @@ SRC_FILES	:= main.c\
 				setup_scene.c\
 				print_scene.c\
 				init.c\
-				vector_utils.c\
 				hooks.c\
 				parse/parse_geometry.c\
 				parse/parse_scene.c\
@@ -19,7 +18,8 @@ SRC_FILES	:= main.c\
 				resize_geometry/resize_utils.c\
 				sphere.c\
 				vec_operations.c\
-				vec_operations_2.c
+				vec_operations_2.c\
+				vec_operations_3.c
 
 OBJ_FILES	:= $(patsubst %.c,%.o,$(SRC_FILES))
 HDR_FILES	:= miniRT.h\

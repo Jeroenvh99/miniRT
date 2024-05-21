@@ -81,7 +81,7 @@ typedef struct s_cylinder
 
 typedef struct s_geometry
 {
-	char			*elemtype;
+	int			elemtype;
 	union			u_elem
 	{
 		t_sphere	*sphere;

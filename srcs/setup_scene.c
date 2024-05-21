@@ -43,19 +43,18 @@ void	free_geom(void *geometry)
 	t_geometry	*geom;
 
 	geom = (t_geometry *)geometry;
-	if (ft_strncmp(geom->elemtype, "sphere", 7) == 0)
+	if (geom->elemtype == 1)
 	{
 		free(geom->elem.sphere);
 	}
-	else if (ft_strncmp(geom->elemtype, "plane", 6) == 0)
+	else if (geom->elemtype == 2)
 	{
 		free(geom->elem.plane);
 	}
-	else if (ft_strncmp(geom->elemtype, "cylinder", 9) == 0)
+	else if (geom->elemtype == 3)
 	{
 		free(geom->elem.cylinder);
 	}
-	free(geom->elemtype);
 	free(geom);
 }
 
@@ -160,17 +159,17 @@ int	checklightcollision(t_scene *scene)
 		while (geometry)
 		{
 			geom = (t_geometry *)geometry->content;
-			if (ft_strncmp(geom->elemtype, "sphere", 7) == 0
+			if (geom->elemtype == 1
 				&& spherecollision(&spot->direction, geom->elem.sphere))
 			{
 				return (1);
 			}
-			else if (ft_strncmp(geom->elemtype, "plane", 6) == 0
+			else if (geom->elemtype == 2
 				&& planecollission(&spot->direction, geom->elem.plane))
 			{
 				return (1);
 			}
-			else if (ft_strncmp(geom->elemtype, "cylinder", 9) == 0
+			else if (geom->elemtype == 3
 				&& cylindercollission(&spot->direction, geom->elem.cylinder))
 			{
 				return (1);

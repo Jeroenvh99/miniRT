@@ -51,15 +51,15 @@ void	draw_objects(t_rt *rt)
 	int i = 0;
 	while (i < rt->scene->geomsize)
 	{
-		if (ft_strncmp(objects[i]->elemtype, "sphere", 7) == 0)
+		if (objects[i]->elemtype == 1)
 		{
 			draw_sphere(rt, *(objects[i]->elem.sphere));
 		}
-		// else if (!ft_strncmp(objects[i]->elemtype, "cylinder", 9))
+		// else if (objects[i]->elemtype == 2)
 		// {
 		// 	draw_cylinder(rt, *(objects[i]->elem.cylinder));
 		// }
-		// else if (!ft_strncmp(objects[i]->elemtype, "plane", 6))
+		// else if (objects[i]->elemtype == 3)
 		// {
 		// 	draw_plane(rt, *(objects[i]->elem.plane));
 		// }
