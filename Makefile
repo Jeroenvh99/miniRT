@@ -19,7 +19,8 @@ SRC_FILES	:= main.c\
 				sphere.c\
 				vec_operations.c\
 				vec_operations_2.c\
-				vec_operations_3.c
+				vec_operations_3.c\
+				ray_launcher.c
 
 OBJ_FILES	:= $(patsubst %.c,%.o,$(SRC_FILES))
 HDR_FILES	:= miniRT.h\
