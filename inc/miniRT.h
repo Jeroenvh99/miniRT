@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:20:05 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/05/20 16:03:19 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/05/21 18:23:47 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "debug.h"
 # include "libft.h"
 # include "scene.h"
+# define SHINE 50
 
 typedef struct s_rt
 {
@@ -41,13 +42,13 @@ t_XYZ			cross_prod(t_XYZ *v1, t_XYZ *v2);
 double			dot_prod(t_XYZ *p1, t_XYZ *p2);
 t_XYZ			*normalize(t_XYZ *vec);
 int				same_point(t_XYZ *p1, t_XYZ *p2);
-t_XYZ	vec_addition(t_XYZ vec1, t_XYZ vec2);
-t_XYZ	vec_multiplication(double factor, t_XYZ vector);
-t_XYZ	vec_subtraction(t_XYZ vec1, t_XYZ vec2);
-double	dot_vec(t_XYZ vec1, t_XYZ vec2);
-t_XYZ	cross_vec(t_XYZ vec1, t_XYZ vec2);
-double	mag_vec(t_XYZ vector);
-t_XYZ	norm_vec(t_XYZ vector);
+t_XYZ			vec_addition(t_XYZ vec1, t_XYZ vec2);
+t_XYZ			vec_multiplication(double factor, t_XYZ vector);
+t_XYZ			vec_subtraction(t_XYZ vec1, t_XYZ vec2);
+double			dot_vec(t_XYZ vec1, t_XYZ vec2);
+t_XYZ			cross_vec(t_XYZ vec1, t_XYZ vec2);
+double			mag_vec(t_XYZ vector);
+t_XYZ			norm_vec(t_XYZ vector);
 
 // resize geometry functions
 void			resize_elements(t_rt *rt);
@@ -59,6 +60,8 @@ void			changecolour(t_colour *colour);
 void			set_resize(mlx_key_data_t keydata, void *rt);
 
 // draw functions
-void	draw_sphere(t_rt *rt, t_sphere sphere);
+void			draw_objects(t_rt *rt);
+void			draw_sphere(t_rt *rt, t_sphere sphere);
+t_ray			ray_launcher(t_rt *rt, t_ray ray, double x, double y);
 
 #endif

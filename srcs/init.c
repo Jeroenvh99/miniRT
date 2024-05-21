@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   init.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jvan-hal <jvan-hal@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/01/17 15:40:24 by jvan-hal      #+#    #+#                 */
-/*   Updated: 2024/03/20 14:03:54 by jvan-hal      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/17 15:40:24 by jvan-hal          #+#    #+#             */
+/*   Updated: 2024/05/21 12:36:34 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include <stdio.h>
-
-void	set_pixel_colour(uint8_t *pixels, t_colour *colour)
-{
-	*(pixels++) = (uint8_t)(colour->red);
-	*(pixels++) = (uint8_t)(colour->green);
-	*(pixels++) = (uint8_t)(colour->blue);
-	*(pixels++) = (uint8_t)(0xFF);
-}
-
 void	buildcamtransform(t_rt *rt)
 {
 	t_XYZ	*forward;
@@ -32,9 +22,9 @@ void	buildcamtransform(t_rt *rt)
 	t_XYZ right, up, tmp;
 	tmp = vector(0, 1, 0);
 	forward = &rt->scene->cam.viewdirection;
-	forward = normalize(forward);
-	right = cross_prod(&tmp, forward);
-	up = cross_prod(forward, &right);
+	*forward = norm_vec(*forward);
+	right = cross_vec(tmp, *forward);
+	up = cross_vec(*forward, right);
 	rt->camtransform[0][0] = right.x;
 	rt->camtransform[0][1] = right.y;
 	rt->camtransform[0][2] = right.z;
@@ -61,11 +51,18 @@ void	draw_objects(t_rt *rt)
 	int i = 0;
 	while (i < rt->scene->geomsize)
 	{
-		if (!ft_strncmp(objects[i]->elemtype, "sphere", 7))
+		if (ft_strncmp(objects[i]->elemtype, "sphere", 7) == 0)
 		{
-			printf("here");
 			draw_sphere(rt, *(objects[i]->elem.sphere));
 		}
+		// else if (!ft_strncmp(objects[i]->elemtype, "cylinder", 9))
+		// {
+		// 	draw_cylinder(rt, *(objects[i]->elem.cylinder));
+		// }
+		// else if (!ft_strncmp(objects[i]->elemtype, "plane", 6))
+		// {
+		// 	draw_plane(rt, *(objects[i]->elem.plane));
+		// }
 		++i;
 	}
 }
@@ -79,9 +76,16 @@ void	init_rt(t_rt *rt)
 	else
 		rt->aspectratio = rt->height / rt->width;
 	rt->mlx = mlx_init(rt->width, rt->height, "miniRT", false);
+	if (!rt->mlx)
+	{
+		exit(1);
+	}
 	rt->image = mlx_new_image(rt->mlx, rt->width, rt->height);
-	draw_objects(rt);
-	mlx_image_to_window(rt->mlx, rt->image, 0, 0);
+	if (!rt->image || mlx_image_to_window(rt->mlx, rt->image, 0, 0) < 0)
+	{
+		mlx_terminate(rt->mlx);
+		exit(1);
+	}
 }
 
 void	exit_rt(t_rt *rt)
@@ -100,4 +104,5 @@ void	exit_rt(t_rt *rt)
 		free(res);
 	}
 	free_scene(rt->scene, 1);
+	exit(1);
 }
