@@ -15,14 +15,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	set_pixel_colour(uint8_t *pixels, t_colour *colour)
-{
-	*(pixels++) = (uint8_t)(colour->red);
-	*(pixels++) = (uint8_t)(colour->green);
-	*(pixels++) = (uint8_t)(colour->blue);
-	*(pixels++) = (uint8_t)(0xFF);
-}
-
 void	buildcamtransform(t_rt *rt)
 {
 	t_XYZ	*forward;
@@ -30,9 +22,9 @@ void	buildcamtransform(t_rt *rt)
 	t_XYZ right, up, tmp;
 	tmp = vector(0, 1, 0);
 	forward = &rt->scene->cam.viewdirection;
-	forward = normalize(forward);
-	right = cross_prod(&tmp, forward);
-	up = cross_prod(forward, &right);
+	*forward = norm_vec(*forward);
+	right = cross_vec(tmp, *forward);
+	up = cross_vec(*forward, right);
 	rt->camtransform[0][0] = right.x;
 	rt->camtransform[0][1] = right.y;
 	rt->camtransform[0][2] = right.z;
@@ -91,9 +83,9 @@ void	init_rt(t_rt *rt)
 	rt->image = mlx_new_image(rt->mlx, rt->width, rt->height);
 	if (!rt->image || mlx_image_to_window(rt->mlx, rt->image, 0, 0) < 0)
 	{
+		mlx_terminate(rt->mlx);
 		exit(1);
 	}
-	draw_objects(rt);
 }
 
 void	exit_rt(t_rt *rt)
@@ -112,4 +104,5 @@ void	exit_rt(t_rt *rt)
 		free(res);
 	}
 	free_scene(rt->scene, 1);
+	exit(1);
 }
