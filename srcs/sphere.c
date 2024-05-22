@@ -27,7 +27,6 @@ double	hit_sphere(t_sphere sphere, t_ray ray)
 {
 	double	a;
 	double	b;
-	double	c;
 	double	delta;
 	double	sol1;
 	double	sol2;
@@ -36,8 +35,7 @@ double	hit_sphere(t_sphere sphere, t_ray ray)
 	diff = vec_subtraction(ray.origin, sphere.centre);
 	a = dot_vec(ray.dir, ray.dir);
 	b = 2 * dot_vec(diff, ray.dir);
-	c = dot_vec(diff, diff) - sphere.radius * sphere.radius;
-	delta = b * b - 4 * a * c;
+	delta = b * b - 4 * a * (dot_vec(diff, diff) - sphere.radius * sphere.radius);
 	if (delta < 0)
 		return (-1.0);
 	sol1 = (-b - sqrt(delta)) / (2.0 * a);
@@ -227,7 +225,7 @@ t_colour	pixel_colour(t_sphere sphere, t_ray ray, t_ambient ambient, t_lighting 
 	double t;
 	t = hit_sphere(sphere, ray);
 	if (t < 0)
-		return ((t_colour){256, 256, 256});
+		return ((t_colour){0, 0, 0, 0});
 	else
 	{
 		t_XYZ hit_point = vec_addition(ray.origin, vec_multiplication(t, ray.dir));
@@ -240,19 +238,21 @@ t_colour	pixel_colour(t_sphere sphere, t_ray ray, t_ambient ambient, t_lighting 
 		res_colour.red = (unsigned char) fmin(255, res_ambient.red + res_diffuse.red + res_spec.red);
 		res_colour.green = (unsigned char) fmin(255, res_ambient.green + res_diffuse.green + res_spec.green);
 		res_colour.blue = (unsigned char) fmin(255, res_ambient.blue + res_diffuse.blue + res_spec.blue);
+		res_colour.transparency = 255;
 		return (res_colour);
 	}
 }
 
 uint32_t pack_colour(t_colour colour)
 {
-	return (colour.red << 24 | colour.green << 16 | colour.blue << 8 | 0xff);
+	return (colour.red << 24 | colour.green << 16 | colour.blue << 8 | colour.transparency);
 }
 void	draw_sphere(t_rt *rt, t_sphere sphere)
 {
 	double	x;
 	double	y;
 	t_ray	ray;
+	t_colour	tempcolour;
 	t_colour	colour;
 
 	//default_matrix(rt);
@@ -263,8 +263,28 @@ void	draw_sphere(t_rt *rt, t_sphere sphere)
 		while (x < rt->width)
 		{
 			ray = ray_launcher(rt, ray, x, y);
-			colour = pixel_colour(sphere, ray, rt->scene->amb, *(rt->scene->lighting.array[0]), SHINE);
-			if (colour.red < 256 && colour.blue < 256 && colour.green < 256)
+			t_lighting **spots;
+			spots = rt->scene->lighting.array;
+			colour.red = colour.green = colour.blue = colour.transparency = 0;
+			int i = 0;
+			while (spots[i])
+			{
+				tempcolour = pixel_colour(sphere, ray, rt->scene->amb, *(rt->scene->lighting.array[i]), SHINE);
+				colour.red += tempcolour.red;
+				if (colour.red > 255)
+					colour.red = 255;
+				colour.green += tempcolour.green;
+				if (colour.green > 255)
+					colour.green = 255;
+				colour.blue += tempcolour.blue;
+				if (colour.blue > 255)
+					colour.blue = 255;
+				colour.transparency += tempcolour.transparency;
+				if (colour.transparency > 255)
+					colour.transparency = 255;
+				++i;
+			}
+			if (colour.transparency > 0)
 			{
 				mlx_put_pixel(rt->image, x, y, pack_colour(colour));
 			}

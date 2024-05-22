@@ -31,6 +31,7 @@ typedef struct s_colour
 	unsigned int	red;
 	unsigned int	green;
 	unsigned int	blue;
+	unsigned int	transparency;
 }					t_colour;
 
 typedef struct s_ambient
