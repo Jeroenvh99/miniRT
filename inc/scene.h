@@ -36,9 +36,9 @@ typedef struct s_colour
 
 typedef struct s_ambient
 {
-	t_colour	colour;
-	double	intensity;
-}	t_ambient;
+	t_colour		colour;
+	double			intensity;
+}					t_ambient;
 
 typedef struct s_camera
 {
@@ -50,10 +50,10 @@ typedef struct s_camera
 
 typedef struct s_lighting
 {
-	t_XYZ	direction;
-	t_colour	colour;
-	double	brightness;
-}	t_lighting;
+	t_XYZ			direction;
+	t_colour		colour;
+	double			brightness;
+}					t_lighting;
 
 typedef struct s_sphere
 {
@@ -82,7 +82,7 @@ typedef struct s_cylinder
 
 typedef struct s_geometry
 {
-	int			elemtype;
+	int				elemtype;
 	union			u_elem
 	{
 		t_sphere	*sphere;
@@ -93,9 +93,9 @@ typedef struct s_geometry
 
 typedef struct s_ray
 {
-	t_XYZ	origin;
-	t_XYZ	dir;
-}	t_ray;
+	t_XYZ			origin;
+	t_XYZ			dir;
+}					t_ray;
 
 typedef struct s_scene
 {
