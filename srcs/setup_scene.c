@@ -159,18 +159,18 @@ int	checklightcollision(t_scene *scene)
 		while (geometry)
 		{
 			geom = (t_geometry *)geometry->content;
-			if (geom->elemtype == 1
-				&& spherecollision(&spot->direction, geom->elem.sphere))
+			if (geom->elemtype == 1 && spherecollision(&spot->direction,
+					geom->elem.sphere))
 			{
 				return (1);
 			}
-			else if (geom->elemtype == 2
-				&& planecollission(&spot->direction, geom->elem.plane))
+			else if (geom->elemtype == 2 && planecollission(&spot->direction,
+					geom->elem.plane))
 			{
 				return (1);
 			}
-			else if (geom->elemtype == 3
-				&& cylindercollission(&spot->direction, geom->elem.cylinder))
+			else if (geom->elemtype == 3 && cylindercollission(&spot->direction,
+					geom->elem.cylinder))
 			{
 				return (1);
 			}

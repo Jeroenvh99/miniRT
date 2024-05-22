@@ -187,9 +187,9 @@ t_colour	ambient_lighting(t_ambient ambient, t_sphere sphere)
 {
 	t_colour	res_ambient;
 
-	res_ambient.red = (unsigned char)(ambient.intensity * ambient.colour.red * sphere.colour.red / 255);
-	res_ambient.green = (unsigned char)(ambient.intensity * ambient.colour.green * sphere.colour.green / 255);
-	res_ambient.green = (unsigned char)(ambient.intensity * ambient.colour.blue * sphere.colour.blue / 255);
+	res_ambient.red = (unsigned int)(ambient.intensity * ambient.colour.red * sphere.colour.red / 255);
+	res_ambient.green = (unsigned int)(ambient.intensity * ambient.colour.green * sphere.colour.green / 255);
+	res_ambient.green = (unsigned int)(ambient.intensity * ambient.colour.blue * sphere.colour.blue / 255);
 	return (res_ambient);
 }
 
@@ -199,9 +199,9 @@ t_colour	diffuse_lighting(t_lighting light, t_XYZ dir, t_XYZ normal, t_sphere sp
 	t_colour	res_diffuse;
 
 	diffuse_factor = fmax(dot_vec(normal, dir), 0.0);
-	res_diffuse.red = (unsigned char)(light.brightness * diffuse_factor * light.colour.red * sphere.colour.red / 255);
-	res_diffuse.green = (unsigned char)(light.brightness * diffuse_factor * light.colour.green * sphere.colour.green / 255);
-	res_diffuse.blue = (unsigned char)(light.brightness * diffuse_factor * light.colour.blue * sphere.colour.blue / 255);
+	res_diffuse.red = (unsigned int)(light.brightness * diffuse_factor * light.colour.red * sphere.colour.red / 255);
+	res_diffuse.green = (unsigned int)(light.brightness * diffuse_factor * light.colour.green * sphere.colour.green / 255);
+	res_diffuse.blue = (unsigned int)(light.brightness * diffuse_factor * light.colour.blue * sphere.colour.blue / 255);
 	return (res_diffuse);
 }
 
@@ -213,9 +213,9 @@ t_colour	specular_lighting(t_lighting light, t_XYZ dir, t_XYZ normal, t_XYZ view
 
 	reflection = vec_subtraction(vec_multiplication(2 * dot_vec(normal, dir), normal), dir);
 	spec = pow(fmax(dot_vec(reflection, viewdirection), 0.0), shininess);
-	res_spec.red = (unsigned char)(light.brightness * spec * light.colour.red);
-	res_spec.green = (unsigned char)(light.brightness * spec * light.colour.green);
-	res_spec.blue = (unsigned char)(light.brightness * spec * light.colour.blue);
+	res_spec.red = (unsigned int)(light.brightness * spec * light.colour.red);
+	res_spec.green = (unsigned int)(light.brightness * spec * light.colour.green);
+	res_spec.blue = (unsigned int)(light.brightness * spec * light.colour.blue);
 	return (res_spec);
 }
 
@@ -235,18 +235,19 @@ t_colour	pixel_colour(t_sphere sphere, t_ray ray, t_ambient ambient, t_lighting 
 		t_colour	res_ambient = ambient_lighting(ambient, sphere);
 		t_colour	res_diffuse = diffuse_lighting(light, light_dir, normal, sphere);
 		t_colour	res_spec = specular_lighting(light, light_dir, normal, viewdirection, shininess);
-		res_colour.red = (unsigned char) fmin(255, res_ambient.red + res_diffuse.red + res_spec.red);
-		res_colour.green = (unsigned char) fmin(255, res_ambient.green + res_diffuse.green + res_spec.green);
-		res_colour.blue = (unsigned char) fmin(255, res_ambient.blue + res_diffuse.blue + res_spec.blue);
+		res_colour.red = (unsigned int) fmin(255, res_ambient.red + res_diffuse.red + res_spec.red);
+		res_colour.green = (unsigned int) fmin(255, res_ambient.green + res_diffuse.green + res_spec.green);
+		res_colour.blue = (unsigned int) fmin(255, res_ambient.blue + res_diffuse.blue + res_spec.blue);
 		res_colour.transparency = 255;
 		return (res_colour);
 	}
 }
 
-uint32_t pack_colour(t_colour colour)
+uint32_t pack_colour(t_colour *colour)
 {
-	return (colour.red << 24 | colour.green << 16 | colour.blue << 8 | colour.transparency);
+	return (colour->red << 24 | colour->green << 16 | colour->blue << 8 | colour->transparency);
 }
+
 void	draw_sphere(t_rt *rt, t_sphere sphere)
 {
 	double	x;
@@ -269,7 +270,7 @@ void	draw_sphere(t_rt *rt, t_sphere sphere)
 			int i = 0;
 			while (spots[i])
 			{
-				tempcolour = pixel_colour(sphere, ray, rt->scene->amb, *(rt->scene->lighting.array[i]), SHINE);
+				tempcolour = pixel_colour(sphere, ray, rt->scene->amb, *spots[i], SHINE);
 				colour.red += tempcolour.red;
 				if (colour.red > 255)
 					colour.red = 255;
@@ -286,11 +287,10 @@ void	draw_sphere(t_rt *rt, t_sphere sphere)
 			}
 			if (colour.transparency > 0)
 			{
-				mlx_put_pixel(rt->image, x, y, pack_colour(colour));
+				mlx_put_pixel(rt->image, x, y, pack_colour(&colour));
 			}
 			x++;
 		}
 		y++;
 	}
 }
-

@@ -15,27 +15,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	buildcamtransform(t_rt *rt)
-{
-	t_XYZ	*forward;
-
-	t_XYZ right, up, tmp;
-	tmp = vector(0, 1, 0);
-	forward = &rt->scene->cam.viewdirection;
-	*forward = norm_vec(*forward);
-	right = cross_vec(tmp, *forward);
-	up = cross_vec(*forward, right);
-	rt->camtransform[0][0] = right.x;
-	rt->camtransform[0][1] = right.y;
-	rt->camtransform[0][2] = right.z;
-	rt->camtransform[1][0] = up.x;
-	rt->camtransform[1][1] = up.y;
-	rt->camtransform[1][2] = up.z;
-	rt->camtransform[2][0] = forward->x;
-	rt->camtransform[2][1] = forward->y;
-	rt->camtransform[2][2] = forward->z;
-}
-
 void	write_scene(t_scene *scene)
 {
 	int	fd;
@@ -47,8 +26,11 @@ void	write_scene(t_scene *scene)
 
 void	draw_objects(t_rt *rt)
 {
-	t_geometry **objects = rt->scene->geometry.array;
-	int i = 0;
+	t_geometry	**objects;
+	int			i;
+
+	objects = rt->scene->geometry.array;
+	i = 0;
 	while (i < rt->scene->geomsize)
 	{
 		if (objects[i]->elemtype == 1)
@@ -72,9 +54,9 @@ void	init_rt(t_rt *rt)
 	rt->width = 1280;
 	rt->height = 720;
 	if (rt->height < rt->width)
-		rt->aspectratio = rt->width / rt->height;
+		rt->aspectratio = (double)rt->width / (double)rt->height;
 	else
-		rt->aspectratio = rt->height / rt->width;
+		rt->aspectratio = (double)rt->height / (double)rt->width;
 	rt->mlx = mlx_init(rt->width, rt->height, "miniRT", false);
 	if (!rt->mlx)
 	{

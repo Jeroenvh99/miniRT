@@ -24,7 +24,7 @@ typedef struct s_rt
 	mlx_image_t	*image;
 	int			width;
 	int			height;
-	float		aspectratio;
+	double		aspectratio;
 	double		camtransform[3][3];
 	t_scene		*scene;
 }				t_rt;

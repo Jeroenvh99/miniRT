@@ -63,14 +63,13 @@ t_XYZ	base_transform(double matrix[3][3], t_XYZ dir)
 
 t_ray	ray_launcher(t_rt *rt, t_ray ray, double x, double y)
 {
-	double	aspect_ratio;
-	double	scale;
+	double scale;
 
-	aspect_ratio = (double)rt->width/(double)rt->height;
 	scale = tan((double)rt->scene->cam.fov * 0.5 * M_PI / 180);
 	ray.origin = rt->scene->cam.pos;
-	ray.dir.x = (2.0 * (x + 0.5) / (double)rt->width - 1.0) * scale * aspect_ratio;
-	ray.dir.y = (1.0 - 2.0 * (y + 0.5) / (double)rt-> height) * scale;
+	ray.dir.x = (2.0 * (x + 0.5) / (double)rt->width - 1.0) * scale
+		* rt->aspectratio;
+	ray.dir.y = (1.0 - 2.0 * (y + 0.5) / (double)rt->height) * scale;
 	ray.dir.z = 1.0;
 	/*print_XYZ(1, &ray.dir);
 	ray.dir = base_transform(rt->camtransform, ray.dir);
