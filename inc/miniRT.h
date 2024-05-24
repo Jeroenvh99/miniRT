@@ -42,8 +42,8 @@ t_XYZ			vec_multiplication(double factor, t_XYZ vector);
 t_XYZ			vec_subtraction(t_XYZ vec1, t_XYZ vec2);
 double			dot_vec(t_XYZ vec1, t_XYZ vec2);
 t_XYZ			cross_vec(t_XYZ vec1, t_XYZ vec2);
-double			mag_vec(t_XYZ vector);
-t_XYZ			norm_vec(t_XYZ vector);
+double			mag_vec(t_XYZ *vector);
+void			norm_vec(t_XYZ *vector);
 
 // resize geometry functions
 void			resize_elements(t_rt *rt);

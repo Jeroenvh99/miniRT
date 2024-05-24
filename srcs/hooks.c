@@ -20,6 +20,6 @@ void	set_resize(mlx_key_data_t keydata, void *rt)
 	if (keydata.key == MLX_KEY_SPACE && keydata.action == MLX_PRESS)
 	{
 		resize_elements(local_rt);
-		draw_objects(rt);
+		draw_objects(local_rt);
 	}
 }
