@@ -43,7 +43,7 @@ static void	print_sphere(int fd, t_sphere *sphere)
 {
 	dprintf(fd, "sp ");
 	print_XYZ(fd, &sphere->centre);
-	dprintf(fd, " %f %f ", sphere->diameter, sphere->radius);
+	dprintf(fd, " %f ", sphere->radius * 2);
 	print_colour(fd, &sphere->colour);
 	dprintf(fd, "\n");
 }

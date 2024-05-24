@@ -29,8 +29,7 @@ int	parsesphere(t_scene *scene, char *line)
 		return (0);
 	}
 	parse_xyz(parts[1], &sphere->centre);
-	sphere->diameter = ft_atof(parts[2]);
-	sphere->radius = sphere->diameter * 0.5;
+	sphere->radius = ft_atof(parts[2]) * 0.5;
 	parse_colour(parts[3], &sphere->colour);
 	geom->elemtype = 1;
 	geom->elem.sphere = sphere;

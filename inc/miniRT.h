@@ -36,6 +36,7 @@ void			exit_rt(t_rt *rt);
 t_XYZ			vector(double x, double y, double z);
 double			distance(t_XYZ *p1, t_XYZ *p2);
 double			distancetoline(t_XYZ *p, t_XYZ *linepoint, t_XYZ *dir);
+int				onLine(t_XYZ *point, t_ray *line);
 int				same_point(t_XYZ *p1, t_XYZ *p2);
 t_XYZ			vec_addition(t_XYZ vec1, t_XYZ vec2);
 t_XYZ			vec_multiplication(double factor, t_XYZ vector);
@@ -46,17 +47,18 @@ double			mag_vec(t_XYZ *vector);
 void			norm_vec(t_XYZ *vector);
 
 // resize geometry functions
-void			resize_elements(t_rt *rt);
+void			resize_elements(t_rt *rt, int i);
 void			changedimension(double *param, char *dimension);
 void			changexyz(t_XYZ *xyz, char *type);
 void			changecolour(t_colour *colour);
 
 // MLX hooks
-void			set_resize(mlx_key_data_t keydata, void *rt);
+void			set_resize(void *rt);
+void	escape_hook(void *param);
 
 // draw functions
 void			draw_objects(t_rt *rt);
-void			draw_sphere(t_rt *rt, t_sphere sphere);
+void			draw_sphere(t_rt *rt, t_geometry *geometry);
 t_ray			ray_launcher(t_rt *rt, t_ray ray, double x, double y);
 
 #endif

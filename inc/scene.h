@@ -58,7 +58,6 @@ typedef struct s_lighting
 typedef struct s_sphere
 {
 	t_XYZ			centre;
-	double			diameter;
 	double			radius;
 	t_colour		colour;
 }					t_sphere;
@@ -83,6 +82,7 @@ typedef struct s_cylinder
 typedef struct s_geometry
 {
 	int				elemtype;
+	t_XYZ			*screencoords;
 	union			u_elem
 	{
 		t_sphere	*sphere;

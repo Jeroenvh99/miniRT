@@ -29,8 +29,6 @@ void	draw_objects(t_rt *rt)
 	t_geometry	**objects;
 	int			i;
 
-	objects = rt->scene->geometry.array;
-	i = 0;
 	if (rt->image)
 	{
 		mlx_delete_image(rt->mlx, rt->image);
@@ -41,19 +39,25 @@ void	draw_objects(t_rt *rt)
 		mlx_terminate(rt->mlx);
 		exit(1);
 	}
+	objects = rt->scene->geometry.array;
+	i = 0;
 	while (i < rt->scene->geomsize)
 	{
+		if (!objects[i]->screencoords)
+		{
+			objects[i]->screencoords = ft_calloc(rt->height * rt->width + 1, sizeof(t_XYZ));
+		}
 		if (objects[i]->elemtype == 1)
 		{
-			draw_sphere(rt, *(objects[i]->elem.sphere));
+			draw_sphere(rt, objects[i]);
 		}
 		// else if (objects[i]->elemtype == 2)
 		// {
-		// 	draw_cylinder(rt, *(objects[i]->elem.cylinder));
+		// 	draw_cylinder(rt, objects[i]);
 		// }
 		// else if (objects[i]->elemtype == 3)
 		// {
-		// 	draw_plane(rt, *(objects[i]->elem.plane));
+		// 	draw_plane(rt, objects[i]);
 		// }
 		++i;
 	}

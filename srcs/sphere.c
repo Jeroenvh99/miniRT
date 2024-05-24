@@ -22,7 +22,7 @@
 	ray.z = camera.z + factor * (direction.z);
 }*/
 
-double	hit_sphere(t_sphere sphere, t_ray ray)
+double	hit_sphere(t_sphere sphere, t_ray *ray)
 {
 	double	a;
 	double	b;
@@ -31,9 +31,9 @@ double	hit_sphere(t_sphere sphere, t_ray ray)
 	double	sol2;
 	t_XYZ	diff;
 
-	diff = vec_subtraction(ray.origin, sphere.centre);
-	a = dot_vec(ray.dir, ray.dir);
-	b = 2 * dot_vec(diff, ray.dir);
+	diff = vec_subtraction(ray->origin, sphere.centre);
+	a = dot_vec(ray->dir, ray->dir);
+	b = 2 * dot_vec(diff, ray->dir);
 	delta = b * b - 4 * a * (dot_vec(diff, diff) - sphere.radius * sphere.radius);
 	if (delta < 0)
 		return (-1.0);
@@ -218,24 +218,24 @@ t_colour	specular_lighting(t_lighting light, t_XYZ dir, t_XYZ normal, t_XYZ view
 	return (res_spec);
 }
 
-t_colour	pixel_colour(t_sphere sphere, t_ray ray, t_ambient ambient, t_lighting light, double shininess)
+t_colour	pixel_colour(t_sphere *sphere, t_ray *ray, t_ambient ambient, t_lighting light, double shininess)
 {
 	t_colour	res_colour;
 	double t;
-	t = hit_sphere(sphere, ray);
+	t = hit_sphere(*sphere, ray);
 	if (t < 0)
 		return ((t_colour){0, 0, 0, 0});
 	else
 	{
-		t_XYZ hit_point = vec_addition(ray.origin, vec_multiplication(t, ray.dir));
-		t_XYZ	normal = vec_subtraction(hit_point, sphere.centre);
+		t_XYZ hit_point = vec_addition(ray->origin, vec_multiplication(t, ray->dir));
+		t_XYZ	normal = vec_subtraction(hit_point, sphere->centre);
 		norm_vec(&normal);
 		t_XYZ	light_dir = vec_subtraction(light.direction, hit_point);
 		norm_vec(&light_dir);
-		t_XYZ	viewdirection = vec_multiplication(-1, ray.dir);
+		t_XYZ	viewdirection = vec_multiplication(-1, ray->dir);
 		norm_vec(&viewdirection);
-		t_colour	res_ambient = ambient_lighting(ambient, sphere);
-		t_colour	res_diffuse = diffuse_lighting(light, light_dir, normal, sphere);
+		t_colour	res_ambient = ambient_lighting(ambient, *sphere);
+		t_colour	res_diffuse = diffuse_lighting(light, light_dir, normal, *sphere);
 		t_colour	res_spec = specular_lighting(light, light_dir, normal, viewdirection, shininess);
 		res_colour.red = (unsigned int) fmin(255, res_ambient.red + res_diffuse.red + res_spec.red);
 		res_colour.green = (unsigned int) fmin(255, res_ambient.green + res_diffuse.green + res_spec.green);
@@ -250,15 +250,17 @@ uint32_t pack_colour(t_colour *colour)
 	return (colour->red << 24 | colour->green << 16 | colour->blue << 8 | colour->transparency);
 }
 
-void	draw_sphere(t_rt *rt, t_sphere sphere)
+void	draw_sphere(t_rt *rt, t_geometry *geom)
 {
 	double	x;
 	double	y;
+	int		j;
 	t_ray	ray;
 	t_colour	tempcolour;
 	t_colour	colour;
 
 	//default_matrix(rt);
+	j = 0;
 	y = 0;
 	while (y < rt->height)
 	{
@@ -272,7 +274,7 @@ void	draw_sphere(t_rt *rt, t_sphere sphere)
 			int i = 0;
 			while (spots[i])
 			{
-				tempcolour = pixel_colour(sphere, ray, rt->scene->amb, *spots[i], SHINE);
+				tempcolour = pixel_colour(geom->elem.sphere, &ray, rt->scene->amb, *spots[i], SHINE);
 				colour.red += tempcolour.red;
 				if (colour.red > 255)
 					colour.red = 255;
@@ -289,6 +291,9 @@ void	draw_sphere(t_rt *rt, t_sphere sphere)
 			}
 			if (colour.transparency > 0)
 			{
+				geom->screencoords[j].x = x;
+				geom->screencoords[j].y = y;
+				++j;
 				mlx_put_pixel(rt->image, x, y, pack_colour(&colour));
 			}
 			x++;
