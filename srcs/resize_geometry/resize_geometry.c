@@ -47,9 +47,10 @@ static void	resize_sphere(t_sphere *sphere)
 	{
 		changexyz(&sphere->centre, "centre");
 	}
-	else if (*selection == 'D' && ft_strlen(selection) == 1)
+	else if (*selection == 'D')
 	{
 		changedimension(&sphere->diameter, "diameter");
+		sphere->radius = sphere->diameter / 2;
 	}
 	else if (*selection == 'R' && ft_strlen(selection) == 1)
 	{
@@ -108,6 +109,7 @@ void	resize_elements(t_rt *rt)
 		i = -1;
 		while (i < 0 || i >= rt->scene->geomsize)
 		{
+				// mlx_put_pixel(rt->image, x, y, pack_colour(&colour));
 			num = get_next_line(0);
 			if (ft_strncmp(num, "exit", 4) == 0)
 			{

@@ -31,6 +31,16 @@ void	draw_objects(t_rt *rt)
 
 	objects = rt->scene->geometry.array;
 	i = 0;
+	if (rt->image)
+	{
+		mlx_delete_image(rt->mlx, rt->image);
+	}
+	rt->image = mlx_new_image(rt->mlx, rt->width, rt->height);
+	if (!rt->image || mlx_image_to_window(rt->mlx, rt->image, 0, 0) < 0)
+	{
+		mlx_terminate(rt->mlx);
+		exit(1);
+	}
 	while (i < rt->scene->geomsize)
 	{
 		if (objects[i]->elemtype == 1)
@@ -62,12 +72,7 @@ void	init_rt(t_rt *rt)
 	{
 		exit(1);
 	}
-	rt->image = mlx_new_image(rt->mlx, rt->width, rt->height);
-	if (!rt->image || mlx_image_to_window(rt->mlx, rt->image, 0, 0) < 0)
-	{
-		mlx_terminate(rt->mlx);
-		exit(1);
-	}
+	rt->image = NULL;
 }
 
 void	exit_rt(t_rt *rt)

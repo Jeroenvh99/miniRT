@@ -12,7 +12,6 @@
 
 #include "miniRT.h"
 #include <math.h>
-#include <stdio.h>
 
 /*t_XYZ	ray_constructor(t_XYZ camera, t_XYZ direction, double factor)
 {
@@ -229,9 +228,12 @@ t_colour	pixel_colour(t_sphere sphere, t_ray ray, t_ambient ambient, t_lighting 
 	else
 	{
 		t_XYZ hit_point = vec_addition(ray.origin, vec_multiplication(t, ray.dir));
-		t_XYZ	normal = norm_vec(vec_subtraction(hit_point, sphere.centre));
-		t_XYZ	light_dir = norm_vec(vec_subtraction(light.direction, hit_point));
-		t_XYZ	viewdirection = norm_vec(vec_multiplication(-1, ray.dir));
+		t_XYZ	normal = vec_subtraction(hit_point, sphere.centre);
+		norm_vec(&normal);
+		t_XYZ	light_dir = vec_subtraction(light.direction, hit_point);
+		norm_vec(&light_dir);
+		t_XYZ	viewdirection = vec_multiplication(-1, ray.dir);
+		norm_vec(&viewdirection);
 		t_colour	res_ambient = ambient_lighting(ambient, sphere);
 		t_colour	res_diffuse = diffuse_lighting(light, light_dir, normal, sphere);
 		t_colour	res_spec = specular_lighting(light, light_dir, normal, viewdirection, shininess);

@@ -41,24 +41,22 @@ t_XYZ	cross_vec(t_XYZ vec1, t_XYZ vec2)
 	return (res);
 }
 
-double	mag_vec(t_XYZ vector)
+double	mag_vec(t_XYZ *vector)
 {
 	double	res;
 
-	res = sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+	res = sqrt(vector->x * vector->x + vector->y * vector->y + vector->z * vector->z);
 	return (res);
 }
 
-t_XYZ	norm_vec(t_XYZ vector)
+void	norm_vec(t_XYZ *vector)
 {
-	t_XYZ	res;
 	double	mag;
 
 	mag = mag_vec(vector);
-	res.x = vector.x / mag;
-	res.y = vector.y / mag;
-	res.z = vector.z / mag;
-	return (res);
+	vector->x /= mag;
+	vector->y /= mag;
+	vector->z /= mag;
 }
 
 t_XYZ	vec_packer(double x, double y, double z)
