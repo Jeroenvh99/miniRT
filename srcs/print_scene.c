@@ -65,7 +65,7 @@ static void	print_cylinder(int fd, t_cylinder *cylinder)
 	print_XYZ(fd, &cylinder->centre);
 	dprintf(fd, " ");
 	print_XYZ(fd, &cylinder->axis);
-	dprintf(fd, " %f %f ", cylinder->diameter, cylinder->height);
+	dprintf(fd, " %f %f ", cylinder->radius * 2, cylinder->height);
 	print_colour(fd, &cylinder->colour);
 	dprintf(fd, "\n");
 }
@@ -79,15 +79,15 @@ void	print_geometry(int fd, t_geometry **arr)
 		geom = *arr;
 		if (geom->elemtype == 1)
 		{
-			print_sphere(fd, geom->elem.sphere);
+			print_sphere(fd, (t_sphere *)geom->elem);
 		}
 		else if (geom->elemtype == 2)
 		{
-			print_plane(fd, geom->elem.plane);
+			print_plane(fd, (t_plane *)geom->elem);
 		}
 		else if (geom->elemtype == 3)
 		{
-			print_cylinder(fd, geom->elem.cylinder);
+			print_cylinder(fd, (t_cylinder *)geom->elem);
 		}
 		++arr;
 	}

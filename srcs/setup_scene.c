@@ -43,18 +43,7 @@ void	free_geom(void *geometry)
 	t_geometry	*geom;
 
 	geom = (t_geometry *)geometry;
-	if (geom->elemtype == 1)
-	{
-		free(geom->elem.sphere);
-	}
-	else if (geom->elemtype == 2)
-	{
-		free(geom->elem.plane);
-	}
-	else if (geom->elemtype == 3)
-	{
-		free(geom->elem.cylinder);
-	}
+	free(geom->elem);
 	free(geom);
 }
 
@@ -160,17 +149,17 @@ int	checklightcollision(t_scene *scene)
 		{
 			geom = (t_geometry *)geometry->content;
 			if (geom->elemtype == 1 && spherecollision(&spot->direction,
-					geom->elem.sphere))
+					(t_sphere *)geom->elem))
 			{
 				return (1);
 			}
 			else if (geom->elemtype == 2 && planecollission(&spot->direction,
-					geom->elem.plane))
+					(t_plane *)geom->elem))
 			{
 				return (1);
 			}
 			else if (geom->elemtype == 3 && cylindercollission(&spot->direction,
-					geom->elem.cylinder))
+					(t_cylinder *)geom->elem))
 			{
 				return (1);
 			}
