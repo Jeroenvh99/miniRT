@@ -17,11 +17,19 @@
 # include "libft.h"
 # include "scene.h"
 # define SHINE 50
+# define HISTORYSIZE 1
+
+typedef struct s_history
+{
+	int index;
+	t_geometry *geom;
+} t_history;
 
 typedef struct s_rt
 {
 	mlx_t		*mlx;
 	mlx_image_t	*image;
+	t_history	history[HISTORYSIZE];
 	int			width;
 	int			height;
 	double		aspectratio;
@@ -54,6 +62,7 @@ void			changecolour(t_colour *colour);
 
 // MLX hooks
 void			set_resize(void *rt);
+void	reset_resize(void *param);
 void	escape_hook(void *param);
 
 // draw functions

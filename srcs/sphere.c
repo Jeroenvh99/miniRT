@@ -274,7 +274,7 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 			int i = 0;
 			while (spots[i])
 			{
-				tempcolour = pixel_colour(geom->elem.sphere, &ray, rt->scene->amb, *spots[i], SHINE);
+				tempcolour = pixel_colour((t_sphere *)geom->elem, &ray, rt->scene->amb, *spots[i], SHINE);
 				colour.red += tempcolour.red;
 				if (colour.red > 255)
 					colour.red = 255;
@@ -289,6 +289,8 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 					colour.transparency = 255;
 				++i;
 			}
+			geom->screencoords[(int)(x + (y * rt->width))].x = 0;
+			geom->screencoords[(int)(x + (y * rt->width))].x = 0;
 			if (colour.transparency > 0)
 			{
 				geom->screencoords[j].x = x;

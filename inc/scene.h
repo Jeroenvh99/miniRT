@@ -73,7 +73,6 @@ typedef struct s_cylinder
 {
 	t_XYZ			centre;
 	t_XYZ			axis;
-	double			diameter;
 	double			radius;
 	double			height;
 	t_colour		colour;
@@ -83,12 +82,7 @@ typedef struct s_geometry
 {
 	int				elemtype;
 	t_XYZ			*screencoords;
-	union			u_elem
-	{
-		t_sphere	*sphere;
-		t_plane		*plane;
-		t_cylinder	*cylinder;
-	} elem;
+	void			*elem;
 }					t_geometry;
 
 typedef struct s_ray

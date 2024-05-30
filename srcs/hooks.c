@@ -12,6 +12,7 @@
 
 #include "miniRT.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void	escape_hook(void *param)
 {
@@ -26,14 +27,14 @@ int	searchcoord(t_rt *rt, t_geometry *geom, int posx, int posy)
 {
 	int j = 0;
 	while (j < rt->width * rt->height)
+	{
+		if (posx == (int)geom->screencoords[j].x && posy == (int)geom->screencoords[j].y)
 		{
-			if (posx == (int)geom->screencoords[j].x && posy == (int)geom->screencoords[j].y)
-			{
-				return 1;
-			}
-			++j;
+			return 1;
 		}
-		return 0;
+		++j;
+	}
+	return 0;
 }
 
 void	set_resize(void *param)
@@ -44,22 +45,49 @@ void	set_resize(void *param)
 	if (mlx_is_mouse_down(local_rt->mlx, MLX_MOUSE_BUTTON_LEFT))
 	{
 		t_geometry	**objects;
-	int			i;
-	int	mousex;
-	int mousey;
+		int			i;
+		int	mousex;
+		int mousey;
 
-	mlx_get_mouse_pos(local_rt->mlx, &mousex, &mousey);
-	objects = local_rt->scene->geometry.array;
-	i = 0;
-	while (i < local_rt->scene->geomsize)
-	{
-		t_geometry *geom = local_rt->scene->geometry.array[i];
-		if (searchcoord(local_rt, geom, mousex, mousey))
-			break;
-		++i;
-	}
-		printf("%i", i);
+		mlx_get_mouse_pos(local_rt->mlx, &mousex, &mousey);
+		objects = local_rt->scene->geometry.array;
+		i = 0;
+		while (i < local_rt->scene->geomsize)
+		{
+			t_geometry *geom = local_rt->scene->geometry.array[i];
+			if (searchcoord(local_rt, geom, mousex, mousey))
+				break;
+			++i;
+			if (i == local_rt->scene->geomsize)
+			{
+				return;
+			}
+		}
 		resize_elements(local_rt, i);
+		draw_objects(local_rt);
+	}
+}
+
+void	reset_resize(void *param)
+{
+	t_rt	*local_rt;
+
+	local_rt = (t_rt *)param;
+	if (mlx_is_mouse_down(local_rt->mlx, MLX_MOUSE_BUTTON_RIGHT))
+	{
+		int j = 0;
+		while (local_rt->history[j].index > -1 && j < HISTORYSIZE - 1)
+		{
+			++j;
+		}
+		if (local_rt->history[j].index == -1)
+		{
+			return;
+		}
+		free(local_rt->scene->geometry.array[local_rt->history[j].index]->elem);
+		free(local_rt->scene->geometry.array[local_rt->history[j].index]->screencoords);
+		free(local_rt->scene->geometry.array[local_rt->history[j].index]);
+		local_rt->scene->geometry.array[local_rt->history[j].index] = local_rt->history[j].geom;
 		draw_objects(local_rt);
 	}
 }
