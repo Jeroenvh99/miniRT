@@ -84,7 +84,7 @@ void	init_rt(t_rt *rt)
 	i = 0;
 	while (i < HISTORYSIZE)
 	{
-		rt->history[i].index = -1;
+		rt->history[i].geom = NULL;
 		++i;
 	}
 }
@@ -92,6 +92,7 @@ void	init_rt(t_rt *rt)
 void	exit_rt(t_rt *rt)
 {
 	char	*res;
+	int		i;
 
 	mlx_terminate(rt->mlx);
 	if (rt->scene->isresized)
@@ -105,5 +106,14 @@ void	exit_rt(t_rt *rt)
 		free(res);
 	}
 	free_scene(rt->scene, 1);
+	i = 0;
+	while (i < HISTORYSIZE)
+	{
+		if (rt->history[i].geom)
+		{
+			free(rt->history[i].geom);
+		}
+		++i;
+	}
 	exit(0);
 }

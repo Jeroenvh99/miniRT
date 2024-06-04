@@ -141,9 +141,11 @@ void moveback(t_history *history)
 	int i = 1;
 	while (i < HISTORYSIZE)
 	{
-		history[i - 1] = history[i];
+		history[i - 1].index = history[i].index;
+		history[i - 1].geom = history[i].geom;
 		++i;
 	}
+	history[i - 1].geom = NULL;
 }
 
 // void	changeselection(t_rt *rt, mlx_image_t **selection, int i)
@@ -157,7 +159,7 @@ void	resize_elements(t_rt *rt, int i)
 	// selection = NULL;
 	t_geometry **objects;
 	int j = 0;
-	while (rt->history[j].index > -1 && j < HISTORYSIZE)
+	while (rt->history[j].geom && j < HISTORYSIZE)
 	{
 		++j;
 	}
@@ -176,7 +178,7 @@ void	resize_elements(t_rt *rt, int i)
 		objects[i]->elemtype);
 	if (objects[i]->elemtype == 1)
 	{
-		objects[i] = copygeom(objects[i], rt->width * rt->height);
+		rt->scene->geometry.array[i] = copygeom(objects[i], rt->width * rt->height);
 		resize_sphere((t_sphere *)objects[i]->elem);
 	}
 	else if (objects[i]->elemtype == 2)

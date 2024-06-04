@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 void	escape_hook(void *param)
@@ -58,36 +57,38 @@ void	set_resize(void *param)
 			if (searchcoord(local_rt, geom, mousex, mousey))
 				break;
 			++i;
-			if (i == local_rt->scene->geomsize)
-			{
-				return;
-			}
 		}
-		resize_elements(local_rt, i);
-		draw_objects(local_rt);
+		if (i < local_rt->scene->geomsize)
+		{
+			resize_elements(local_rt, i);
+			draw_objects(local_rt);
+		}
 	}
 }
 
 void	reset_resize(void *param)
 {
 	t_rt	*local_rt;
+	int		index;
 
 	local_rt = (t_rt *)param;
 	if (mlx_is_mouse_down(local_rt->mlx, MLX_MOUSE_BUTTON_RIGHT))
 	{
 		int j = 0;
-		while (local_rt->history[j].index > -1 && j < HISTORYSIZE - 1)
+		while (local_rt->history[j + 1].geom && j < HISTORYSIZE - 2)
 		{
 			++j;
 		}
-		if (local_rt->history[j].index == -1)
+		if (!local_rt->history[j].geom)
 		{
 			return;
 		}
-		free(local_rt->scene->geometry.array[local_rt->history[j].index]->elem);
-		free(local_rt->scene->geometry.array[local_rt->history[j].index]->screencoords);
-		free(local_rt->scene->geometry.array[local_rt->history[j].index]);
-		local_rt->scene->geometry.array[local_rt->history[j].index] = local_rt->history[j].geom;
+		index = local_rt->history[j].index;
+		free(local_rt->scene->geometry.array[index]->elem);
+		free(local_rt->scene->geometry.array[index]->screencoords);
+		free(local_rt->scene->geometry.array[index]);
+		local_rt->scene->geometry.array[index] = local_rt->history[j].geom;
+		local_rt->history[j].geom = NULL;
 		draw_objects(local_rt);
 	}
 }
