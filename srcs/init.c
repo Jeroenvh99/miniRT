@@ -43,10 +43,6 @@ void	draw_objects(t_rt *rt)
 	i = 0;
 	while (i < rt->scene->geomsize)
 	{
-		if (!objects[i]->screencoords)
-		{
-			objects[i]->screencoords = ft_calloc(rt->height * rt->width + 1, sizeof(t_XYZ));
-		}
 		if (objects[i]->elemtype == 1)
 		{
 			draw_sphere(rt, objects[i]);
@@ -65,6 +61,8 @@ void	draw_objects(t_rt *rt)
 
 void	init_rt(t_rt *rt)
 {
+	int i = 0;
+	t_geometry	**objects;
 	rt->width = 1280;
 	rt->height = 720;
 	if (rt->height < rt->width)
@@ -77,11 +75,24 @@ void	init_rt(t_rt *rt)
 		exit(1);
 	}
 	rt->image = NULL;
+	objects = rt->scene->geometry.array;
+	while (i < rt->scene->geomsize)
+	{
+		objects[i]->screencoords = ft_calloc((rt->height * rt->width) + 1, sizeof(t_XYZ));
+		++i;
+	}
+	i = 0;
+	while (i < HISTORYSIZE)
+	{
+		rt->history[i].geom = NULL;
+		++i;
+	}
 }
 
 void	exit_rt(t_rt *rt)
 {
 	char	*res;
+	int		i;
 
 	mlx_terminate(rt->mlx);
 	if (rt->scene->isresized)
@@ -95,5 +106,14 @@ void	exit_rt(t_rt *rt)
 		free(res);
 	}
 	free_scene(rt->scene, 1);
-	exit(1);
+	i = 0;
+	while (i < HISTORYSIZE)
+	{
+		if (rt->history[i].geom)
+		{
+			free(rt->history[i].geom);
+		}
+		++i;
+	}
+	exit(0);
 }

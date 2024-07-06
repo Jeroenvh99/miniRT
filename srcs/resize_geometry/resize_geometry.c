@@ -74,10 +74,6 @@ static void	resize_cylinder(t_cylinder *cylinder)
 	{
 		changexyz(&cylinder->axis, "axis");
 	}
-	else if (*selection == 'D' && ft_strlen(selection) == 2)
-	{
-		changedimension(&cylinder->diameter, "diameter");
-	}
 	else if (*selection == 'R' && ft_strlen(selection) == 2)
 	{
 		changedimension(&cylinder->radius, "radius");
@@ -93,6 +89,65 @@ static void	resize_cylinder(t_cylinder *cylinder)
 	free(selection);
 }
 
+void copypos(t_XYZ *src, t_XYZ *dst)
+{
+	dst->x = src->x;
+	dst->y = src->y;
+	dst->z = src->z;
+}
+
+void copycolour(t_colour *src, t_colour *dst)
+{
+	dst->red = src->red;
+	dst->green = src->green;
+	dst->blue = src->blue;
+	dst->transparency = src->transparency;
+}
+
+void	*copyelem(void *sourceelem, int type)
+{
+	if (type == 1)
+	{
+		t_sphere *source = (t_sphere *)sourceelem;
+		t_sphere *res = ft_calloc(1, sizeof(t_sphere));
+		copypos(&source->centre, &res->centre);
+		res->radius = source->radius;
+		copycolour(&source->colour, &res->colour);
+		return res;
+	}
+	return NULL;
+}
+
+t_geometry *copygeom(t_geometry *source, int screensize)
+{
+	t_geometry	*copy;
+
+	copy = ft_calloc(1, sizeof(t_geometry));
+	copy->elemtype = source->elemtype;
+	copy->screencoords = ft_calloc(screensize + 1, sizeof(t_XYZ));
+	int i = 0;
+	while (i < screensize)
+	{
+		copy->screencoords[i].x = source->screencoords[i].x;
+		copy->screencoords[i].y = source->screencoords[i].y;
+		++i;
+	}
+	copy->elem = copyelem(source->elem, source->elemtype);
+	return copy;
+}
+
+void moveback(t_history *history)
+{
+	int i = 1;
+	while (i < HISTORYSIZE)
+	{
+		history[i - 1].index = history[i].index;
+		history[i - 1].geom = history[i].geom;
+		++i;
+	}
+	history[i - 1].geom = NULL;
+}
+
 // void	changeselection(t_rt *rt, mlx_image_t **selection, int i)
 // {
 
@@ -102,19 +157,37 @@ void	resize_elements(t_rt *rt, int i)
 {
 	// mlx_image_t	*selection;
 	// selection = NULL;
+	t_geometry **objects;
+	int j = 0;
+	while (rt->history[j].geom && j < HISTORYSIZE)
+	{
+		++j;
+	}
+	if (j == HISTORYSIZE)
+	{
+		free(rt->history[0].geom->elem);
+		free(rt->history[0].geom->screencoords);
+		free(rt->history[0].geom);
+		moveback(rt->history);
+		--j;
+	}
+	objects = rt->scene->geometry.array;
+	rt->history[j].index = i;
+	rt->history[j].geom = objects[i];
 	printf("Element type: %i\n1 = sphere, 2 = plane, 3 = cylinder\n",
-		rt->scene->geometry.array[i]->elemtype);
-	if (rt->scene->geometry.array[i]->elemtype == 2)
+		objects[i]->elemtype);
+	if (objects[i]->elemtype == 1)
 	{
-		resize_plane(rt->scene->geometry.array[i]->elem.plane);
+		rt->scene->geometry.array[i] = copygeom(objects[i], rt->width * rt->height);
+		resize_sphere((t_sphere *)objects[i]->elem);
 	}
-	else if (rt->scene->geometry.array[i]->elemtype == 1)
+	else if (objects[i]->elemtype == 2)
 	{
-		resize_sphere(rt->scene->geometry.array[i]->elem.sphere);
+		resize_plane((t_plane *)objects[i]->elem);
 	}
-	else if (rt->scene->geometry.array[i]->elemtype == 3)
+	else if (objects[i]->elemtype == 3)
 	{
-		resize_cylinder(rt->scene->geometry.array[i]->elem.cylinder);
+		resize_cylinder((t_cylinder *)objects[i]->elem);
 	}
 	rt->scene->isresized = 1;
 }
