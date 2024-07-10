@@ -62,7 +62,7 @@ void			changecolour(t_colour *colour);
 
 // MLX hooks
 void			set_resize(void *rt);
-void			reset_resize(void *param);
+void			reset_resize(mlx_key_data_t keydata, void* param);
 void			escape_hook(void *param);
 
 // draw functions
