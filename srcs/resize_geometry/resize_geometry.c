@@ -89,14 +89,14 @@ static void	resize_cylinder(t_cylinder *cylinder)
 	free(selection);
 }
 
-void copypos(t_XYZ *src, t_XYZ *dst)
+void	copypos(t_XYZ *src, t_XYZ *dst)
 {
 	dst->x = src->x;
 	dst->y = src->y;
 	dst->z = src->z;
 }
 
-void copycolour(t_colour *src, t_colour *dst)
+void	copycolour(t_colour *src, t_colour *dst)
 {
 	dst->red = src->red;
 	dst->green = src->green;
@@ -106,26 +106,30 @@ void copycolour(t_colour *src, t_colour *dst)
 
 void	*copyelem(void *sourceelem, int type)
 {
+	t_sphere	*source;
+	t_sphere	*res;
+
 	if (type == 1)
 	{
-		t_sphere *source = (t_sphere *)sourceelem;
-		t_sphere *res = ft_calloc(1, sizeof(t_sphere));
+		source = (t_sphere *)sourceelem;
+		res = ft_calloc(1, sizeof(t_sphere));
 		copypos(&source->centre, &res->centre);
 		res->radius = source->radius;
 		copycolour(&source->colour, &res->colour);
-		return res;
+		return (res);
 	}
-	return NULL;
+	return (NULL);
 }
 
-t_geometry *copygeom(t_geometry *source, int screensize)
+t_geometry	*copygeom(t_geometry *source, int screensize)
 {
 	t_geometry	*copy;
+	int			i;
 
 	copy = ft_calloc(1, sizeof(t_geometry));
 	copy->elemtype = source->elemtype;
 	copy->screencoords = ft_calloc(screensize + 1, sizeof(t_XYZ));
-	int i = 0;
+	i = 0;
 	while (i < screensize)
 	{
 		copy->screencoords[i].x = source->screencoords[i].x;
@@ -133,12 +137,14 @@ t_geometry *copygeom(t_geometry *source, int screensize)
 		++i;
 	}
 	copy->elem = copyelem(source->elem, source->elemtype);
-	return copy;
+	return (copy);
 }
 
-void moveback(t_history *history)
+void	moveback(t_history *history)
 {
-	int i = 1;
+	int	i;
+
+	i = 1;
 	while (i < HISTORYSIZE)
 	{
 		history[i - 1].index = history[i].index;
@@ -148,17 +154,12 @@ void moveback(t_history *history)
 	history[i - 1].geom = NULL;
 }
 
-// void	changeselection(t_rt *rt, mlx_image_t **selection, int i)
-// {
-
-// }
-
 void	resize_elements(t_rt *rt, int i)
 {
-	// mlx_image_t	*selection;
-	// selection = NULL;
-	t_geometry **objects;
-	int j = 0;
+	t_geometry	**objects;
+	int			j;
+
+	j = 0;
 	while (rt->history[j].geom && j < HISTORYSIZE)
 	{
 		++j;
@@ -178,7 +179,8 @@ void	resize_elements(t_rt *rt, int i)
 		objects[i]->elemtype);
 	if (objects[i]->elemtype == 1)
 	{
-		rt->scene->geometry.array[i] = copygeom(objects[i], rt->width * rt->height);
+		rt->scene->geometry.array[i] = copygeom(objects[i], rt->width
+				* rt->height);
 		resize_sphere((t_sphere *)objects[i]->elem);
 	}
 	else if (objects[i]->elemtype == 2)

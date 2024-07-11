@@ -26,8 +26,9 @@ void	write_scene(t_scene *scene)
 
 void	draw_objects(t_rt *rt)
 {
-	t_geometry	**objects;
-	int			i;
+	t_drawfunc const	drawfuncs[3] = {draw_sphere, NULL, NULL};
+	t_geometry			**objects;
+	int					i;
 
 	if (rt->image)
 	{
@@ -43,33 +44,21 @@ void	draw_objects(t_rt *rt)
 	i = 0;
 	while (i < rt->scene->geomsize)
 	{
-		if (objects[i]->elemtype == 1)
-		{
-			draw_sphere(rt, objects[i]);
-		}
-		// else if (objects[i]->elemtype == 2)
-		// {
-		// 	draw_cylinder(rt, objects[i]);
-		// }
-		// else if (objects[i]->elemtype == 3)
-		// {
-		// 	draw_plane(rt, objects[i]);
-		// }
+		drawfuncs[objects[i]->elemtype - 1](rt, objects[i]);
 		++i;
 	}
 }
 
 void	init_rt(t_rt *rt)
 {
-	int i = 0;
+	int			i;
 	t_geometry	**objects;
+
+	i = 0;
 	rt->width = 1280;
 	rt->height = 720;
-	if (rt->height < rt->width)
-		rt->aspectratio = (double)rt->width / (double)rt->height;
-	else
-		rt->aspectratio = (double)rt->height / (double)rt->width;
-	rt->mlx = mlx_init(rt->width, rt->height, "miniRT", false);
+	rt->aspectratio = (double)rt->width / (double)rt->height;
+	rt->mlx = mlx_init(rt->width, rt->height, "miniRT", true);
 	if (!rt->mlx)
 	{
 		exit(1);
@@ -78,7 +67,8 @@ void	init_rt(t_rt *rt)
 	objects = rt->scene->geometry.array;
 	while (i < rt->scene->geomsize)
 	{
-		objects[i]->screencoords = ft_calloc((rt->height * rt->width) + 1, sizeof(t_XYZ));
+		objects[i]->screencoords = ft_calloc((rt->height * rt->width) + 1,
+				sizeof(t_XYZ));
 		++i;
 	}
 	i = 0;

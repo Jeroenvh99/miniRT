@@ -18,7 +18,7 @@ static void	print_colour(int fd, t_colour *colour)
 	dprintf(fd, "%i,%i,%i", colour->red, colour->green, colour->blue);
 }
 
-static void	print_XYZ(int fd, t_XYZ *pos)
+static void	print_xyz(int fd, t_XYZ *pos)
 {
 	dprintf(fd, "%f,%f,%f", pos->x, pos->y, pos->z);
 }
@@ -31,7 +31,7 @@ static void	print_lighting(int fd, t_lighting **lights)
 	{
 		light = *lights;
 		dprintf(fd, "L ");
-		print_XYZ(fd, &light->direction);
+		print_xyz(fd, &light->direction);
 		dprintf(fd, " %f ", light->brightness);
 		print_colour(fd, &light->colour);
 		dprintf(fd, "\n");
@@ -42,7 +42,7 @@ static void	print_lighting(int fd, t_lighting **lights)
 static void	print_sphere(int fd, t_sphere *sphere)
 {
 	dprintf(fd, "sp ");
-	print_XYZ(fd, &sphere->centre);
+	print_xyz(fd, &sphere->centre);
 	dprintf(fd, " %f ", sphere->radius * 2);
 	print_colour(fd, &sphere->colour);
 	dprintf(fd, "\n");
@@ -51,9 +51,9 @@ static void	print_sphere(int fd, t_sphere *sphere)
 static void	print_plane(int fd, t_plane *plane)
 {
 	dprintf(fd, "pl ");
-	print_XYZ(fd, &plane->point);
+	print_xyz(fd, &plane->point);
 	dprintf(fd, " ");
-	print_XYZ(fd, &plane->normal);
+	print_xyz(fd, &plane->normal);
 	dprintf(fd, " ");
 	print_colour(fd, &plane->colour);
 	dprintf(fd, "\n");
@@ -62,9 +62,9 @@ static void	print_plane(int fd, t_plane *plane)
 static void	print_cylinder(int fd, t_cylinder *cylinder)
 {
 	dprintf(fd, "cy ");
-	print_XYZ(fd, &cylinder->centre);
+	print_xyz(fd, &cylinder->centre);
 	dprintf(fd, " ");
-	print_XYZ(fd, &cylinder->axis);
+	print_xyz(fd, &cylinder->axis);
 	dprintf(fd, " %f %f ", cylinder->radius * 2, cylinder->height);
 	print_colour(fd, &cylinder->colour);
 	dprintf(fd, "\n");
@@ -104,9 +104,9 @@ void	print_scene(int fd, t_scene *scene)
 	if (scene->cam.fov <= 180)
 	{
 		dprintf(fd, "C ");
-		print_XYZ(fd, &scene->cam.pos);
+		print_xyz(fd, &scene->cam.pos);
 		dprintf(fd, " ");
-		print_XYZ(fd, &scene->cam.viewdirection);
+		print_xyz(fd, &scene->cam.viewdirection);
 		dprintf(fd, " %i\n", scene->cam.fov);
 	}
 	if (scene->lighting.array)
