@@ -37,7 +37,7 @@ typedef struct s_rt
 	t_scene		*scene;
 }				t_rt;
 
-typedef int		(*t_drawfunc)(t_rt *, t_geometry *);
+typedef void	(*t_drawfunc)(t_rt *, t_geometry *);
 
 void			init_rt(t_rt *rt);
 void			exit_rt(t_rt *rt);
