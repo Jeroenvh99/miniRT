@@ -66,13 +66,13 @@ void	set_resize(void *param)
 	}
 }
 
-void	reset_resize(void *param)
+void	reset_resize(mlx_key_data_t keydata, void* param)
 {
 	t_rt	*local_rt;
 	int		index;
 
 	local_rt = (t_rt *)param;
-	if (mlx_is_mouse_down(local_rt->mlx, MLX_MOUSE_BUTTON_RIGHT))
+	if (keydata.key == MLX_KEY_Z && keydata.action == MLX_PRESS && keydata.modifier == MLX_CONTROL)
 	{
 		int j = 0;
 		while (local_rt->history[j + 1].geom && j < HISTORYSIZE - 2)
