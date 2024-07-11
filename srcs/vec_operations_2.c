@@ -42,3 +42,13 @@ t_XYZ	vec_subtraction(t_XYZ vec1, t_XYZ vec2)
 	res.z = vec1.z - vec2.z;
 	return (res);
 }
+
+void	norm_vec(t_XYZ *vector)
+{
+	double	mag;
+
+	mag = mag_vec(vector);
+	vector->x /= mag;
+	vector->y /= mag;
+	vector->z /= mag;
+}

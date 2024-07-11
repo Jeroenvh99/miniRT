@@ -34,12 +34,13 @@ double	distancetoline(t_XYZ *p, t_XYZ *linepoint, t_XYZ *dir)
 	return (mag_vec(&nominator) / mag_vec(dir));
 }
 
-int	onLine(t_XYZ *point, t_ray *line)
+int	online(t_XYZ *point, t_ray *line)
 {
 	t_XYZ	tmp;
 	double	nominator;
 
 	tmp = vec_subtraction(*point, line->origin);
 	nominator = (double)tmp.x / (double)line->dir.x;
-	return ((double)tmp.y / (double)line->dir.y == nominator && (double)tmp.z / (double)line->dir.z == nominator);
+	return ((double)tmp.y / (double)line->dir.y == nominator && (double)tmp.z
+		/ (double)line->dir.z == nominator);
 }

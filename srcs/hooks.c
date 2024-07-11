@@ -24,38 +24,40 @@ void	escape_hook(void *param)
 
 int	searchcoord(t_rt *rt, t_geometry *geom, int posx, int posy)
 {
-	int j = 0;
+	int	j;
+
+	j = 0;
 	while (j < rt->width * rt->height)
 	{
-		if (posx == (int)geom->screencoords[j].x && posy == (int)geom->screencoords[j].y)
+		if (posx == (int)geom->screencoords[j].x
+			&& posy == (int)geom->screencoords[j].y)
 		{
-			return 1;
+			return (1);
 		}
 		++j;
 	}
-	return 0;
+	return (0);
 }
 
 void	set_resize(void *param)
 {
-	t_rt	*local_rt;
+	t_rt		*local_rt;
+	t_geometry	**objects;
+	int			i;
+	int			mousex;
+	int			mousey;
 
 	local_rt = (t_rt *)param;
 	if (mlx_is_mouse_down(local_rt->mlx, MLX_MOUSE_BUTTON_LEFT))
 	{
-		t_geometry	**objects;
-		int			i;
-		int	mousex;
-		int mousey;
-
 		mlx_get_mouse_pos(local_rt->mlx, &mousex, &mousey);
 		objects = local_rt->scene->geometry.array;
 		i = 0;
 		while (i < local_rt->scene->geomsize)
 		{
-			t_geometry *geom = local_rt->scene->geometry.array[i];
-			if (searchcoord(local_rt, geom, mousex, mousey))
-				break;
+			if (searchcoord(local_rt, local_rt->scene->geometry.array[i],
+					mousex, mousey))
+				break ;
 			++i;
 		}
 		if (i < local_rt->scene->geomsize)
@@ -66,22 +68,24 @@ void	set_resize(void *param)
 	}
 }
 
-void	reset_resize(mlx_key_data_t keydata, void* param)
+void	reset_resize(mlx_key_data_t keydata, void *param)
 {
 	t_rt	*local_rt;
 	int		index;
+	int		j;
 
 	local_rt = (t_rt *)param;
-	if (keydata.key == MLX_KEY_Z && keydata.action == MLX_PRESS && keydata.modifier == MLX_CONTROL)
+	if (keydata.key == MLX_KEY_Z && keydata.action == MLX_PRESS
+		&& keydata.modifier == MLX_CONTROL)
 	{
-		int j = 0;
+		j = 0;
 		while (local_rt->history[j + 1].geom && j < HISTORYSIZE - 2)
 		{
 			++j;
 		}
 		if (!local_rt->history[j].geom)
 		{
-			return;
+			return ;
 		}
 		index = local_rt->history[j].index;
 		free(local_rt->scene->geometry.array[index]->elem);
@@ -91,4 +95,29 @@ void	reset_resize(mlx_key_data_t keydata, void* param)
 		local_rt->history[j].geom = NULL;
 		draw_objects(local_rt);
 	}
+}
+
+void	resize_rt(int32_t width, int32_t height, void *param)
+{
+	t_rt		*local_rt;
+	t_geometry	**objects;
+	int			i;
+
+	local_rt = (t_rt *)param;
+	i = 0;
+	local_rt->width = width;
+	local_rt->height = height;
+	if (height < width)
+		local_rt->aspectratio = (double)width / (double)height;
+	else
+		local_rt->aspectratio = (double)height / (double)width;
+	objects = local_rt->scene->geometry.array;
+	while (i < local_rt->scene->geomsize)
+	{
+		free(objects[i]->screencoords);
+		objects[i]->screencoords = ft_calloc((local_rt->height
+					* local_rt->width) + 1, sizeof(t_XYZ));
+		++i;
+	}
+	draw_objects(local_rt);
 }
