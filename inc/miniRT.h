@@ -46,7 +46,7 @@ void			exit_rt(t_rt *rt);
 t_XYZ			vector(double x, double y, double z);
 double			distance(t_XYZ *p1, t_XYZ *p2);
 double			distancetoline(t_XYZ *p, t_XYZ *linepoint, t_XYZ *dir);
-int				onLine(t_XYZ *point, t_ray *line);
+int				online(t_XYZ *point, t_ray *line);
 int				same_point(t_XYZ *p1, t_XYZ *p2);
 t_XYZ			vec_addition(t_XYZ vec1, t_XYZ vec2);
 t_XYZ			vec_multiplication(double factor, t_XYZ vector);
