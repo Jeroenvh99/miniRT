@@ -37,6 +37,8 @@ typedef struct s_rt
 	t_scene		*scene;
 }				t_rt;
 
+typedef int		(*t_drawfunc)(t_rt *, t_geometry *);
+
 void			init_rt(t_rt *rt);
 void			exit_rt(t_rt *rt);
 
@@ -62,8 +64,9 @@ void			changecolour(t_colour *colour);
 
 // MLX hooks
 void			set_resize(void *rt);
-void			reset_resize(mlx_key_data_t keydata, void* param);
+void			reset_resize(mlx_key_data_t keydata, void *param);
 void			escape_hook(void *param);
+void			resize_rt(int32_t width, int32_t height, void *param);
 
 // draw functions
 void			draw_objects(t_rt *rt);
