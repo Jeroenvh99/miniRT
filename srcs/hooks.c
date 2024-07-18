@@ -12,6 +12,8 @@
 
 #include "miniRT.h"
 #include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
 
 void	escape_hook(void *param)
 {
@@ -100,24 +102,39 @@ void	reset_resize(mlx_key_data_t keydata, void *param)
 void	resize_rt(int32_t width, int32_t height, void *param)
 {
 	t_rt		*local_rt;
-	t_geometry	**objects;
 	int			i;
 
 	local_rt = (t_rt *)param;
 	i = 0;
+	local_rt->lastresize = mlx_get_time();
 	local_rt->width = width;
 	local_rt->height = height;
 	if (height < width)
 		local_rt->aspectratio = (double)width / (double)height;
 	else
 		local_rt->aspectratio = (double)height / (double)width;
-	objects = local_rt->scene->geometry.array;
-	while (i < local_rt->scene->geomsize)
+	local_rt->resizerender = 1;
+}
+
+void	resize_render(void *param)
+{
+	t_rt		*local_rt;
+	t_geometry	**objects;
+	int			i;
+
+	local_rt = (t_rt *)param;
+	i = 0;
+	if (local_rt->resizerender && (mlx_get_time() - local_rt->lastresize) > 0.1)
 	{
-		free(objects[i]->screencoords);
-		objects[i]->screencoords = ft_calloc((local_rt->height
-					* local_rt->width) + 1, sizeof(t_XYZ));
-		++i;
+		objects = local_rt->scene->geometry.array;
+		while (i < local_rt->scene->geomsize)
+		{
+			free(objects[i]->screencoords);
+			objects[i]->screencoords = ft_calloc((local_rt->height
+				* local_rt->width) + 1, sizeof(t_XYZ));
+			++i;
+		}
+		draw_objects(local_rt);
+		local_rt->resizerender = 0;
 	}
-	draw_objects(local_rt);
 }
