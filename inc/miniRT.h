@@ -32,6 +32,8 @@ typedef struct s_rt
 	t_history	history[HISTORYSIZE];
 	int			width;
 	int			height;
+	double		lastresize;
+	int			resizerender;
 	double		aspectratio;
 	double		camtransform[3][3];
 	t_scene		*scene;
@@ -67,6 +69,7 @@ void			set_resize(void *rt);
 void			reset_resize(mlx_key_data_t keydata, void *param);
 void			escape_hook(void *param);
 void			resize_rt(int32_t width, int32_t height, void *param);
+void			resize_render(void *param);
 
 // draw functions
 void			draw_objects(t_rt *rt);
