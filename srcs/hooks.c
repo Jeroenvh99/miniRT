@@ -17,11 +17,11 @@
 
 void	escape_hook(void *param)
 {
-	mlx_t	*mlx;
+	t_rt	*local_rt;
 
-	mlx = ((t_rt *)param)->mlx;
-	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
-		exit_rt((t_rt *)param);
+	local_rt = (t_rt *)param;
+	if (mlx_is_key_down(local_rt->mlx, MLX_KEY_ESCAPE))
+		exit_rt(local_rt);
 }
 
 int	searchcoord(t_rt *rt, t_geometry *geom, int posx, int posy)
@@ -57,7 +57,7 @@ void	set_resize(void *param)
 		i = 0;
 		while (i < local_rt->scene->geomsize)
 		{
-			if (searchcoord(local_rt, local_rt->scene->geometry.array[i],
+			if (searchcoord(local_rt, objects[i],
 					mousex, mousey))
 				break ;
 			++i;
@@ -101,11 +101,9 @@ void	reset_resize(mlx_key_data_t keydata, void *param)
 
 void	resize_rt(int32_t width, int32_t height, void *param)
 {
-	t_rt		*local_rt;
-	int			i;
+	t_rt	*local_rt;
 
 	local_rt = (t_rt *)param;
-	i = 0;
 	local_rt->lastresize = mlx_get_time();
 	local_rt->width = width;
 	local_rt->height = height;
@@ -113,7 +111,6 @@ void	resize_rt(int32_t width, int32_t height, void *param)
 		local_rt->aspectratio = (double)width / (double)height;
 	else
 		local_rt->aspectratio = (double)height / (double)width;
-	local_rt->resizerender = 1;
 }
 
 void	resize_render(void *param)
@@ -124,7 +121,7 @@ void	resize_render(void *param)
 
 	local_rt = (t_rt *)param;
 	i = 0;
-	if (local_rt->resizerender && (mlx_get_time() - local_rt->lastresize) > 0.1)
+	if (local_rt->lastresize > 0 && (mlx_get_time() - local_rt->lastresize) > 0.1)
 	{
 		objects = local_rt->scene->geometry.array;
 		while (i < local_rt->scene->geomsize)
@@ -135,6 +132,6 @@ void	resize_render(void *param)
 			++i;
 		}
 		draw_objects(local_rt);
-		local_rt->resizerender = 0;
+		local_rt->lastresize = 0;
 	}
 }

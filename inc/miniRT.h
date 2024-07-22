@@ -33,7 +33,6 @@ typedef struct s_rt
 	int			width;
 	int			height;
 	double		lastresize;
-	int			resizerender;
 	double		aspectratio;
 	double		camtransform[3][3];
 	t_scene		*scene;
