@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:35:43 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/05/18 20:31:13 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/07/17 17:31:31 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,58 @@ int	hit_cylinder(t_cylinder cylinder, t_ray ray, double *output)
 		return (1);
 	}
 	return (0);
+}
+
+void	draw_sphere(t_rt *rt, t_geometry *geom)
+{
+	double	x;
+	double	y;
+	int		j;
+	t_ray	ray;
+	t_colour	tempcolour;
+	t_colour	colour;
+
+	//default_matrix(rt);
+	j = 0;
+	y = 0;
+	while (y < rt->height)
+	{
+		x = 0;
+		while (x < rt->width)
+		{
+			ray = ray_launcher(rt, ray, x, y);
+			t_lighting **spots;
+			spots = rt->scene->lighting.array;
+			colour.red = colour.green = colour.blue = colour.transparency = 0;
+			int i = 0;
+			while (spots[i])
+			{
+				tempcolour = pixel_colour((t_sphere *)geom->elem, &ray, rt->scene->amb, *spots[i], SHINE);
+				colour.red += tempcolour.red;
+				if (colour.red > 255)
+					colour.red = 255;
+				colour.green += tempcolour.green;
+				if (colour.green > 255)
+					colour.green = 255;
+				colour.blue += tempcolour.blue;
+				if (colour.blue > 255)
+					colour.blue = 255;
+				colour.transparency += tempcolour.transparency;
+				if (colour.transparency > 255)
+					colour.transparency = 255;
+				++i;
+			}
+			geom->screencoords[(int)(x + (y * rt->width))].x = 0;
+			geom->screencoords[(int)(x + (y * rt->width))].x = 0;
+			if (colour.transparency > 0)
+			{
+				geom->screencoords[j].x = x;
+				geom->screencoords[j].y = y;
+				++j;
+				mlx_put_pixel(rt->image, x, y, pack_colour(&colour));
+			}
+			x++;
+		}
+		y++;
+	}
 }
