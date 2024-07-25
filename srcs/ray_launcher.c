@@ -76,9 +76,9 @@ t_ray	ray_launcher(t_rt *rt, t_ray ray, double x, double y)
 	ray.dir.z = 1.0;
 	norm_vec(&ray.dir);
 	// print_XYZ(1, &ray.dir);
-	ray.dir = base_transform(rt->camtransform, ray.dir);
+	// ray.dir = base_transform(rt->camtransform, ray.dir);
 	// print_XYZ(1, &ray.dir);
 	// printf("\n");
-	norm_vec(&ray.dir);
+	// norm_vec(&ray.dir);
 	return (ray);
 }
