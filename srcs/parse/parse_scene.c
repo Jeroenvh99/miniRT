@@ -40,7 +40,7 @@ static int	parseambient(t_scene *scene, char *line)
 
 static int	parsecamera(t_scene *scene, char *line)
 {
-	char		**parts;
+	char	**parts;
 
 	if (scene->cam.fov <= 180)
 	{
@@ -84,10 +84,10 @@ static int	parseline(t_scene *scene, char *line)
 {
 	int					i;
 	static const char	*rt_elements[N_ELEMENTS] = {"A", "C", "L", "sp", "pl",
-			"cy"};
+		"cy"};
+	t_parsef const		parsef[N_ELEMENTS] = {parseambient, parsecamera,
+		parselight, parsesphere, parseplane, parsecylinder};
 
-	t_parsef const parsef[N_ELEMENTS] = {parseambient, parsecamera, parselight,
-		parsesphere, parseplane, parsecylinder};
 	i = 0;
 	while (i < N_ELEMENTS)
 	{

@@ -34,7 +34,9 @@ int	main(int argc, char **argv)
 	draw_objects(&rt);
 	mlx_loop_hook(rt.mlx, set_resize, &rt);
 	mlx_loop_hook(rt.mlx, escape_hook, &rt);
+	mlx_loop_hook(rt.mlx, resize_render, &rt);
 	mlx_key_hook(rt.mlx, reset_resize, &rt);
+	mlx_resize_hook(rt.mlx, resize_rt, &rt);
 	mlx_loop(rt.mlx);
 	exit_rt(&rt);
 	return (0);

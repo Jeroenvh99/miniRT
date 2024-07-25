@@ -32,10 +32,13 @@ typedef struct s_rt
 	t_history	history[HISTORYSIZE];
 	int			width;
 	int			height;
+	double		lastresize;
 	double		aspectratio;
 	double		camtransform[3][3];
 	t_scene		*scene;
 }				t_rt;
+
+typedef void	(*t_drawfunc)(t_rt *, t_geometry *);
 
 void			init_rt(t_rt *rt);
 void			exit_rt(t_rt *rt);
@@ -44,7 +47,7 @@ void			exit_rt(t_rt *rt);
 t_XYZ			vector(double x, double y, double z);
 double			distance(t_XYZ *p1, t_XYZ *p2);
 double			distancetoline(t_XYZ *p, t_XYZ *linepoint, t_XYZ *dir);
-int				onLine(t_XYZ *point, t_ray *line);
+int				online(t_XYZ *point, t_ray *line);
 int				same_point(t_XYZ *p1, t_XYZ *p2);
 t_XYZ			vec_addition(t_XYZ vec1, t_XYZ vec2);
 t_XYZ			vec_multiplication(double factor, t_XYZ vector);
@@ -63,8 +66,10 @@ void			changecolour(t_colour *colour);
 
 // MLX hooks
 void			set_resize(void *rt);
-void			reset_resize(mlx_key_data_t keydata, void* param);
+void			reset_resize(mlx_key_data_t keydata, void *param);
 void			escape_hook(void *param);
+void			resize_rt(int32_t width, int32_t height, void *param);
+void			resize_render(void *param);
 
 // light and color
 

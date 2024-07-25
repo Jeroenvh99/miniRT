@@ -44,6 +44,7 @@ void	free_geom(void *geometry)
 
 	geom = (t_geometry *)geometry;
 	free(geom->elem);
+	free(geom->screencoords);
 	free(geom);
 }
 
