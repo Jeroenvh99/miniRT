@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 19:33:23 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/05/21 15:02:52 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/07/25 15:28:53 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,6 @@ t_XYZ	vector(double x, double y, double z)
 	vec.y = y;
 	vec.z = z;
 	return (vec);
-}
-
-t_XYZ	vec_packer(double x, double y, double z)
-{
-	t_XYZ	res;
-
-	res.x = x;
-	res.y = y;
-	res.z = z;
-	return (res);
 }
 
 double	dot_vec(t_XYZ vec1, t_XYZ vec2)

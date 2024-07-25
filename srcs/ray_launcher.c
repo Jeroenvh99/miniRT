@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 08:48:19 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/07/25 15:24:28 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/07/25 15:35:17 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,15 @@ void	default_matrix(t_rt *rt)
 	t_XYZ	right;
 	t_XYZ	up;
 	t_XYZ	holder;
+	t_XYZ	temp;
 
 	holder = vector(0, 1, 0);
 	ahead = rt->scene->cam.viewdirection;
 	// norm_vec(&ahead);
 	right = cross_vec(holder, ahead);
-	up = cross_vec(ahead, right);	
+	up = cross_vec(ahead, right);
+	temp = vector(0.2, 0, 0);
+	right = vec_multiplication(0.8, right);
 	rt->camtransform[0][0] = right.x;
 	rt->camtransform[0][1] = right.y;
 	rt->camtransform[0][2] = right.z;
@@ -37,10 +40,10 @@ void	default_matrix(t_rt *rt)
 	rt->camtransform[2][2] = ahead.z;
 }
 
-static void	print_XYZ(int fd, t_XYZ *pos)
-{
-	dprintf(fd, "%f,%f,%f\n", pos->x, pos->y, pos->z);
-}
+// static void	print_XYZ(int fd, t_XYZ *pos)
+// {
+// 	dprintf(fd, "%f,%f,%f\n", pos->x, pos->y, pos->z);
+// }
 
 t_XYZ	base_transform(double matrix[3][3], t_XYZ dir)
 {
@@ -72,10 +75,10 @@ t_ray	ray_launcher(t_rt *rt, t_ray ray, double x, double y)
 	ray.dir.y = (1.0 - 2.0 * (y + 0.5) / (double)rt->height) * scale;
 	ray.dir.z = 1.0;
 	norm_vec(&ray.dir);
-	print_XYZ(1, &ray.dir);
+	// print_XYZ(1, &ray.dir);
 	ray.dir = base_transform(rt->camtransform, ray.dir);
-	print_XYZ(1, &ray.dir);
-	printf("\n");
+	// print_XYZ(1, &ray.dir);
+	// printf("\n");
 	norm_vec(&ray.dir);
 	return (ray);
 }
