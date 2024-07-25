@@ -135,3 +135,26 @@ void	resize_render(void *param)
 		local_rt->lastresize = 0;
 	}
 }
+
+void	rotate_camera(void *param)
+{
+	t_rt	*local_rt;
+
+	local_rt = (t_rt *)param;
+	if (mlx_is_key_down(local_rt->mlx, MLX_KEY_LEFT))
+	{
+		//rotateleft
+	}
+	else if (mlx_is_key_down(local_rt->mlx, MLX_KEY_RIGHT))
+	{
+		//rotateright
+	}
+	else if (mlx_is_key_down(local_rt->mlx, MLX_KEY_UP))
+	{
+		//rotateup
+	}
+	else if (mlx_is_key_down(local_rt->mlx, MLX_KEY_DOWN))
+	{
+		//rotatedown
+	}
+}
