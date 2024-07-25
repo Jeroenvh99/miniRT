@@ -141,9 +141,16 @@ void	rotate_camera(void *param)
 	t_rt	*local_rt;
 
 	local_rt = (t_rt *)param;
-	if (mlx_is_key_down(local_rt->mlx, MLX_KEY_LEFT))
+	if (mlx_is_key_down(local_rt->mlx, MLX_KEY_A))
 	{
-		//rotateleft
+		printf("here");
+		t_sphere *sphere0 = (t_sphere *)local_rt->scene->geometry.array[0]->elem;
+		sphere0->centre = base_transform(local_rt->camtransform, sphere0->centre);
+		t_sphere *sphere1 = (t_sphere *)local_rt->scene->geometry.array[1]->elem;
+		sphere1->centre = base_transform(local_rt->camtransform, sphere1->centre);
+		t_sphere *sphere2 = (t_sphere *)local_rt->scene->geometry.array[2]->elem;
+		sphere2->centre = base_transform(local_rt->camtransform, sphere2->centre);
+		draw_objects(local_rt);
 	}
 	else if (mlx_is_key_down(local_rt->mlx, MLX_KEY_RIGHT))
 	{

@@ -57,6 +57,7 @@ t_XYZ			cross_vec(t_XYZ vec1, t_XYZ vec2);
 double			mag_vec(t_XYZ *vector);
 void			norm_vec(t_XYZ *vector);
 void			default_matrix(t_rt *rt);
+t_XYZ			base_transform(double matrix[3][3], t_XYZ dir);
 
 // resize geometry functions
 void			resize_elements(t_rt *rt, int i);
