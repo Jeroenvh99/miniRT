@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:20:05 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/05/21 18:23:47 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/07/25 15:13:16 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ double			dot_vec(t_XYZ vec1, t_XYZ vec2);
 t_XYZ			cross_vec(t_XYZ vec1, t_XYZ vec2);
 double			mag_vec(t_XYZ *vector);
 void			norm_vec(t_XYZ *vector);
+void			default_matrix(t_rt *rt);
 
 // resize geometry functions
 void			resize_elements(t_rt *rt, int i);
@@ -69,6 +70,9 @@ void			reset_resize(mlx_key_data_t keydata, void *param);
 void			escape_hook(void *param);
 void			resize_rt(int32_t width, int32_t height, void *param);
 void			resize_render(void *param);
+
+// light and color
+
 
 // draw functions
 void			draw_objects(t_rt *rt);

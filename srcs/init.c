@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:40:24 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/05/21 12:36:34 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/07/25 15:13:29 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	init_rt(t_rt *rt)
 		rt->history[i].geom = NULL;
 		++i;
 	}
+	default_matrix(rt);
 }
 
 void	exit_rt(t_rt *rt)
