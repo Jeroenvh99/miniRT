@@ -57,6 +57,7 @@ t_XYZ			cross_vec(t_XYZ vec1, t_XYZ vec2);
 double			mag_vec(t_XYZ *vector);
 void			norm_vec(t_XYZ *vector);
 void			default_matrix(t_rt *rt);
+t_XYZ			base_transform(double matrix[3][3], t_XYZ dir);
 
 // resize geometry functions
 void			resize_elements(t_rt *rt, int i);
@@ -70,6 +71,7 @@ void			reset_resize(mlx_key_data_t keydata, void *param);
 void			escape_hook(void *param);
 void			resize_rt(int32_t width, int32_t height, void *param);
 void			resize_render(void *param);
+void			rotate_camera(void *param);
 
 // light and color
 
