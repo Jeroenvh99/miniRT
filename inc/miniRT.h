@@ -16,6 +16,7 @@
 # include "debug.h"
 # include "libft.h"
 # include "scene.h"
+# include <math.h>
 # define SHINE 50
 # define HISTORYSIZE 3
 
@@ -34,6 +35,8 @@ typedef struct s_rt
 	int			height;
 	double		lastresize;
 	double		aspectratio;
+	double		xrotation;
+	double		yrotation;
 	double		camtransform[3][3];
 	t_scene		*scene;
 }				t_rt;
@@ -57,6 +60,7 @@ t_XYZ			cross_vec(t_XYZ vec1, t_XYZ vec2);
 double			mag_vec(t_XYZ *vector);
 void			norm_vec(t_XYZ *vector);
 void			default_matrix(t_rt *rt);
+void			default_matrix_rotate(t_rt *rt, double xrotation, double yrotation);
 t_XYZ			base_transform(double matrix[3][3], t_XYZ dir);
 
 // resize geometry functions
