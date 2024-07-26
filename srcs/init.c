@@ -59,6 +59,8 @@ void	init_rt(t_rt *rt)
 	rt->height = 720;
 	rt->lastresize = 0;
 	rt->aspectratio = (double)rt->width / (double)rt->height;
+	rt->xrotation = 0;
+	rt->yrotation = 0;
 	rt->mlx = mlx_init(rt->width, rt->height, "miniRT", true);
 	if (!rt->mlx)
 	{

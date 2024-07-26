@@ -222,6 +222,7 @@ t_colour	pixel_colour(t_sphere *sphere, t_ray *ray, t_ambient ambient, t_lightin
 {
 	t_colour	res_colour;
 	double t;
+	
 	t = hit_sphere(*sphere, ray);
 	if (t < 0)
 		return ((t_colour){0, 0, 0, 0});
@@ -258,8 +259,11 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 	t_ray	ray;
 	t_colour	tempcolour;
 	t_colour	colour;
+	t_sphere	transformedsphere;
 
-	//default_matrix(rt);
+	transformedsphere.centre = base_transform(rt->camtransform, ((t_sphere *)geom->elem)->centre);
+	transformedsphere.radius = ((t_sphere *)geom->elem)->radius;
+	transformedsphere.colour = ((t_sphere *)geom->elem)->colour;
 	j = 0;
 	y = 0;
 	while (y < rt->height)
@@ -274,7 +278,7 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 			int i = 0;
 			while (spots[i])
 			{
-				tempcolour = pixel_colour((t_sphere *)geom->elem, &ray, rt->scene->amb, *spots[i], SHINE);
+				tempcolour = pixel_colour(&transformedsphere, &ray, rt->scene->amb, *spots[i], SHINE);
 				colour.red += tempcolour.red;
 				if (colour.red > 255)
 					colour.red = 255;
