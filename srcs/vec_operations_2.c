@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include <math.h>
 
 t_XYZ	vec_multiplication(double factor, t_XYZ vector)
 {
