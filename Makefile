@@ -38,7 +38,7 @@ OBJ_SUBDIRS := $(SRC_SUBDIRS)
 HDR_DIR		:= ./inc/
 LIB_DIR		:= ./lib/
 
-CFLAGS		+= -Wall -Wextra -Werror -I$(LIB_DIR)libft/ -I$(LIB_DIR)MLX42/include/MLX42 -I$(HDR_DIR) -g
+CFLAGS		+= -Wall -Wextra -Werror -I$(LIB_DIR)libft/ -I$(LIB_DIR)MLX42/include/MLX42 -I$(HDR_DIR) -g -fsanitize=address
 
 .PHONY: all bonus clean fclean re
 

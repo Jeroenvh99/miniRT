@@ -127,8 +127,8 @@ void	resize_render(void *param)
 		while (i < local_rt->scene->geomsize)
 		{
 			free(objects[i]->screencoords);
-			objects[i]->screencoords = ft_calloc((local_rt->height
-				* local_rt->width) + 1, sizeof(t_XYZ));
+			objects[i]->screencoords = ft_calloc(local_rt->height
+				* local_rt->width, sizeof(t_XYZ));
 			++i;
 		}
 		draw_objects(local_rt);
@@ -139,8 +139,12 @@ void	resize_render(void *param)
 void	rotate_camera(void *param)
 {
 	t_rt	*local_rt;
+	double	prevxrot;
+	double	prevyrot;
 
 	local_rt = (t_rt *)param;
+	prevxrot = local_rt->xrotation;
+	prevyrot = local_rt->yrotation;
 	if (mlx_is_key_down(local_rt->mlx, MLX_KEY_LEFT))
 	{
 		local_rt->xrotation += 5 * (M_PI / 180.0);
@@ -158,5 +162,6 @@ void	rotate_camera(void *param)
 		local_rt->yrotation -= 5 * (M_PI / 180.0);
 	}
 	default_matrix_rotate(local_rt, local_rt->xrotation, local_rt->yrotation);
-	draw_objects(local_rt);
+	if (local_rt->xrotation != prevxrot || local_rt->yrotation != prevyrot)
+		draw_objects(local_rt);
 }

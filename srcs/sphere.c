@@ -265,6 +265,13 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 	transformedsphere.radius = ((t_sphere *)geom->elem)->radius;
 	transformedsphere.colour = ((t_sphere *)geom->elem)->colour;
 	j = 0;
+	while (j < rt->width * rt->height)
+	{
+		geom->screencoords[j].x = 0;
+		geom->screencoords[j].y = 0;
+		++j;
+	}
+	j = 0;
 	y = 0;
 	while (y < rt->height)
 	{
@@ -293,8 +300,6 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 					colour.transparency = 255;
 				++i;
 			}
-			geom->screencoords[(int)(x + (y * rt->width))].x = 0;
-			geom->screencoords[(int)(x + (y * rt->width))].x = 0;
 			if (colour.transparency > 0)
 			{
 				geom->screencoords[j].x = x;
