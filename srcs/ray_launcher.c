@@ -34,15 +34,8 @@ void	default_matrix_rotate(t_rt *rt, double xrotation, double yrotation)
 	rt->camtransform[0][2] = -sin(xrotation);
 	rt->camtransform[1][0] = -sin(yrotation);
 	rt->camtransform[1][1] = cos(yrotation);
-	rt->camtransform[1][2] = 0;
 	rt->camtransform[2][0] = sin(xrotation);
-	rt->camtransform[2][1] = 0;
 	rt->camtransform[2][2] = cos(xrotation);
-}
-
-static void	print_XYZ(int fd, t_XYZ *pos)
-{
-	dprintf(fd, "%f,%f,%f\n", pos->x, pos->y, pos->z);
 }
 
 t_XYZ	base_transform(double matrix[3][3], t_XYZ dir)

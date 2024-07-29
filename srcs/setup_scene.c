@@ -75,7 +75,6 @@ void	free_scene(t_scene *scene, int isarr)
 		ft_lstclear(&scene->lighting.list, free);
 		ft_lstclear(&scene->geometry.list, free_geom);
 	}
-	free(scene->filename);
 	free(scene);
 }
 
@@ -108,7 +107,6 @@ int	cylindercollission(t_XYZ *lightpos, t_cylinder *cylinder)
 	t_plane	cap1;
 	t_plane	cap2;
 	double	halfheight;
-	double	dist;
 
 	if (distancetoline(lightpos, &cylinder->centre,
 			&cylinder->axis) == cylinder->radius)
@@ -124,7 +122,6 @@ int	cylindercollission(t_XYZ *lightpos, t_cylinder *cylinder)
 	cap2.point = vector(cylinder->centre.x - (cylinder->axis.x * halfheight),
 			cylinder->centre.y - (cylinder->axis.y * halfheight),
 			cylinder->centre.z - (cylinder->axis.z * halfheight));
-	dist = distancetoline(lightpos, &cylinder->centre, &cylinder->axis);
 	if (distancetoline(lightpos, &cylinder->centre,
 			&cylinder->axis) <= cylinder->radius && (planecollission(lightpos,
 				&cap1) || planecollission(lightpos, &cap2)))

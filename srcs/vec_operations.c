@@ -24,10 +24,7 @@ t_XYZ	vector(double x, double y, double z)
 
 double	dot_vec(t_XYZ vec1, t_XYZ vec2)
 {
-	double	res;
-
-	res = vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
-	return (res);
+	return (vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z);
 }
 
 t_XYZ	cross_vec(t_XYZ vec1, t_XYZ vec2)
@@ -42,9 +39,6 @@ t_XYZ	cross_vec(t_XYZ vec1, t_XYZ vec2)
 
 double	mag_vec(t_XYZ *vector)
 {
-	double	res;
-
-	res = sqrt(vector->x * vector->x + vector->y * vector->y + vector->z
-			* vector->z);
-	return (res);
+	return (sqrt(vector->x * vector->x + vector->y * vector->y + vector->z
+			* vector->z));
 }
