@@ -43,10 +43,8 @@ double	hit_sphere(t_sphere sphere, t_ray *ray)
 	{
 		return (fmin(sol1, sol2));
 	}
-	else if (sol1 > 0)
-		return (sol1);
-	else if (sol2 > 0)
-		return (sol2);
+	else if (sol1 > 0 || sol2 > 0)
+		return (fmax(sol1, sol2));
 	else
 		return (-1.0);
 }
@@ -221,8 +219,8 @@ t_colour	specular_lighting(t_lighting light, t_XYZ dir, t_XYZ normal, t_XYZ view
 t_colour	pixel_colour(t_sphere *sphere, t_ray *ray, t_ambient ambient, t_lighting light, double shininess)
 {
 	t_colour	res_colour;
-	double t;
-	
+	double		t;
+
 	t = hit_sphere(*sphere, ray);
 	if (t < 0)
 		return ((t_colour){0, 0, 0, 0});
