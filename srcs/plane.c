@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 20:32:04 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/03 16:52:48 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/03 17:17:15 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@ double  hit_plane(t_plane plane, t_ray *ray)
     t_XYZ   diff;
 
     inter = dot_vec(ray->dir, plane.normal);
-    if (fabs(inter) < 1e-20)
+    // printf("%f\n", inter);
+    if (fabs(inter) < 1e-10)
         return(-1.0);
     diff = vec_subtraction(plane.point, ray->origin);
     res = dot_vec(diff, plane.normal) / inter;
+    printf("%f\n", res);
     if (res < 0)
         return (-1.0);
     return (res);
