@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 08:48:19 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/07/25 15:35:17 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/07/26 16:59:43 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ void	default_matrix_rotate(t_rt *rt, double xrotation, double yrotation)
 	rt->camtransform[2][2] = cos(xrotation);
 }
 
-static void	print_XYZ(int fd, t_XYZ *pos)
-{
-	dprintf(fd, "%f,%f,%f\n", pos->x, pos->y, pos->z);
-}
+// static void	print_XYZ(int fd, t_XYZ *pos)
+// {
+// 	dprintf(fd, "%f,%f,%f\n", pos->x, pos->y, pos->z);
+// }
 
 t_XYZ	base_transform(double matrix[3][3], t_XYZ dir)
 {

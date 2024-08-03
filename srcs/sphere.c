@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 20:04:50 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/07/26 16:57:19 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/07/26 16:59:10 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,19 +278,19 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 			int i = 0;
 			while (spots[i])
 			{
-				tempcolour = pixel_colour(&transformedsphere, &ray, rt->scene->amb, *spots[i], SHINE);
-				colour.red += tempcolour.red;
-				if (colour.red > 255)
-					colour.red = 255;
-				colour.green += tempcolour.green;
-				if (colour.green > 255)
-					colour.green = 255;
-				colour.blue += tempcolour.blue;
-				if (colour.blue > 255)
-					colour.blue = 255;
-				colour.transparency += tempcolour.transparency;
-				if (colour.transparency > 255)
-					colour.transparency = 255;
+				colour = pixel_colour(&transformedsphere, &ray, rt->scene->amb, *spots[i], SHINE);
+				// colour.red += tempcolour.red;
+				// if (colour.red > 255)
+				// 	colour.red = 255;
+				// colour.green += tempcolour.green;
+				// if (colour.green > 255)
+				// 	colour.green = 255;
+				// colour.blue += tempcolour.blue;
+				// if (colour.blue > 255)
+				// 	colour.blue = 255;
+				// colour.transparency += tempcolour.transparency;
+				// if (colour.transparency > 255)
+				// 	colour.transparency = 255;
 				++i;
 			}
 			geom->screencoords[(int)(x + (y * rt->width))].x = 0;
