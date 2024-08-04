@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 08:48:19 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/04 16:23:49 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/04 17:10:05 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_ray	ray_launcher(t_rt *rt, t_ray ray, double x, double y)
 	ray.dir.x = (2.0 * (x + 0.5) / (double)rt->width - 1.0) * scale
 		* rt->aspectratio;
 	ray.dir.z = (1.0 - 2.0 * (y + 0.5) / (double)rt->height) * scale;
-	ray.dir.y = 1.0;
+	ray.dir.y = rt->scene->cam.viewdirection.z;
 	norm_vec(&ray.dir);
 	return (ray);
 }
