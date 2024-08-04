@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 20:32:04 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/03 17:17:15 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/04 16:19:04 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,20 @@
 double  hit_plane(t_plane plane, t_ray *ray)
 {
     double  inter;
-    double  res;
+    double  denominator;
     t_XYZ   diff;
 
-    inter = dot_vec(ray->dir, plane.normal);
-    // printf("%f\n", inter);
-    if (fabs(inter) < 1e-10)
+    denominator = dot_vec(ray->dir, plane.normal);
+    // printf("%f\n", denominator);
+    if (denominator < 1e-10)
         return(-1.0);
     diff = vec_subtraction(plane.point, ray->origin);
-    res = dot_vec(diff, plane.normal) / inter;
-    printf("%f\n", res);
-    if (res < 0)
-        return (-1.0);
-    return (res);
+	norm_vec(&diff);
+    inter = dot_vec(diff, plane.normal) / denominator;
+	if (inter < 0)
+		return (-1.0);
+    // printf("%f\n", inter);
+    return (inter);
 }
 
 void	draw_plane(t_rt *rt, t_geometry *geom)
@@ -63,6 +64,7 @@ void	draw_plane(t_rt *rt, t_geometry *geom)
 			geom->screencoords[(int)(x + (y * rt->width))].x = 0;*/
 			if (hit_plane(*((t_plane *)geom->elem), &ray) >= 0)
 			{
+				// printf("%f\n", hit_plane(*((t_plane *)geom->elem), &ray));
 				geom->screencoords[j].x = x;
 				geom->screencoords[j].y = y;
 				++j;
