@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 20:32:04 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/04 16:19:04 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/04 17:00:34 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,8 @@ double  hit_plane(t_plane plane, t_ray *ray)
     double  denominator;
     t_XYZ   diff;
 
-    denominator = dot_vec(ray->dir, plane.normal);
-    // printf("%f\n", denominator);
-    if (denominator < 1e-10)
+    denominator = dot_vec(ray->dir, plane.normal); 
+    if (fabs(denominator) < 1e-10)
         return(-1.0);
     diff = vec_subtraction(plane.point, ray->origin);
 	norm_vec(&diff);
