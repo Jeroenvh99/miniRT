@@ -72,7 +72,7 @@ void	draw_objects(t_rt *rt)
 			{
 				mlx_put_pixel(rt->image, x, y, rt->pixeldata[y * rt->width + x].colour);
 			}
-			x++;
+			x++; 
 		}
 		y++;
 	}
