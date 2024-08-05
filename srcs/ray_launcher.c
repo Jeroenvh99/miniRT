@@ -64,7 +64,7 @@ t_ray	ray_launcher(t_rt *rt, t_ray ray, double x, double y)
 	ray.dir.x = (2.0 * (x + 0.5) / (double)rt->width - 1.0) * scale
 		* rt->aspectratio;
 	ray.dir.z = (1.0 - 2.0 * (y + 0.5) / (double)rt->height) * scale;
-	ray.dir.y = rt->scene->cam.viewdirection.z;
+	ray.dir.y = rt->scene->cam.viewdirection.y;
 	norm_vec(&ray.dir);
 	return (ray);
 }

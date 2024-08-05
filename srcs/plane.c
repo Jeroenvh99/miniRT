@@ -19,6 +19,14 @@ double  hit_plane(t_plane plane, t_ray *ray)
     double  inter;
     double  denominator;
     t_XYZ   diff;
+	double	first;
+	double	second;
+	double	third;
+	double	fourth;
+	double	t;
+	double	n;
+	double	res;
+	t_XYZ	int_point;
 
     denominator = dot_vec(ray->dir, plane.normal); 
     if (fabs(denominator) < 1e-10)
@@ -28,8 +36,23 @@ double  hit_plane(t_plane plane, t_ray *ray)
     inter = dot_vec(diff, plane.normal) / denominator;
 	if (inter < 0)
 		return (-1.0);
+
+	first = plane.normal.x;
+	second = plane.normal.y;
+	third = plane.normal.z;
+	fourth = plane.normal.x * plane.point.x + plane.normal.y * plane.point.y + plane.normal.z * plane.point.z;
+	n = ray->origin.x * first + ray->origin.y * second + ray->origin.z * third;
+	t = first * ray->dir.x + second * ray->dir.y + third * ray->dir.z;
+	fourth -= n;
+	res = (fourth / t);
+	int_point.x = ray->origin.x + ray->dir.x * res;
+	int_point.y = ray->origin.y + ray->dir.y * res;
+	int_point.z = ray->origin.z + ray->dir.z * res;
+	printf("%f\n", (0.5 * 1280) / tan(35));
+	printf("%f\n", int_point.y);
+	// printf("%f\n", dot_vec(vec_subtraction(ray->origin, int_point), vector(0, 1, 0)));
     // printf("%f\n", inter);
-    return (inter);
+    return (int_point.y - ray->origin.y - (0.5 * 1280) / tan(35));
 }
 
 void	draw_plane(t_rt *rt, t_geometry *geom)
@@ -58,9 +81,7 @@ void	draw_plane(t_rt *rt, t_geometry *geom)
 			{
 				colour = pixel_colour(&transformedsphere, &ray, rt->scene->amb, *spots[i], SHINE);
 				++i;
-			}
-			geom->screencoords[(int)(x + (y * rt->width))].x = 0;
-			geom->screencoords[(int)(x + (y * rt->width))].x = 0;*/
+			}*/
 			if (hit_plane(*((t_plane *)geom->elem), &ray) >= 0)
 			{
 				// printf("%f\n", hit_plane(*((t_plane *)geom->elem), &ray));
