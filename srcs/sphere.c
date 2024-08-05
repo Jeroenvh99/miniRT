@@ -43,10 +43,8 @@ double	hit_sphere(t_sphere sphere, t_ray *ray)
 	{
 		return (fmin(sol1, sol2));
 	}
-	else if (sol1 > 0)
-		return (sol1);
-	else if (sol2 > 0)
-		return (sol2);
+	else if (sol1 > 0 || sol2 > 0)
+		return (fmax(sol1, sol2));
 	else
 		return (-1.0);
 }
@@ -221,8 +219,8 @@ t_colour	specular_lighting(t_lighting light, t_XYZ dir, t_XYZ normal, t_XYZ view
 t_colour	pixel_colour(t_sphere *sphere, t_ray *ray, t_ambient ambient, t_lighting light, double shininess)
 {
 	t_colour	res_colour;
-	double t;
-	
+	double		t;
+
 	t = hit_sphere(*sphere, ray);
 	if (t < 0)
 		return ((t_colour){0, 0, 0, 0});
@@ -265,6 +263,13 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 	transformedsphere.radius = ((t_sphere *)geom->elem)->radius;
 	transformedsphere.colour = ((t_sphere *)geom->elem)->colour;
 	j = 0;
+	while (j < rt->width * rt->height)
+	{
+		geom->screencoords[j].x = 0;
+		geom->screencoords[j].y = 0;
+		++j;
+	}
+	j = 0;
 	y = 0;
 	while (y < rt->height)
 	{
@@ -293,8 +298,6 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 				// 	colour.transparency = 255;
 				++i;
 			}
-			geom->screencoords[(int)(x + (y * rt->width))].x = 0;
-			geom->screencoords[(int)(x + (y * rt->width))].x = 0;
 			if (colour.transparency > 0)
 			{
 				geom->screencoords[j].x = x;

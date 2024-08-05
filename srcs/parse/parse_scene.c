@@ -108,7 +108,7 @@ void	readscene(t_scene *scene, char *scenefile)
 
 	if (!checkfilename(scenefile))
 		exit(1);
-	scene->filename = ft_strdup(scenefile);
+	scene->filename = scenefile;
 	fd = open(scenefile, O_RDONLY);
 	if (fd == -1)
 	{

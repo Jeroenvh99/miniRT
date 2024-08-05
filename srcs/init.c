@@ -70,7 +70,7 @@ void	init_rt(t_rt *rt)
 	objects = rt->scene->geometry.array;
 	while (i < rt->scene->geomsize)
 	{
-		objects[i]->screencoords = ft_calloc((rt->height * rt->width) + 1,
+		objects[i]->screencoords = ft_calloc(rt->height * rt->width,
 				sizeof(t_XYZ));
 		++i;
 	}
