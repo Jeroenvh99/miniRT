@@ -40,12 +40,41 @@ void	draw_objects(t_rt *rt)
 		mlx_terminate(rt->mlx);
 		exit(1);
 	}
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < rt->height)
+	{
+		x = 0;
+		while (x < rt->width)
+		{
+			rt->pixeldata[y * rt->width + x].dist = DBL_MAX;
+			x++;
+		}
+		y++;
+	}
 	objects = rt->scene->geometry.array;
 	i = 0;
 	while (i < rt->scene->geomsize)
 	{
 		drawfuncs[objects[i]->elemtype - 1](rt, objects[i]);
 		++i;
+	}
+
+	y = 0;
+	while (y < rt->height)
+	{
+		x = 0;
+		while (x < rt->width)
+		{
+			if (rt->pixeldata[y * rt->width + x].dist != DBL_MAX)
+			{
+				mlx_put_pixel(rt->image, x, y, rt->pixeldata[y * rt->width + x].colour);
+			}
+			x++;
+		}
+		y++;
 	}
 }
 
@@ -80,6 +109,7 @@ void	init_rt(t_rt *rt)
 		rt->history[i].geom = NULL;
 		++i;
 	}
+	rt->pixeldata = malloc(rt->width * rt->height * sizeof(t_hit));
 	default_matrix_rotate(rt, 0, 0);
 }
 
