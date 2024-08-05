@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:40:24 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/07/25 15:13:29 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/03 16:32:10 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	write_scene(t_scene *scene)
 
 void	draw_objects(t_rt *rt)
 {
-	t_drawfunc const	drawfuncs[3] = {draw_sphere, NULL, NULL};
+	t_drawfunc const	drawfuncs[3] = {draw_sphere, draw_plane, NULL};
 	t_geometry			**objects;
 	int					i;
 

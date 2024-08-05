@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:35:43 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/07/17 17:31:31 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/07/26 15:30:40 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,35 @@ int	hit_cylinder(t_cylinder cylinder, t_ray ray, double *output)
 	return (0);
 }
 
+// first thing's first: find 
+
+t_colour	pixel_colour(t_cylinder *cylinder, t_ray *ray, t_ambient ambient, t_lighting light, double shininess)
+{
+	t_colour	res_colour;
+	double t;
+	t = hit_cylinder(*sphere, ray);
+	if (t < 0)
+		return ((t_colour){0, 0, 0, 0});
+	else
+	{
+		t_XYZ hit_point = vec_addition(ray->origin, vec_multiplication(t, ray->dir));
+		t_XYZ	normal = vec_subtraction(hit_point, sphere->centre);
+		norm_vec(&normal);
+		t_XYZ	light_dir = vec_subtraction(light.direction, hit_point);
+		norm_vec(&light_dir);
+		t_XYZ	viewdirection = vec_multiplication(-1, ray->dir);
+		norm_vec(&viewdirection);
+		t_colour	res_ambient = ambient_lighting(ambient, *sphere);
+		t_colour	res_diffuse = diffuse_lighting(light, light_dir, normal, *sphere);
+		t_colour	res_spec = specular_lighting(light, light_dir, normal, viewdirection, shininess);
+		res_colour.red = (unsigned int) fmin(255, res_ambient.red + res_diffuse.red + res_spec.red);
+		res_colour.green = (unsigned int) fmin(255, res_ambient.green + res_diffuse.green + res_spec.green);
+		res_colour.blue = (unsigned int) fmin(255, res_ambient.blue + res_diffuse.blue + res_spec.blue);
+		res_colour.transparency = 255;
+		return (res_colour);
+	}
+}
+
 void	draw_sphere(t_rt *rt, t_geometry *geom)
 {
 	double	x;
@@ -109,7 +138,7 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 			int i = 0;
 			while (spots[i])
 			{
-				tempcolour = pixel_colour((t_sphere *)geom->elem, &ray, rt->scene->amb, *spots[i], SHINE);
+				tempcolour = cylinder_colour((t_cylinder *)geom->elem, &ray, rt->scene->amb, *spots[i], SHINE);
 				colour.red += tempcolour.red;
 				if (colour.red > 255)
 					colour.red = 255;
@@ -138,3 +167,4 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 		y++;
 	}
 }
+

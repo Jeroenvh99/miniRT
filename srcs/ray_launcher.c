@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 08:48:19 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/07/25 15:35:17 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/04 17:10:05 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ void	default_matrix_rotate(t_rt *rt, double xrotation, double yrotation)
 	rt->camtransform[2][2] = cos(xrotation);
 }
 
+// static void	print_XYZ(int fd, t_XYZ *pos)
+// {
+// 	dprintf(fd, "%f,%f,%f\n", pos->x, pos->y, pos->z);
+// }
+
 t_XYZ	base_transform(double matrix[3][3], t_XYZ dir)
 {
 	t_XYZ	res;
@@ -56,8 +61,8 @@ t_ray	ray_launcher(t_rt *rt, t_ray ray, double x, double y)
 	ray.origin = rt->scene->cam.pos;
 	ray.dir.x = (2.0 * (x + 0.5) / (double)rt->width - 1.0) * scale
 		* rt->aspectratio;
-	ray.dir.y = (1.0 - 2.0 * (y + 0.5) / (double)rt->height) * scale;
-	ray.dir.z = 1.0;
+	ray.dir.z = (1.0 - 2.0 * (y + 0.5) / (double)rt->height) * scale;
+	ray.dir.y = rt->scene->cam.viewdirection.z;
 	norm_vec(&ray.dir);
 	return (ray);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   parse_utils.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: jvan-hal <jvan-hal@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/01/12 13:13:12 by jvan-hal      #+#    #+#                 */
-/*   Updated: 2024/01/16 14:30:44 by jvan-hal      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/12 13:13:12 by jvan-hal          #+#    #+#             */
+/*   Updated: 2024/08/03 17:01:22 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	parse_colour(char *in, t_colour *colour)
 	colour->green = ft_atoi(in);
 	in = ft_strchr(in, ',') + 1;
 	colour->blue = ft_atoi(in);
+	colour->transparency = 255;
 }
 
 void	parse_xyz(char *in, t_XYZ *pos)
