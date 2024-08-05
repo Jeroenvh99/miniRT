@@ -111,6 +111,8 @@ void	resize_rt(int32_t width, int32_t height, void *param)
 		local_rt->aspectratio = (double)width / (double)height;
 	else
 		local_rt->aspectratio = (double)height / (double)width;
+	free(local_rt->pixeldata);
+	local_rt->pixeldata = malloc(local_rt->width * local_rt->height * sizeof(t_hit));
 }
 
 void	resize_render(void *param)

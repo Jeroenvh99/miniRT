@@ -19,6 +19,9 @@ double  hit_plane(t_plane plane, t_ray *ray)
     double  inter;
     double  denominator;
     t_XYZ   diff;
+	double	first;
+	double	second;
+	double	third;
 	double	fourth;
 	double	t;
 	double	n;
@@ -34,9 +37,12 @@ double  hit_plane(t_plane plane, t_ray *ray)
 	if (inter < 0)
 		return (-1.0);
 
+	first = plane.normal.x;
+	second = plane.normal.y;
+	third = plane.normal.z;
 	fourth = plane.normal.x * plane.point.x + plane.normal.y * plane.point.y + plane.normal.z * plane.point.z;
-	n = ray->origin.x * plane.normal.x + ray->origin.y * plane.normal.y + ray->origin.z * plane.normal.z;
-	t = plane.normal.x * ray->dir.x + plane.normal.y * ray->dir.y + plane.normal.z * ray->dir.z;
+	n = ray->origin.x * first + ray->origin.y * second + ray->origin.z * third;
+	t = first * ray->dir.x + second * ray->dir.y + third * ray->dir.z;
 	fourth -= n;
 	res = (fourth / t);
 	int_point.x = ray->origin.x + ray->dir.x * res;
@@ -56,6 +62,7 @@ void	draw_plane(t_rt *rt, t_geometry *geom)
 	int		j;
 	double	t;
 	t_ray	ray;
+	t_plane	transformedplane;
 	// t_colour	tempcolour;
 	// t_colour	colour;
 	// t_plane     plane;
@@ -77,7 +84,10 @@ void	draw_plane(t_rt *rt, t_geometry *geom)
 				colour = pixel_colour(&transformedsphere, &ray, rt->scene->amb, *spots[i], SHINE);
 				++i;
 			}*/
-			t = hit_plane(*((t_plane *)geom->elem), &ray);
+			transformedplane.point = base_transform(rt->camtransform, ((t_plane *)geom->elem)->point);
+			transformedplane.normal = base_transform(rt->camtransform, ((t_plane *)geom->elem)->normal);
+			transformedplane.colour = ((t_plane *)geom->elem)->colour;
+			t = hit_plane(transformedplane, &ray);
 			if (t >= 0)
 			{
 				if (t < rt->pixeldata[y * rt->width + x].dist)

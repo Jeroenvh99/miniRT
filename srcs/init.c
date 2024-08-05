@@ -92,9 +92,10 @@ void	init_rt(t_rt *rt)
 	rt->yrotation = 0;
 	rt->mlx = mlx_init(rt->width, rt->height, "miniRT", true);
 	if (!rt->mlx)
-	{
 		exit(1);
-	}
+	rt->pixeldata = malloc(rt->width * rt->height * sizeof(t_hit));
+	if (!rt->pixeldata)
+		exit(1);
 	rt->image = NULL;
 	objects = rt->scene->geometry.array;
 	while (i < rt->scene->geomsize)
@@ -109,7 +110,6 @@ void	init_rt(t_rt *rt)
 		rt->history[i].geom = NULL;
 		++i;
 	}
-	rt->pixeldata = malloc(rt->width * rt->height * sizeof(t_hit));
 	default_matrix_rotate(rt, 0, 0);
 }
 
@@ -130,6 +130,7 @@ void	exit_rt(t_rt *rt)
 		free(res);
 	}
 	free_scene(rt->scene, 1);
+	free(rt->pixeldata);
 	i = 0;
 	while (i < HISTORYSIZE)
 	{
