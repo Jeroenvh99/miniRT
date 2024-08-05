@@ -216,14 +216,14 @@ t_colour	specular_lighting(t_lighting light, t_XYZ dir, t_XYZ normal, t_XYZ view
 	return (res_spec);
 }
 
-t_colour	pixel_colour(t_sphere *sphere, t_ray *ray, t_ambient ambient, t_lighting light, double shininess)
+int	pixel_colour(t_sphere *sphere, t_ray *ray, t_ambient ambient, t_lighting light, double shininess, int x, int y, t_rt *rt)
 {
 	t_colour	res_colour;
 	double		t;
 
 	t = hit_sphere(*sphere, ray);
 	if (t < 0)
-		return ((t_colour){0, 0, 0, 0});
+		return (0);
 	else
 	{
 		t_XYZ hit_point = vec_addition(ray->origin, vec_multiplication(t, ray->dir));
@@ -240,7 +240,12 @@ t_colour	pixel_colour(t_sphere *sphere, t_ray *ray, t_ambient ambient, t_lightin
 		res_colour.green = (unsigned int) fmin(255, res_ambient.green + res_diffuse.green + res_spec.green);
 		res_colour.blue = (unsigned int) fmin(255, res_ambient.blue + res_diffuse.blue + res_spec.blue);
 		res_colour.transparency = 255;
-		return (res_colour);
+		if (t < rt->pixeldata[y * rt->width + x].dist)
+		{
+			rt->pixeldata[y * rt->width + x].dist = t;
+			rt->pixeldata[y * rt->width + x].colour = pack_colour(&res_colour);
+		}
+		return (1);
 	}
 }
 
@@ -251,12 +256,12 @@ uint32_t pack_colour(t_colour *colour)
 
 void	draw_sphere(t_rt *rt, t_geometry *geom)
 {
-	double	x;
-	double	y;
+	int		x;
+	int		y;
 	int		j;
 	t_ray	ray;
 	// t_colour	tempcolour;
-	t_colour	colour;
+	int		colour;
 	t_sphere	transformedsphere;
 
 	transformedsphere.centre = base_transform(rt->camtransform, ((t_sphere *)geom->elem)->centre);
@@ -279,31 +284,29 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 			ray = ray_launcher(rt, ray, x, y);
 			t_lighting **spots;
 			spots = rt->scene->lighting.array;
-			colour.red = colour.green = colour.blue = colour.transparency = 0;
-			int i = 0;
-			while (spots[i])
-			{
-				colour = pixel_colour(&transformedsphere, &ray, rt->scene->amb, *spots[i], SHINE);
-				// colour.red += tempcolour.red;
-				// if (colour.red > 255)
-				// 	colour.red = 255;
-				// colour.green += tempcolour.green;
-				// if (colour.green > 255)
-				// 	colour.green = 255;
-				// colour.blue += tempcolour.blue;
-				// if (colour.blue > 255)
-				// 	colour.blue = 255;
-				// colour.transparency += tempcolour.transparency;
-				// if (colour.transparency > 255)
-				// 	colour.transparency = 255;
-				++i;
-			}
-			if (colour.transparency > 0)
+			// int i = 0;
+			colour = pixel_colour(&transformedsphere, &ray, rt->scene->amb, *spots[0], SHINE, x, y, rt);
+			// while (spots[i])
+			// {
+			// 	colour.red += tempcolour.red;
+			// 	if (colour.red > 255)
+			// 		colour.red = 255;
+			// 	colour.green += tempcolour.green;
+			// 	if (colour.green > 255)
+			// 		colour.green = 255;
+			// 	colour.blue += tempcolour.blue;
+			// 	if (colour.blue > 255)
+			// 		colour.blue = 255;
+			// 	colour.transparency += tempcolour.transparency;
+			// 	if (colour.transparency > 255)
+			// 		colour.transparency = 255;
+			// 	++i;
+			// }
+			if (colour)
 			{
 				geom->screencoords[j].x = x;
 				geom->screencoords[j].y = y;
 				++j;
-				mlx_put_pixel(rt->image, x, y, pack_colour(&colour));
 			}
 			x++;
 		}

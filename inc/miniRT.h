@@ -17,6 +17,7 @@
 # include "libft.h"
 # include "scene.h"
 # include <math.h>
+# include <float.h>
 # define SHINE 50
 # define HISTORYSIZE 3
 
@@ -25,6 +26,12 @@ typedef struct s_history
 	int			index;
 	t_geometry	*geom;
 }				t_history;
+
+typedef struct s_hit
+{
+	double		dist;
+	uint32_t	colour;
+}				t_hit;
 
 typedef struct s_rt
 {
@@ -37,6 +44,7 @@ typedef struct s_rt
 	double		aspectratio;
 	double		xrotation;
 	double		yrotation;
+	t_hit		*pixeldata;
 	double		camtransform[3][3];
 	t_scene		*scene;
 }				t_rt;

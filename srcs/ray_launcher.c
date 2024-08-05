@@ -30,12 +30,14 @@ void	default_matrix(t_rt *rt)
 void	default_matrix_rotate(t_rt *rt, double xrotation, double yrotation)
 {
 	rt->camtransform[0][0] = cos(xrotation) + cos(yrotation);
-	rt->camtransform[0][1] = sin(yrotation);
-	rt->camtransform[0][2] = -sin(xrotation);
-	rt->camtransform[1][0] = -sin(yrotation);
-	rt->camtransform[1][1] = cos(yrotation);
-	rt->camtransform[2][0] = sin(xrotation);
-	rt->camtransform[2][2] = cos(xrotation);
+	rt->camtransform[0][1] = sin(xrotation);
+	rt->camtransform[0][2] = -sin(yrotation);
+	rt->camtransform[1][0] = -sin(xrotation);
+	rt->camtransform[1][1] = cos(xrotation);\
+	rt->camtransform[1][2] = 0;
+	rt->camtransform[2][0] = sin(yrotation);
+	rt->camtransform[2][1] = 0;
+	rt->camtransform[2][2] = cos(yrotation);
 }
 
 // static void	print_XYZ(int fd, t_XYZ *pos)
@@ -62,7 +64,7 @@ t_ray	ray_launcher(t_rt *rt, t_ray ray, double x, double y)
 	ray.dir.x = (2.0 * (x + 0.5) / (double)rt->width - 1.0) * scale
 		* rt->aspectratio;
 	ray.dir.z = (1.0 - 2.0 * (y + 0.5) / (double)rt->height) * scale;
-	ray.dir.y = rt->scene->cam.viewdirection.z;
+	ray.dir.y = rt->scene->cam.viewdirection.y;
 	norm_vec(&ray.dir);
 	return (ray);
 }
