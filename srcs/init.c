@@ -80,7 +80,7 @@ void	init_rt(t_rt *rt)
 		rt->history[i].geom = NULL;
 		++i;
 	}
-	default_matrix(rt);
+	default_matrix_rotate(rt, 0, 0);
 }
 
 void	exit_rt(t_rt *rt)

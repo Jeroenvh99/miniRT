@@ -30,12 +30,14 @@ void	default_matrix(t_rt *rt)
 void	default_matrix_rotate(t_rt *rt, double xrotation, double yrotation)
 {
 	rt->camtransform[0][0] = cos(xrotation) + cos(yrotation);
-	rt->camtransform[0][1] = sin(yrotation);
-	rt->camtransform[0][2] = -sin(xrotation);
-	rt->camtransform[1][0] = -sin(yrotation);
-	rt->camtransform[1][1] = cos(yrotation);
-	rt->camtransform[2][0] = sin(xrotation);
-	rt->camtransform[2][2] = cos(xrotation);
+	rt->camtransform[0][1] = sin(xrotation);
+	rt->camtransform[0][2] = -sin(yrotation);
+	rt->camtransform[1][0] = -sin(xrotation);
+	rt->camtransform[1][1] = cos(xrotation);\
+	rt->camtransform[1][2] = 0;
+	rt->camtransform[2][0] = sin(yrotation);
+	rt->camtransform[2][1] = 0;
+	rt->camtransform[2][2] = cos(yrotation);
 }
 
 // static void	print_XYZ(int fd, t_XYZ *pos)
