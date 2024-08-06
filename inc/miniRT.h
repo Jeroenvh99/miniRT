@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:20:05 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/08/03 16:41:06 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/06 14:13:30 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,6 @@ void			draw_sphere(t_rt *rt, t_geometry *geometry);
 void			draw_plane(t_rt *rt, t_geometry *geom);
 uint32_t		pack_colour(t_colour *colour);
 t_ray			ray_launcher(t_rt *rt, t_ray ray, double x, double y);
+void			draw_cylinder(t_rt *rt, t_geometry *geom);
 
 #endif
