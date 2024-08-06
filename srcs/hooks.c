@@ -174,7 +174,9 @@ void	rotate_camera(void *param)
 	{
 		local_rt->zrotation -= 5 * (M_PI / 180.0);
 	}
-	default_matrix_rotate(local_rt, local_rt->xrotation, local_rt->yrotation, local_rt->zrotation);
 	if (local_rt->xrotation != prevxrot || local_rt->yrotation != prevyrot || prevzrot != local_rt->zrotation)
+	{
+		default_matrix_rotate(local_rt, local_rt->xrotation, local_rt->yrotation, local_rt->zrotation);
 		draw_objects(local_rt);
+	}
 }
