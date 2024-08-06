@@ -40,10 +40,12 @@ typedef struct s_rt
 	t_history	history[HISTORYSIZE];
 	int			width;
 	int			height;
+	int			totalpixels;
 	double		lastresize;
 	double		aspectratio;
 	double		xrotation;
 	double		yrotation;
+	double		zrotation;
 	t_hit		*pixeldata;
 	double		camtransform[3][3];
 	t_scene		*scene;
@@ -68,7 +70,7 @@ t_XYZ			cross_vec(t_XYZ vec1, t_XYZ vec2);
 double			mag_vec(t_XYZ *vector);
 void			norm_vec(t_XYZ *vector);
 void			default_matrix(t_rt *rt);
-void			default_matrix_rotate(t_rt *rt, double xrotation, double yrotation);
+void			default_matrix_rotate(t_rt *rt, double xrotation, double yrotation, double zrotation);
 t_XYZ			base_transform(double matrix[3][3], t_XYZ dir);
 
 // resize geometry functions
