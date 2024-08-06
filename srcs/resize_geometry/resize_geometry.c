@@ -179,8 +179,7 @@ void	resize_elements(t_rt *rt, int i)
 		objects[i]->elemtype);
 	if (objects[i]->elemtype == 1)
 	{
-		rt->scene->geometry.array[i] = copygeom(objects[i], rt->width
-				* rt->height);
+		rt->scene->geometry.array[i] = copygeom(objects[i], rt->totalpixels);
 		resize_sphere((t_sphere *)objects[i]->elem);
 	}
 	else if (objects[i]->elemtype == 2)

@@ -107,12 +107,11 @@ void	resize_rt(int32_t width, int32_t height, void *param)
 	local_rt->lastresize = mlx_get_time();
 	local_rt->width = width;
 	local_rt->height = height;
+	local_rt->totalpixels = width * height;
 	if (height < width)
 		local_rt->aspectratio = (double)width / (double)height;
 	else
 		local_rt->aspectratio = (double)height / (double)width;
-	free(local_rt->pixeldata);
-	local_rt->pixeldata = malloc(local_rt->width * local_rt->height * sizeof(t_hit));
 }
 
 void	resize_render(void *param)
@@ -125,12 +124,14 @@ void	resize_render(void *param)
 	i = 0;
 	if (local_rt->lastresize > 0 && (mlx_get_time() - local_rt->lastresize) > 0.1)
 	{
+		free(local_rt->pixeldata);
+		local_rt->pixeldata = malloc(local_rt->totalpixels * sizeof(t_hit));
 		objects = local_rt->scene->geometry.array;
 		while (i < local_rt->scene->geomsize)
 		{
 			free(objects[i]->screencoords);
-			objects[i]->screencoords = ft_calloc(local_rt->height
-				* local_rt->width, sizeof(t_XYZ));
+			objects[i]->screencoords = ft_calloc(local_rt->totalpixels,
+				sizeof(t_XYZ));
 			++i;
 		}
 		draw_objects(local_rt);
@@ -143,10 +144,12 @@ void	rotate_camera(void *param)
 	t_rt	*local_rt;
 	double	prevxrot;
 	double	prevyrot;
+	double	prevzrot;
 
 	local_rt = (t_rt *)param;
 	prevxrot = local_rt->xrotation;
 	prevyrot = local_rt->yrotation;
+	prevzrot = local_rt->zrotation;
 	if (mlx_is_key_down(local_rt->mlx, MLX_KEY_LEFT))
 	{
 		local_rt->xrotation += 5 * (M_PI / 180.0);
@@ -163,7 +166,15 @@ void	rotate_camera(void *param)
 	{
 		local_rt->yrotation -= 5 * (M_PI / 180.0);
 	}
-	default_matrix_rotate(local_rt, local_rt->xrotation, local_rt->yrotation);
-	if (local_rt->xrotation != prevxrot || local_rt->yrotation != prevyrot)
+	else if (mlx_is_key_down(local_rt->mlx, MLX_KEY_W))
+	{
+		local_rt->zrotation += 5 * (M_PI / 180.0);
+	}
+	else if (mlx_is_key_down(local_rt->mlx, MLX_KEY_S))
+	{
+		local_rt->zrotation -= 5 * (M_PI / 180.0);
+	}
+	default_matrix_rotate(local_rt, local_rt->xrotation, local_rt->yrotation, local_rt->zrotation);
+	if (local_rt->xrotation != prevxrot || local_rt->yrotation != prevyrot || prevzrot != local_rt->zrotation)
 		draw_objects(local_rt);
 }
