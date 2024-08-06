@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
+#include <stdio.h>
 
 /*int	hit_cylinder(t_cylinder cylinder, t_ray ray, int *output)
 {
@@ -181,7 +182,6 @@ double hit_cylinder(t_cylinder *cylinder, t_ray *ray)
     return closest_inter; // Return closest_inter directly
 }
 
-
 void	draw_cylinder(t_rt *rt, t_geometry *geom)
 {
 	int	x;
@@ -227,7 +227,7 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom)
 					colour.transparency = 255;
 				++i;
 			}*/
-			t = hit_cylinder((t_cylinder *)geom->elem, &ray);
+			t = hit_cylinder(&transformedcylinder, &ray);
 			if (t > 0)
 			{
 				if (t < rt->pixeldata[y * rt->width + x].dist)
