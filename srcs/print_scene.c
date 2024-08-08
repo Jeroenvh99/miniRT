@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 13:02:18 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/05/17 20:06:51 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/08 16:43:24 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static void	print_colour(int fd, t_colour *colour)
 {
-	dprintf(fd, "%i,%i,%i", colour->red, colour->green, colour->blue);
+	dprintf(fd, "%f,%f,%f", colour->red, colour->green, colour->blue);
 }
 
 static void	print_xyz(int fd, t_XYZ *pos)

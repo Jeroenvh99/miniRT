@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:20:05 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/08/06 14:13:30 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/08 15:07:35 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "scene.h"
 # include <math.h>
 # include <float.h>
-# define SHINE 50
+# define SHINE 80
 # define HISTORYSIZE 3
 
 typedef struct s_history
