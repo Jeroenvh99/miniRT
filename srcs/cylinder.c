@@ -182,11 +182,10 @@ double hit_cylinder(t_cylinder *cylinder, t_ray *ray)
     return closest_inter; // Return closest_inter directly
 }
 
-void	draw_cylinder(t_rt *rt, t_geometry *geom)
+void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 {
 	int	x;
 	int	y;
-	int		j;
 	double	t;
 	t_ray	ray;
 	t_cylinder	transformedcylinder;
@@ -198,14 +197,13 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom)
 	transformedcylinder.radius = ((t_cylinder *)geom->elem)->radius;
 	transformedcylinder.height = ((t_cylinder *)geom->elem)->height;
 	transformedcylinder.colour = ((t_cylinder *)geom->elem)->colour;
-	j = 0;
 	y = 0;
 	while (y < rt->height)
 	{
 		x = 0;
 		while (x < rt->width)
 		{
-			ray = ray_launcher(rt, ray, x, y);
+			ray_launcher(rt, &ray, x, y);
 			/*t_lighting **spots;
 			spots = rt->scene->lighting.array;
 			colour.red = colour.green = colour.blue = colour.transparency = 0;
@@ -234,6 +232,7 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom)
 				{
 					rt->pixeldata[y * rt->width + x].dist = t;
 					rt->pixeldata[y * rt->width + x].colour = pack_colour(&transformedcylinder.colour);
+					rt->pixeldata[y * rt->width + x].elemid = id;
 				}
 			}
 			x++;

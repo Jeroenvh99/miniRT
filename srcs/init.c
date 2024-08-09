@@ -28,7 +28,8 @@ void	draw_objects(t_rt *rt)
 {
 	t_drawfunc const	drawfuncs[3] = {draw_sphere, draw_plane, draw_cylinder};
 	t_geometry			**objects;
-	int					i;
+	int	x;
+	int	y;
 
 	if (rt->image)
 	{
@@ -40,8 +41,6 @@ void	draw_objects(t_rt *rt)
 		mlx_terminate(rt->mlx);
 		exit(1);
 	}
-	int	x;
-	int	y;
 
 	y = 0;
 	while (y < rt->height)
@@ -55,11 +54,11 @@ void	draw_objects(t_rt *rt)
 		y++;
 	}
 	objects = rt->scene->geometry.array;
-	i = 0;
-	while (i < rt->scene->geomsize)
+	y = 0;
+	while (y < rt->scene->geomsize)
 	{
-		drawfuncs[objects[i]->elemtype - 1](rt, objects[i]);
-		++i;
+		drawfuncs[objects[y]->elemtype - 1](rt, objects[y], y);
+		++y;
 	}
 
 	y = 0;
@@ -100,11 +99,6 @@ void	init_rt(t_rt *rt)
 		exit(1);
 	rt->image = NULL;
 	objects = rt->scene->geometry.array;
-	while (i < rt->scene->geomsize)
-	{
-		objects[i]->screencoords = ft_calloc(rt->totalpixels, sizeof(t_XYZ));
-		++i;
-	}
 	i = 0;
 	while (i < HISTORYSIZE)
 	{

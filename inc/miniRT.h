@@ -31,6 +31,7 @@ typedef struct s_hit
 {
 	double		dist;
 	uint32_t	colour;
+	int			elemid;
 }				t_hit;
 
 typedef struct s_rt
@@ -51,7 +52,8 @@ typedef struct s_rt
 	t_scene		*scene;
 }				t_rt;
 
-typedef void	(*t_drawfunc)(t_rt *, t_geometry *);
+typedef void	(*t_drawfunc)(t_rt *, t_geometry *, int);
+typedef void	*(*t_copyfunc)(void *);
 
 void			init_rt(t_rt *rt);
 void			exit_rt(t_rt *rt);
@@ -92,10 +94,10 @@ void			rotate_camera(void *param);
 
 // draw functions
 void			draw_objects(t_rt *rt);
-void			draw_sphere(t_rt *rt, t_geometry *geometry);
-void			draw_plane(t_rt *rt, t_geometry *geom);
+void			draw_sphere(t_rt *rt, t_geometry *geometry, int id);
+void			draw_plane(t_rt *rt, t_geometry *geom, int id);
+void			draw_cylinder(t_rt *rt, t_geometry *geom, int id);
 uint32_t		pack_colour(t_colour *colour);
-t_ray			ray_launcher(t_rt *rt, t_ray ray, double x, double y);
-void			draw_cylinder(t_rt *rt, t_geometry *geom);
+void			ray_launcher(t_rt *rt, t_ray *ray, double x, double y);
 
 #endif

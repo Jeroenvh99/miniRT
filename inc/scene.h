@@ -81,7 +81,6 @@ typedef struct s_cylinder
 typedef struct s_geometry
 {
 	int				elemtype;
-	t_XYZ			*screencoords;
 	void			*elem;
 }					t_geometry;
 

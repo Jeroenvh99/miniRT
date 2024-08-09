@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include <math.h>
-#include <stdio.h>
 
 void	default_matrix(t_rt *rt)
 {
@@ -40,11 +38,6 @@ void	default_matrix_rotate(t_rt *rt, double xrotation, double yrotation, double 
 	rt->camtransform[2][2] = cos(yrotation + zrotation);
 }
 
-// static void	print_XYZ(int fd, t_XYZ *pos)
-// {
-// 	dprintf(fd, "%f,%f,%f\n", pos->x, pos->y, pos->z);
-// }
-
 t_XYZ	base_transform(double matrix[3][3], t_XYZ dir)
 {
 	t_XYZ	res;
@@ -55,16 +48,15 @@ t_XYZ	base_transform(double matrix[3][3], t_XYZ dir)
 	return (res);
 }
 
-t_ray	ray_launcher(t_rt *rt, t_ray ray, double x, double y)
+void	ray_launcher(t_rt *rt, t_ray *ray, double x, double y)
 {
 	double scale;
 
 	scale = tan((double)rt->scene->cam.fov * 0.5 * M_PI / 180);
-	ray.origin = rt->scene->cam.pos;
-	ray.dir.x = (2.0 * (x + 0.5) / (double)rt->width - 1.0) * scale
+	ray->origin = rt->scene->cam.pos;
+	ray->dir.x = (2.0 * (x + 0.5) / (double)rt->width - 1.0) * scale
 		* rt->aspectratio;
-	ray.dir.z = (1.0 - 2.0 * (y + 0.5) / (double)rt->height) * scale;
-	ray.dir.y = rt->scene->cam.viewdirection.y;
-	norm_vec(&ray.dir);
-	return (ray);
+	ray->dir.z = (1.0 - 2.0 * (y + 0.5) / (double)rt->height) * scale;
+	ray->dir.y = rt->scene->cam.viewdirection.y;
+	norm_vec(&ray->dir);
 }

@@ -24,21 +24,27 @@ void	escape_hook(void *param)
 		exit_rt(local_rt);
 }
 
-int	searchcoord(t_rt *rt, t_geometry *geom, int posx, int posy)
+int	searchcoord(t_rt *rt, int posx, int posy)
 {
-	int	j;
+	int	x;
+	int	y;
 
-	j = 0;
-	while (j < rt->width * rt->height)
+	y = 0;
+	while (y < rt->height)
 	{
-		if (posx == (int)geom->screencoords[j].x
-			&& posy == (int)geom->screencoords[j].y)
+		x = 0;
+		while (x < rt->width)
 		{
-			return (1);
+			if (rt->pixeldata[y * rt->width + x].dist != DBL_MAX)
+			{
+				if (x == posx && y == posy)
+					return (rt->pixeldata[y * rt->width + x].elemid);
+			}
+			x++; 
 		}
-		++j;
+		y++;
 	}
-	return (0);
+	return (-1);
 }
 
 void	set_resize(void *param)
@@ -54,15 +60,8 @@ void	set_resize(void *param)
 	{
 		mlx_get_mouse_pos(local_rt->mlx, &mousex, &mousey);
 		objects = local_rt->scene->geometry.array;
-		i = 0;
-		while (i < local_rt->scene->geomsize)
-		{
-			if (searchcoord(local_rt, objects[i],
-					mousex, mousey))
-				break ;
-			++i;
-		}
-		if (i < local_rt->scene->geomsize)
+		i = searchcoord(local_rt, mousex, mousey);
+		if (i > -1 && i < local_rt->scene->geomsize)
 		{
 			resize_elements(local_rt, i);
 			draw_objects(local_rt);
@@ -91,7 +90,6 @@ void	reset_resize(mlx_key_data_t keydata, void *param)
 		}
 		index = local_rt->history[j].index;
 		free(local_rt->scene->geometry.array[index]->elem);
-		free(local_rt->scene->geometry.array[index]->screencoords);
 		free(local_rt->scene->geometry.array[index]);
 		local_rt->scene->geometry.array[index] = local_rt->history[j].geom;
 		local_rt->history[j].geom = NULL;
@@ -117,23 +115,12 @@ void	resize_rt(int32_t width, int32_t height, void *param)
 void	resize_render(void *param)
 {
 	t_rt		*local_rt;
-	t_geometry	**objects;
-	int			i;
 
 	local_rt = (t_rt *)param;
-	i = 0;
 	if (local_rt->lastresize > 0 && (mlx_get_time() - local_rt->lastresize) > 0.1)
 	{
 		free(local_rt->pixeldata);
 		local_rt->pixeldata = malloc(local_rt->totalpixels * sizeof(t_hit));
-		objects = local_rt->scene->geometry.array;
-		while (i < local_rt->scene->geomsize)
-		{
-			free(objects[i]->screencoords);
-			objects[i]->screencoords = ft_calloc(local_rt->totalpixels,
-				sizeof(t_XYZ));
-			++i;
-		}
 		draw_objects(local_rt);
 		local_rt->lastresize = 0;
 	}
