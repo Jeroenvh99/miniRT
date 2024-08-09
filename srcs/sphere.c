@@ -6,12 +6,13 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 20:04:50 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/08 17:04:56 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/09 15:35:43 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include <math.h>
+#include <stdio.h>
 
 /*t_XYZ	ray_constructor(t_XYZ camera, t_XYZ direction, double factor)
 {
@@ -184,23 +185,23 @@ t_colour	ambient_lighting(t_ambient ambient, t_sphere sphere)
 {
 	t_colour	res_ambient;
 
-	res_ambient.red = ((ambient.intensity * ambient.colour.red + sphere.colour.red) / 255);
-	res_ambient.green = ((ambient.intensity * ambient.colour.green + sphere.colour.green) / 255);
-	res_ambient.blue = ((ambient.intensity * ambient.colour.blue + sphere.colour.blue) / 255);
+	res_ambient.red = (ambient.intensity * ambient.colour.red + sphere.colour.red);
+	res_ambient.green = (ambient.intensity * ambient.colour.green + sphere.colour.green);
+	res_ambient.blue = (ambient.intensity * ambient.colour.blue + sphere.colour.blue);
 	return (res_ambient);
 }
 
-/*t_colour	diffuse_lighting(t_lighting light, t_XYZ dir, t_XYZ normal, t_sphere sphere)
+t_colour	diffuse_lighting(t_lighting light, t_XYZ dir, t_XYZ normal)
 {
 	double	diffuse_factor;
 	t_colour	res_diffuse;
 
 	diffuse_factor = fmax(dot_vec(normal, dir), 0.0);
-	res_diffuse.red = (light.brightness * diffuse_factor * light.colour.red * sphere.colour.red);
-	res_diffuse.green = (light.brightness * diffuse_factor * light.colour.green * sphere.colour.green);
-	res_diffuse.blue = (light.brightness * diffuse_factor * light.colour.blue * sphere.colour.blue);
+	res_diffuse.red = (light.brightness * diffuse_factor * light.colour.red);
+	res_diffuse.green = (light.brightness * diffuse_factor * light.colour.green);
+	res_diffuse.blue = (light.brightness * diffuse_factor * light.colour.blue);
 	return (res_diffuse);
-}*/
+}
 
 t_colour	specular_lighting(t_lighting light, t_XYZ dir, t_XYZ normal, t_XYZ viewdirection, double shininess)
 {
@@ -210,6 +211,10 @@ t_colour	specular_lighting(t_lighting light, t_XYZ dir, t_XYZ normal, t_XYZ view
 
 	reflection = vec_subtraction(vec_multiplication(2 * dot_vec(normal, dir), normal), dir);
 	spec = pow(fmax(dot_vec(reflection, viewdirection), 0.0), shininess);
+	
+	
+	//if (spec > 0.0001)
+		//printf("%f", spec);
 	res_spec.red = (light.brightness * spec * light.colour.red);
 	res_spec.green = (light.brightness * spec * light.colour.green);
 	res_spec.blue = (light.brightness * spec * light.colour.blue);
@@ -234,11 +239,11 @@ int	pixel_colour(t_sphere *sphere, t_ray *ray, t_ambient ambient, t_lighting lig
 		t_XYZ	viewdirection = vec_multiplication(-1, ray->dir);
 		norm_vec(&viewdirection);
 		t_colour	res_ambient = ambient_lighting(ambient, *sphere);
-		t_colour	res_diffuse = {0, 0, 0, 0}; //diffuse_lighting(light, light_dir, normal, *sphere);
+		t_colour	res_diffuse = diffuse_lighting(light, light_dir, normal);
 		t_colour	res_spec = specular_lighting(light, light_dir, normal, viewdirection, shininess);
-		res_colour.red = fmin(255, 255 * res_ambient.red + res_diffuse.red + res_spec.red);
-		res_colour.green = fmin(255, 255 * res_ambient.green + res_diffuse.green + res_spec.green);
-		res_colour.blue = fmin(255, 255 * res_ambient.blue + res_diffuse.blue + res_spec.blue);
+		res_colour.red = fmin(255, res_ambient.red + res_diffuse.red + res_spec.red);
+		res_colour.green = fmin(255, res_ambient.green + res_diffuse.green + res_spec.green);
+		res_colour.blue = fmin(255, res_ambient.blue + res_diffuse.blue + res_spec.blue);
 		res_colour.transparency = 255;
 		if (t < rt->pixeldata[y * rt->width + x].dist)
 		{
