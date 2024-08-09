@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:20:28 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/08/03 16:14:51 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/08 16:37:24 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ typedef struct s_XYZ
 
 typedef struct s_colour
 {
-	unsigned int	red;
-	unsigned int	green;
-	unsigned int	blue;
-	unsigned int	transparency;
+	double	red;
+	double	green;
+	double	blue;
+	double	transparency;
 }					t_colour;
 
 typedef struct s_ambient
