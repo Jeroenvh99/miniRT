@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include <math.h>
-#include <stdio.h>
 
 /*t_XYZ	ray_constructor(t_XYZ camera, t_XYZ direction, double factor)
 {
@@ -221,7 +219,7 @@ t_colour	specular_lighting(t_lighting light, t_XYZ dir, t_XYZ normal, t_XYZ view
 	return (res_spec);
 }
 
-int	pixel_colour(t_sphere *sphere, t_ray *ray, t_ambient ambient, t_lighting light, double shininess, int x, int y, t_rt *rt)
+int	pixel_colour(t_sphere *sphere, t_ray *ray, t_ambient ambient, t_lighting light, double shininess, int x, int y, t_rt *rt, int id)
 {
 	t_colour	res_colour;
 	double		t;
@@ -249,6 +247,7 @@ int	pixel_colour(t_sphere *sphere, t_ray *ray, t_ambient ambient, t_lighting lig
 		{
 			rt->pixeldata[y * rt->width + x].dist = t;
 			rt->pixeldata[y * rt->width + x].colour = pack_colour(&res_colour);
+			rt->pixeldata[y * rt->width + x].elemid = id;
 		}
 		return (1);
 	}
@@ -259,38 +258,28 @@ uint32_t pack_colour(t_colour *colour)
 	return ((unsigned int)colour->red << 24 | (unsigned int)colour->green << 16 | (unsigned int)colour->blue << 8 | (unsigned int)colour->transparency);
 }
 
-void	draw_sphere(t_rt *rt, t_geometry *geom)
+void	draw_sphere(t_rt *rt, t_geometry *geom, int id)
 {
 	int		x;
 	int		y;
-	int		j;
 	t_ray	ray;
 	// t_colour	tempcolour;
-	int		colour;
 	t_sphere	transformedsphere;
 
 	transformedsphere.centre = base_transform(rt->camtransform, ((t_sphere *)geom->elem)->centre);
 	transformedsphere.radius = ((t_sphere *)geom->elem)->radius;
 	transformedsphere.colour = ((t_sphere *)geom->elem)->colour;
-	j = 0;
-	while (j < rt->width * rt->height)
-	{
-		geom->screencoords[j].x = 0;
-		geom->screencoords[j].y = 0;
-		++j;
-	}
-	j = 0;
 	y = 0;
 	while (y < rt->height)
 	{
 		x = 0;
 		while (x < rt->width)
 		{
-			ray = ray_launcher(rt, ray, x, y);
+			ray_launcher(rt, &ray, x, y);
 			t_lighting **spots;
 			spots = rt->scene->lighting.array;
 			// int i = 0;
-			colour = pixel_colour(&transformedsphere, &ray, rt->scene->amb, *spots[0], SHINE, x, y, rt);
+			pixel_colour(&transformedsphere, &ray, rt->scene->amb, *spots[0], SHINE, x, y, rt, id);
 			// while (spots[i])
 			// {
 			// 	colour.red += tempcolour.red;
@@ -307,12 +296,6 @@ void	draw_sphere(t_rt *rt, t_geometry *geom)
 			// 		colour.transparency = 255;
 			// 	++i;
 			// }
-			if (colour)
-			{
-				geom->screencoords[j].x = x;
-				geom->screencoords[j].y = y;
-				++j;
-			}
 			x++;
 		}
 		y++;

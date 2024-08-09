@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include "math.h"
 #include <stdio.h>
 
 double  hit_plane(t_plane *plane, t_ray *ray)
@@ -26,11 +25,10 @@ double  hit_plane(t_plane *plane, t_ray *ray)
     return (dot_vec(diff, plane->normal) / denominator);
 }
 
-void	draw_plane(t_rt *rt, t_geometry *geom)
+void	draw_plane(t_rt *rt, t_geometry *geom, int id)
 {
 	int		x;
 	int		y;
-	int		j;
 	double	t;
 	t_ray	ray;
 	t_plane	transformedplane;
@@ -40,14 +38,13 @@ void	draw_plane(t_rt *rt, t_geometry *geom)
 	transformedplane.point = base_transform(rt->camtransform, ((t_plane *)geom->elem)->point);
 	transformedplane.normal = base_transform(rt->camtransform, ((t_plane *)geom->elem)->normal);
 	transformedplane.colour = ((t_plane *)geom->elem)->colour;
-	j = 0;
 	y = 0;
 	while (y < rt->height)
 	{
 		x = 0;
 		while (x < rt->width)
 		{
-			ray = ray_launcher(rt, ray, x, y);
+			ray_launcher(rt, &ray, x, y);
 			/*t_lighting **spots;
 			spots = rt->scene->lighting.array;
 			colour.red = colour.green = colour.blue = colour.transparency = 0;
@@ -64,10 +61,8 @@ void	draw_plane(t_rt *rt, t_geometry *geom)
 				{
 					rt->pixeldata[y * rt->width + x].dist = t;
 					rt->pixeldata[y * rt->width + x].colour = pack_colour(&transformedplane.colour);
+					rt->pixeldata[y * rt->width + x].elemid = id;
 				}
-				geom->screencoords[j].x = x;
-				geom->screencoords[j].y = y;
-				++j;
 			}
 			x++;
 		}

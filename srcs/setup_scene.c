@@ -44,16 +44,6 @@ void	free_geom(void *geometry)
 
 	geom = (t_geometry *)geometry;
 	free(geom->elem);
-	free(geom->screencoords);
-	free(geom);
-}
-
-void	free_geom_list(void *geometry)
-{
-	t_geometry	*geom;
-
-	geom = (t_geometry *)geometry;
-	free(geom->elem);
 	free(geom);
 }
 
@@ -82,7 +72,7 @@ void	free_scene(t_scene *scene, int isarr)
 	else
 	{
 		ft_lstclear(&scene->lighting.list, free);
-		ft_lstclear(&scene->geometry.list, free_geom_list);
+		ft_lstclear(&scene->geometry.list, free_geom);
 	}
 	free(scene);
 }

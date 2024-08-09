@@ -104,39 +104,55 @@ void	copycolour(t_colour *src, t_colour *dst)
 	dst->transparency = src->transparency;
 }
 
-void	*copyelem(void *sourceelem, int type)
+void	*copysphere(void *sourceelem)
 {
 	t_sphere	*source;
 	t_sphere	*res;
 
-	if (type == 1)
-	{
-		source = (t_sphere *)sourceelem;
-		res = ft_calloc(1, sizeof(t_sphere));
-		copypos(&source->centre, &res->centre);
-		res->radius = source->radius;
-		copycolour(&source->colour, &res->colour);
-		return (res);
-	}
-	return (NULL);
+	source = (t_sphere *)sourceelem;
+	res = ft_calloc(1, sizeof(t_sphere));
+	copypos(&source->centre, &res->centre);
+	res->radius = source->radius;
+	copycolour(&source->colour, &res->colour);
+	return (res);
 }
 
-t_geometry	*copygeom(t_geometry *source, int screensize)
+void	*copyplane(void *sourceelem)
 {
-	t_geometry	*copy;
-	int			i;
+	t_plane	*source;
+	t_plane	*res;
+
+	source = (t_plane *)sourceelem;
+	res = ft_calloc(1, sizeof(t_plane));
+	copypos(&source->point, &res->point);
+	copypos(&source->normal, &res->normal);
+	copycolour(&source->colour, &res->colour);
+	return (res);
+}
+
+void	*copycylinder(void *sourceelem)
+{
+	t_cylinder	*source;
+	t_cylinder	*res;
+
+	source = (t_cylinder *)sourceelem;
+	res = ft_calloc(1, sizeof(t_cylinder));
+	copypos(&source->centre, &res->centre);
+	copypos(&source->axis, &res->axis);
+	res->radius = source->radius;
+	res->height = source->height;
+	copycolour(&source->colour, &res->colour);
+	return (res);
+}
+
+t_geometry	*copygeom(t_geometry *source)
+{
+	t_geometry			*copy;
+	t_copyfunc const	copyfuncs[3] = {copysphere, copyplane, copycylinder};
 
 	copy = ft_calloc(1, sizeof(t_geometry));
 	copy->elemtype = source->elemtype;
-	copy->screencoords = ft_calloc(screensize + 1, sizeof(t_XYZ));
-	i = 0;
-	while (i < screensize)
-	{
-		copy->screencoords[i].x = source->screencoords[i].x;
-		copy->screencoords[i].y = source->screencoords[i].y;
-		++i;
-	}
-	copy->elem = copyelem(source->elem, source->elemtype);
+	copy->elem = copyfuncs[source->elemtype - 1](source->elem);
 	return (copy);
 }
 
@@ -167,7 +183,6 @@ void	resize_elements(t_rt *rt, int i)
 	if (j == HISTORYSIZE)
 	{
 		free(rt->history[0].geom->elem);
-		free(rt->history[0].geom->screencoords);
 		free(rt->history[0].geom);
 		moveback(rt->history);
 		--j;
@@ -179,15 +194,17 @@ void	resize_elements(t_rt *rt, int i)
 		objects[i]->elemtype);
 	if (objects[i]->elemtype == 1)
 	{
-		rt->scene->geometry.array[i] = copygeom(objects[i], rt->totalpixels);
+		rt->scene->geometry.array[i] = copygeom(objects[i]);
 		resize_sphere((t_sphere *)objects[i]->elem);
 	}
 	else if (objects[i]->elemtype == 2)
 	{
+		rt->scene->geometry.array[i] = copygeom(objects[i]);
 		resize_plane((t_plane *)objects[i]->elem);
 	}
 	else if (objects[i]->elemtype == 3)
 	{
+		rt->scene->geometry.array[i] = copygeom(objects[i]);
 		resize_cylinder((t_cylinder *)objects[i]->elem);
 	}
 	rt->scene->isresized = 1;
