@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:20:05 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/08/09 15:26:58 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/11 16:42:59 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,9 @@ void			resize_render(void *param);
 void			rotate_camera(void *param);
 
 // light and color
-
+t_colour	ambient_lighting(t_ambient ambient, t_sphere sphere);
+t_colour	diffuse_lighting(t_lighting light, t_XYZ dir, t_XYZ normal);
+t_colour	specular_lighting(t_lighting light, t_XYZ dir, t_XYZ normal, t_XYZ viewdirection, double shininess);
 
 // draw functions
 void			draw_objects(t_rt *rt);

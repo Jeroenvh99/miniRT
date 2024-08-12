@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:35:43 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/06 14:23:21 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/12 13:07:44 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,16 @@
 	}
 }*/
 
+t_colour	ambient_lighting_cyl(t_ambient ambient, t_cylinder cylinder)
+{
+	t_colour	res_ambient;
+
+	res_ambient.red = (ambient.intensity * ambient.colour.red + cylinder.colour.red);
+	res_ambient.green = (ambient.intensity * ambient.colour.green + cylinder.colour.green);
+	res_ambient.blue = (ambient.intensity * ambient.colour.blue + cylinder.colour.blue);
+	return (res_ambient);
+}
+
 double hit_cylinder(t_cylinder *cylinder, t_ray *ray)
 {
     t_XYZ diff;
@@ -182,6 +192,50 @@ double hit_cylinder(t_cylinder *cylinder, t_ray *ray)
     return closest_inter; // Return closest_inter directly
 }
 
+t_XYZ cylinder_normal(t_cylinder *cylinder, t_XYZ point, t_XYZ ray_origin, double t) {
+    t_XYZ hit_point = vec_addition(ray_origin, vec_multiplication(t, cylinder->axis));
+    t_XYZ diff = vec_subtraction(point, cylinder->centre);
+	t_XYZ	res;
+    double proj = dot_vec(diff, cylinder->axis);
+
+    if (fabs(proj) < 1e-6) {
+        // Bottom cap
+        return vec_multiplication(-1, cylinder->axis);
+    } else if (fabs(proj - cylinder->height) < 1e-6) {
+        // Top cap
+        return cylinder->axis;
+    } else {
+        // Curved surface
+        t_XYZ on_axis = vec_addition(cylinder->centre, vec_multiplication(proj, cylinder->axis));
+		res = vec_subtraction(hit_point, on_axis);
+		norm_vec(&res);
+        return (res);
+    }
+}
+
+t_colour pixel_colour_cylinder(t_cylinder *cylinder, t_ray *ray, t_ambient ambient, t_lighting light, double shininess, double t) {
+    t_XYZ hit_point = vec_addition(ray->origin, vec_multiplication(t, ray->dir));
+    t_XYZ normal = cylinder_normal(cylinder, hit_point, ray->origin, t);
+
+    
+    t_XYZ light_dir = vec_subtraction(hit_point, light.direction); 
+    norm_vec(&light_dir);
+    t_XYZ view_dir = vec_multiplication(-1, ray->dir);
+    norm_vec(&view_dir);
+
+    t_colour ambient_color = ambient_lighting_cyl(ambient, *cylinder);
+    t_colour diffuse_color = diffuse_lighting(light, light_dir, normal);
+    t_colour specular_color = specular_lighting(light, light_dir, normal, view_dir, shininess);
+
+    t_colour final_color;
+    final_color.red = fmin(255, ambient_color.red + diffuse_color.red + specular_color.red);
+    final_color.green = fmin(255, ambient_color.green + diffuse_color.green + specular_color.green);
+    final_color.blue = fmin(255, ambient_color.blue + diffuse_color.blue + specular_color.blue);
+
+    return final_color;
+}
+
+
 void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 {
 	int	x;
@@ -189,8 +243,10 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 	double	t;
 	t_ray	ray;
 	t_cylinder	transformedcylinder;
+	t_lighting **spots;
+	spots = rt->scene->lighting.array;
 	//t_colour	tempcolour;
-	//t_colour	colour;
+	t_colour	colour;
 
 	transformedcylinder.centre = base_transform(rt->camtransform, ((t_cylinder *)geom->elem)->centre);
 	transformedcylinder.axis = base_transform(rt->camtransform, ((t_cylinder *)geom->elem)->axis);
@@ -204,34 +260,14 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 		while (x < rt->width)
 		{
 			ray_launcher(rt, &ray, x, y);
-			/*t_lighting **spots;
-			spots = rt->scene->lighting.array;
-			colour.red = colour.green = colour.blue = colour.transparency = 0;
-			int i = 0;
-			while (spots[i])
-			{
-				tempcolour = cylinder_colour((t_cylinder *)geom->elem, &ray, rt->scene->amb, *spots[i], SHINE);
-				colour.red += tempcolour.red;
-				if (colour.red > 255)
-					colour.red = 255;
-				colour.green += tempcolour.green;
-				if (colour.green > 255)
-					colour.green = 255;
-				colour.blue += tempcolour.blue;
-				if (colour.blue > 255)
-					colour.blue = 255;
-				colour.transparency += tempcolour.transparency;
-				if (colour.transparency > 255)
-					colour.transparency = 255;
-				++i;
-			}*/
 			t = hit_cylinder(&transformedcylinder, &ray);
 			if (t > 0)
 			{
 				if (t < rt->pixeldata[y * rt->width + x].dist)
 				{
 					rt->pixeldata[y * rt->width + x].dist = t;
-					rt->pixeldata[y * rt->width + x].colour = pack_colour(&transformedcylinder.colour);
+					colour = pixel_colour_cylinder(&transformedcylinder, &ray, rt->scene->amb, *spots[0], SHINE, t);
+					rt->pixeldata[y * rt->width + x].colour = pack_colour(&colour);
 					rt->pixeldata[y * rt->width + x].elemid = id;
 				}
 			}
