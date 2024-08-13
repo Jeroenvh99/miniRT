@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include <stdio.h>
 
 static t_colour	ambient_lighting(t_ambient *ambient, t_plane *plane)
 {
@@ -91,7 +90,6 @@ void  hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 		if (t < rt->pixeldata[y * rt->width + x].dist)
 		{
 			rt->pixeldata[y * rt->width + x].dist = t;
-			printf("%f\n", res_colour.red);
 			rt->pixeldata[y * rt->width + x].colour = pack_colour(&res_colour);
 			rt->pixeldata[y * rt->width + x].elemid = id;
 		}
