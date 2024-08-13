@@ -189,8 +189,6 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 	double	t;
 	t_ray	ray;
 	t_cylinder	transformedcylinder;
-	//t_colour	tempcolour;
-	//t_colour	colour;
 
 	transformedcylinder.centre = base_transform(rt->camtransform, ((t_cylinder *)geom->elem)->centre);
 	transformedcylinder.axis = base_transform(rt->camtransform, ((t_cylinder *)geom->elem)->axis);
@@ -204,27 +202,6 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 		while (x < rt->width)
 		{
 			ray_launcher(rt, &ray, x, y);
-			/*t_lighting **spots;
-			spots = rt->scene->lighting.array;
-			colour.red = colour.green = colour.blue = colour.transparency = 0;
-			int i = 0;
-			while (spots[i])
-			{
-				tempcolour = cylinder_colour((t_cylinder *)geom->elem, &ray, rt->scene->amb, *spots[i], SHINE);
-				colour.red += tempcolour.red;
-				if (colour.red > 255)
-					colour.red = 255;
-				colour.green += tempcolour.green;
-				if (colour.green > 255)
-					colour.green = 255;
-				colour.blue += tempcolour.blue;
-				if (colour.blue > 255)
-					colour.blue = 255;
-				colour.transparency += tempcolour.transparency;
-				if (colour.transparency > 255)
-					colour.transparency = 255;
-				++i;
-			}*/
 			t = hit_cylinder(&transformedcylinder, &ray);
 			if (t > 0)
 			{

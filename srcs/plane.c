@@ -32,8 +32,6 @@ void	draw_plane(t_rt *rt, t_geometry *geom, int id)
 	double	t;
 	t_ray	ray;
 	t_plane	transformedplane;
-	// t_colour	tempcolour;
-	// t_colour	colour;
 
 	transformedplane.point = base_transform(rt->camtransform, ((t_plane *)geom->elem)->point);
 	transformedplane.normal = base_transform(rt->camtransform, ((t_plane *)geom->elem)->normal);
@@ -45,15 +43,6 @@ void	draw_plane(t_rt *rt, t_geometry *geom, int id)
 		while (x < rt->width)
 		{
 			ray_launcher(rt, &ray, x, y);
-			/*t_lighting **spots;
-			spots = rt->scene->lighting.array;
-			colour.red = colour.green = colour.blue = colour.transparency = 0;
-			int i = 0;
-			while (spots[i])
-			{
-				colour = pixel_colour(&transformedsphere, &ray, rt->scene->amb, *spots[i], SHINE);
-				++i;
-			}*/
 			t = hit_plane(&transformedplane, &ray);
 			if (t >= 0)
 			{
