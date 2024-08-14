@@ -40,7 +40,7 @@ double	hit_sphere(t_sphere sphere, t_ray *ray)
 		return (-1.0);
 }
 
-t_colour	ambient_lighting(t_ambient *ambient, t_sphere *sphere)
+static t_colour	ambient_lighting(t_ambient *ambient, t_sphere *sphere)
 {
 	t_colour	res_ambient;
 
@@ -69,7 +69,7 @@ t_colour	ambient_lighting(t_ambient *ambient, t_sphere *sphere)
 	return (res_diffuse);
 }*/
 
-t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
+static t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
 		t_XYZ *viewdirection)
 {
 	t_XYZ reflection;
@@ -140,7 +140,14 @@ void	pixel_colour(t_sphere *sphere, t_ray *ray, int x, int y, t_rt *rt, int id)
 
 uint32_t	pack_colour(t_colour *colour)
 {
-	return ((unsigned int)colour->red << 24 | (unsigned int)colour->green << 16 | (unsigned int)colour->blue << 8 | (unsigned int)colour->transparency);
+	unsigned int	r;
+	unsigned int	g;
+	unsigned int	b;
+
+	r = (unsigned int)colour->red;
+	g = (unsigned int)colour->green;
+	b = (unsigned int)colour->blue;
+	return (r << 24 | g << 16 | b << 8 | 255);
 }
 
 void	draw_sphere(t_rt *rt, t_geometry *geom, int id)

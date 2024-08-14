@@ -116,7 +116,36 @@
 	}
 }*/
 
-double hit_cylinder(t_cylinder *cylinder, t_ray *ray)
+static t_colour	ambient_lighting(t_ambient *ambient, t_cylinder *cylinder)
+{
+	t_colour	res_ambient;
+
+	res_ambient.red = ((ambient->intensity * ambient->colour.red
+				+ cylinder->colour.red) / 255);
+	res_ambient.green = ((ambient->intensity * ambient->colour.green
+				+ cylinder->colour.green) / 255);
+	res_ambient.blue = ((ambient->intensity * ambient->colour.blue
+				+ cylinder->colour.blue) / 255);
+	return (res_ambient);
+}
+
+static t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
+		t_XYZ *viewdirection)
+{
+	t_XYZ reflection;
+	double spec;
+	t_colour	res_spec;
+
+	reflection = vec_subtraction(vec_multiplication(2 * dot_vec(*normal, *dir),
+				*normal), *dir);
+	spec = pow(fmax(dot_vec(reflection, *viewdirection), 0.0), SHINE);
+	res_spec.red = (light->brightness * spec * light->colour.red);
+	res_spec.green = (light->brightness * spec * light->colour.green);
+	res_spec.blue = (light->brightness * spec * light->colour.blue);
+	return (res_spec);
+}
+
+void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int id)
 {
     t_XYZ diff;
     t_XYZ point_disc;
@@ -132,6 +161,17 @@ double hit_cylinder(t_cylinder *cylinder, t_ray *ray)
     double inter2;
     double closest_inter = -1; // Initialize closest_inter to -1
     double disc;
+	double t;
+	t_colour	res_colour;
+	int			i;
+	t_XYZ		hit_point;
+	t_XYZ		normal;
+	t_XYZ		viewdirection;
+	t_colour	res_ambient;
+	t_lighting	**spots;
+	t_XYZ		light_dir;
+	t_colour	res_diffuse = {0, 0, 0, 0};
+	t_colour	res_spec;
 
     diff = vec_subtraction(ray->origin, cylinder->centre);
     a = dot_vec(ray->dir, ray->dir) - dot_vec(ray->dir, cylinder->axis) * dot_vec(ray->dir, cylinder->axis);
@@ -179,14 +219,47 @@ double hit_cylinder(t_cylinder *cylinder, t_ray *ray)
             closest_inter = disc;
         }
     }
-    return closest_inter; // Return closest_inter directly
+    t = closest_inter;
+	if (t > 0)
+	{
+		res_ambient = ambient_lighting(&rt->scene->amb, cylinder);
+		res_colour.red = fmin(255, 255 * res_ambient.red);
+		res_colour.green = fmin(255, 255 * res_ambient.green);
+		res_colour.blue = fmin(255, 255 * res_ambient.blue);
+		spots = rt->scene->lighting.array;
+		i = 0;
+		while (spots[i])
+		{
+			hit_point = vec_addition(ray->origin, vec_multiplication(t, ray->dir));
+			normal = vec_subtraction(hit_point, cylinder->centre);
+			norm_vec(&normal); // only works for the tube
+			light_dir = vec_subtraction(spots[i]->direction, hit_point);
+			norm_vec(&light_dir);
+			// res_diffuse = diffuse_lighting(spots[i], light_dir, normal, *sphere);
+			res_spec = specular_lighting(spots[i], &light_dir, &normal,
+					&viewdirection);
+			res_colour.red = fmin(255, res_colour.red + res_diffuse.red
+					+ res_spec.red);
+			res_colour.green = fmin(255, res_colour.green + res_diffuse.green
+					+ res_spec.green);
+			res_colour.blue = fmin(255, res_colour.blue + res_diffuse.blue
+					+ res_spec.blue);
+			++i;
+		}
+		res_colour.transparency = 255;
+		if (t < rt->pixeldata[y * rt->width + x].dist)
+		{
+			rt->pixeldata[y * rt->width + x].dist = t;
+			rt->pixeldata[y * rt->width + x].colour = pack_colour(&res_colour);
+			rt->pixeldata[y * rt->width + x].elemid = id;
+		}
+	}
 }
 
 void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 {
 	int	x;
 	int	y;
-	double	t;
 	t_ray	ray;
 	t_cylinder	transformedcylinder;
 
@@ -202,16 +275,7 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 		while (x < rt->width)
 		{
 			ray_launcher(rt, &ray, x, y);
-			t = hit_cylinder(&transformedcylinder, &ray);
-			if (t > 0)
-			{
-				if (t < rt->pixeldata[y * rt->width + x].dist)
-				{
-					rt->pixeldata[y * rt->width + x].dist = t;
-					rt->pixeldata[y * rt->width + x].colour = pack_colour(&transformedcylinder.colour);
-					rt->pixeldata[y * rt->width + x].elemid = id;
-				}
-			}
+			hit_cylinder(&transformedcylinder, &ray, rt, x, y, id);
 			x++;
 		}
 		y++;
