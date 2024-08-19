@@ -357,9 +357,8 @@ t_colour	calculate_lighting(t_cylinder *cylinder, t_ray *ray, double t, t_lighti
 	final_colour.red += light->colour.red * light->brightness * specular_intensity;
 	final_colour.green += light->colour.green * light->brightness * specular_intensity;
 	final_colour.blue += light->colour.blue * light->brightness * specular_intensity;
-	return final_colour;
+	return (final_colour);
 }
-
 
 void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 {
