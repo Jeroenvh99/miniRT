@@ -80,6 +80,13 @@ void			resize_elements(t_rt *rt, int i);
 void			changedimension(double *param, char *dimension);
 void			changexyz(t_XYZ *xyz, char *type);
 void			changecolour(t_colour *colour);
+void			copypos(t_XYZ *src, t_XYZ *dst);
+void			copycolour(t_colour *src, t_colour *dst);
+void			*copysphere(void *sourceelem);
+void			*copyplane(void *sourceelem);
+void			*copycylinder(void *sourceelem);
+t_geometry		*copygeom(t_geometry *source);
+void			moveback(t_history *history);
 
 // MLX hooks
 void			set_resize(void *rt);

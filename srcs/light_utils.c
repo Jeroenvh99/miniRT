@@ -17,11 +17,11 @@ t_colour	ambient_lighting(t_ambient *ambient, t_colour *colour)
 	t_colour	res_ambient;
 
 	res_ambient.red = (ambient->intensity * ambient->colour.red
-				+ colour->red);
+			+ colour->red);
 	res_ambient.green = (ambient->intensity * ambient->colour.green
-				+ colour->green);
+			+ colour->green);
 	res_ambient.blue = (ambient->intensity * ambient->colour.blue
-				+ colour->blue);
+			+ colour->blue);
 	return (res_ambient);
 }
 
@@ -32,8 +32,10 @@ t_colour	diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal)
 
 	diffuse_factor = fmax(dot_vec(*normal, *dir), 0.0);
 	res_diffuse.red = (light->brightness * diffuse_factor * light->colour.red);
-	res_diffuse.green = (light->brightness * diffuse_factor * light->colour.green);
-	res_diffuse.blue = (light->brightness * diffuse_factor * light->colour.blue);
+	res_diffuse.green = (light->brightness * diffuse_factor
+			* light->colour.green);
+	res_diffuse.blue = (light->brightness * diffuse_factor
+			* light->colour.blue);
 	return (res_diffuse);
 }
 

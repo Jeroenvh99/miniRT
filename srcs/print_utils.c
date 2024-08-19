@@ -13,26 +13,28 @@
 #include "miniRT.h"
 #include <stdio.h>
 
-void	print_scene(int fd, t_scene *scene)
+void	print_colour(int fd, t_colour *colour)
 {
-	if (scene->amb.intensity <= 100)
+	dprintf(fd, "%f,%f,%f", colour->red, colour->green, colour->blue);
+}
+
+void	print_xyz(int fd, t_XYZ *pos)
+{
+	dprintf(fd, "%f,%f,%f", pos->x, pos->y, pos->z);
+}
+
+void	print_lighting(int fd, t_lighting **lights)
+{
+	t_lighting	*light;
+
+	while (*lights)
 	{
-		dprintf(fd, "A %f ", scene->amb.intensity);
-		print_colour(fd, &scene->amb.colour);
+		light = *lights;
+		dprintf(fd, "L ");
+		print_xyz(fd, &light->direction);
+		dprintf(fd, " %f ", light->brightness);
+		print_colour(fd, &light->colour);
 		dprintf(fd, "\n");
+		++lights;
 	}
-	if (scene->cam.fov <= 180)
-	{
-		dprintf(fd, "C ");
-		print_xyz(fd, &scene->cam.pos);
-		dprintf(fd, " ");
-		print_xyz(fd, &scene->cam.viewdirection);
-		dprintf(fd, " %i\n", scene->cam.fov);
-	}
-	if (scene->lighting.array)
-		print_lighting(fd, scene->lighting.array);
-	else
-		dprintf(fd, "There is no lighting in this scene\n");
-	if (scene->geometry.array)
-		print_geometry(fd, scene->geometry.array);
 }

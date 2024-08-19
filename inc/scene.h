@@ -112,9 +112,19 @@ typedef struct s_scene
 t_scene				*initscene(void);
 void				free_scene(t_scene *scene, int isarr);
 int					checkscene(t_scene *scene);
+int					spherecollision(t_XYZ *lightpos, t_sphere *sphere);
+int					planecollission(t_XYZ *lightpos, t_plane *plane);
+int					cylindercollission(t_XYZ *lightpos, t_cylinder *cylinder);
+int					checklightcollision(t_scene *scene);
 
-// parsing function
+// parsing functions
 void				readscene(t_scene *scene, char *scenefile);
 void				build_arrays(t_scene *scene);
+
+// printing functions
+void				print_colour(int fd, t_colour *colour);
+void				print_xyz(int fd, t_XYZ *pos);
+void				print_lighting(int fd, t_lighting **lights);
+void				print_geometry(int fd, t_geometry **arr);
 
 #endif
