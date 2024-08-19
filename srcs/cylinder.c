@@ -129,12 +129,12 @@ static t_colour	ambient_lighting(t_ambient *ambient, t_cylinder *cylinder)
 	return (res_ambient);
 }
 
-static t_colour	diffuse_lighting(t_lighting *light, t_XYZ dir, t_XYZ normal)
+static t_colour	diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal)
 {
 	double	diffuse_factor;
 	t_colour	res_diffuse;
 
-	diffuse_factor = fmax(dot_vec(normal, dir), 0.0);
+	diffuse_factor = fmax(dot_vec(*normal, *dir), 0.0);
 	res_diffuse.red = (light->brightness * diffuse_factor * light->colour.red);
 	res_diffuse.green = (light->brightness * diffuse_factor * light->colour.green);
 	res_diffuse.blue = (light->brightness * diffuse_factor * light->colour.blue);
@@ -247,7 +247,7 @@ void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int 
 			norm_vec(&normal); // only works for the tube
 			light_dir = vec_subtraction(spots[i]->direction, hit_point);
 			norm_vec(&light_dir);
-			res_diffuse = diffuse_lighting(spots[i], light_dir, normal);
+			res_diffuse = diffuse_lighting(spots[i], &light_dir, &normal);
 			res_spec = specular_lighting(spots[i], &light_dir, &normal,
 					&viewdirection);
 			res_colour.red = fmin(255, res_colour.red + res_diffuse.red
