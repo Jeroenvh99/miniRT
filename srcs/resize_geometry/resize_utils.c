@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "miniRT.h"
 #include "parse.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -62,4 +62,19 @@ void	changecolour(t_colour *colour)
 	}
 	parse_colour(new, colour);
 	free(new);
+}
+
+void	copypos(t_XYZ *src, t_XYZ *dst)
+{
+	dst->x = src->x;
+	dst->y = src->y;
+	dst->z = src->z;
+}
+
+void	copycolour(t_colour *src, t_colour *dst)
+{
+	dst->red = src->red;
+	dst->green = src->green;
+	dst->blue = src->blue;
+	dst->transparency = src->transparency;
 }

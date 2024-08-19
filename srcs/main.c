@@ -13,6 +13,16 @@
 #include "miniRT.h"
 #include <unistd.h>
 
+void	add_hooks(t_rt *rt)
+{
+	mlx_loop_hook(rt->mlx, set_resize, rt);
+	mlx_loop_hook(rt->mlx, escape_hook, rt);
+	mlx_loop_hook(rt->mlx, resize_render, rt);
+	mlx_loop_hook(rt->mlx, rotate_camera, rt);
+	mlx_key_hook(rt->mlx, reset_resize, rt);
+	mlx_resize_hook(rt->mlx, resize_rt, rt);
+}
+
 int	main(int argc, char **argv)
 {
 	t_rt	rt;
@@ -32,12 +42,7 @@ int	main(int argc, char **argv)
 	build_arrays(rt.scene);
 	init_rt(&rt);
 	draw_objects(&rt);
-	mlx_loop_hook(rt.mlx, set_resize, &rt);
-	mlx_loop_hook(rt.mlx, escape_hook, &rt);
-	mlx_loop_hook(rt.mlx, resize_render, &rt);
-	mlx_loop_hook(rt.mlx, rotate_camera, &rt);
-	mlx_key_hook(rt.mlx, reset_resize, &rt);
-	mlx_resize_hook(rt.mlx, resize_rt, &rt);
+	add_hooks(&rt);
 	mlx_loop(rt.mlx);
 	exit_rt(&rt);
 	return (0);

@@ -4,9 +4,13 @@ OS			:= $(shell uname -s)
 
 SRC_FILES	:= main.c\
 				setup_scene.c\
+				scene_check.c\
+				print_utils.c\
+				print_geometry.c\
 				print_scene.c\
 				init.c\
 				hooks.c\
+				hooks_2.c\
 				parse/parse_geometry.c\
 				parse/parse_scene.c\
 				parse/parse_utils.c\
@@ -16,13 +20,16 @@ SRC_FILES	:= main.c\
 				parse/parse_check_3.c\
 				resize_geometry/resize_geometry.c\
 				resize_geometry/resize_utils.c\
+				resize_geometry/history_utils.c\
 				sphere.c\
 				vec_operations.c\
 				vec_operations_2.c\
 				vec_operations_3.c\
 				ray_launcher.c\
 				plane.c\
-				cylinder.c
+				cylinder.c\
+				light_utils.c\
+				scene_check.c
 
 OBJ_FILES	:= $(patsubst %.c,%.o,$(SRC_FILES))
 HDR_FILES	:= miniRT.h\

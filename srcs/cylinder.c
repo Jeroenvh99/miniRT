@@ -115,47 +115,6 @@
 	}
 }*/
 
-static t_colour	ambient_lighting(t_ambient *ambient, t_cylinder *cylinder)
-{
-	t_colour	res_ambient;
-
-	res_ambient.red = (ambient->intensity * ambient->colour.red
-				+ cylinder->colour.red);
-	res_ambient.green = (ambient->intensity * ambient->colour.green
-				+ cylinder->colour.green);
-	res_ambient.blue = (ambient->intensity * ambient->colour.blue
-				+ cylinder->colour.blue);
-	return (res_ambient);
-}
-
-static t_colour	diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal)
-{
-	double		diffuse_factor;
-	t_colour	res_diffuse;
-
-	diffuse_factor = fmax(dot_vec(*normal, *dir), 0.0);
-	res_diffuse.red = (light->brightness * diffuse_factor * light->colour.red);
-	res_diffuse.green = (light->brightness * diffuse_factor * light->colour.green);
-	res_diffuse.blue = (light->brightness * diffuse_factor * light->colour.blue);
-	return (res_diffuse);
-}
-
-static t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
-		t_XYZ *viewdirection)
-{
-	t_XYZ		reflection;
-	double		spec;
-	t_colour	res_spec;
-
-	reflection = vec_subtraction(vec_multiplication(2 * dot_vec(*normal, *dir),
-				*normal), *dir);
-	spec = pow(fmax(dot_vec(reflection, *viewdirection), 0.0), SHINE);
-	res_spec.red = (light->brightness * spec * light->colour.red);
-	res_spec.green = (light->brightness * spec * light->colour.green);
-	res_spec.blue = (light->brightness * spec * light->colour.blue);
-	return (res_spec);
-}
-
 void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int id)
 {
 	t_XYZ		diff;
@@ -233,7 +192,7 @@ void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int 
 	t = closest_inter;
 	if (t > 0)
 	{
-		res_ambient = ambient_lighting(&rt->scene->amb, cylinder);
+		res_ambient = ambient_lighting(&rt->scene->amb, &cylinder->colour);
 		res_colour.red = fmin(255, res_ambient.red);
 		res_colour.green = fmin(255, res_ambient.green);
 		res_colour.blue = fmin(255, res_ambient.blue);
@@ -367,8 +326,8 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 	t_ray		ray;
 	t_cylinder	transformedcylinder;
 
-	transformedcylinder.centre = base_transform(rt->camtransform, ((t_cylinder *)geom->elem)->centre);
-	transformedcylinder.axis = base_transform(rt->camtransform, ((t_cylinder *)geom->elem)->axis);
+	transformedcylinder.centre = base_transform(rt->camtransform, &((t_cylinder *)geom->elem)->centre);
+	transformedcylinder.axis = base_transform(rt->camtransform, &((t_cylinder *)geom->elem)->axis);
 	transformedcylinder.radius = ((t_cylinder *)geom->elem)->radius;
 	transformedcylinder.height = ((t_cylinder *)geom->elem)->height;
 	transformedcylinder.colour = ((t_cylinder *)geom->elem)->colour;

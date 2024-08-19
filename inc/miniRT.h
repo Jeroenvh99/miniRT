@@ -73,13 +73,20 @@ double			mag_vec(t_XYZ *vector);
 void			norm_vec(t_XYZ *vector);
 void			default_matrix(t_rt *rt);
 void			default_matrix_rotate(t_rt *rt, double xrotation, double yrotation, double zrotation);
-t_XYZ			base_transform(double matrix[3][3], t_XYZ dir);
+t_XYZ			base_transform(double matrix[3][3], t_XYZ *dir);
 
 // resize geometry functions
 void			resize_elements(t_rt *rt, int i);
 void			changedimension(double *param, char *dimension);
 void			changexyz(t_XYZ *xyz, char *type);
 void			changecolour(t_colour *colour);
+void			copypos(t_XYZ *src, t_XYZ *dst);
+void			copycolour(t_colour *src, t_colour *dst);
+void			*copysphere(void *sourceelem);
+void			*copyplane(void *sourceelem);
+void			*copycylinder(void *sourceelem);
+t_geometry		*copygeom(t_geometry *source);
+void			moveback(t_history *history);
 
 // MLX hooks
 void			set_resize(void *rt);
@@ -96,5 +103,11 @@ void			draw_plane(t_rt *rt, t_geometry *geom, int id);
 void			draw_cylinder(t_rt *rt, t_geometry *geom, int id);
 uint32_t		pack_colour(t_colour *colour);
 void			ray_launcher(t_rt *rt, t_ray *ray, double x, double y);
+
+// lighting functions
+t_colour		ambient_lighting(t_ambient *ambient, t_colour *colour);
+t_colour		diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal);
+t_colour		specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
+		t_XYZ *viewdirection);
 
 #endif

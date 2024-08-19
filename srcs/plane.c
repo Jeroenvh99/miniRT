@@ -12,47 +12,6 @@
 
 #include "miniRT.h"
 
-static t_colour	ambient_lighting(t_ambient *ambient, t_plane *plane)
-{
-	t_colour	res_ambient;
-
-	res_ambient.red = (ambient->intensity * ambient->colour.red
-				+ plane->colour.red);
-	res_ambient.green = (ambient->intensity * ambient->colour.green
-				+ plane->colour.green);
-	res_ambient.blue = (ambient->intensity * ambient->colour.blue
-				+ plane->colour.blue);
-	return (res_ambient);
-}
-
-static t_colour	diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal)
-{
-	double		diffuse_factor;
-	t_colour	res_diffuse;
-
-	diffuse_factor = fmax(dot_vec(*normal, *dir), 0.0);
-	res_diffuse.red = (light->brightness * diffuse_factor * light->colour.red);
-	res_diffuse.green = (light->brightness * diffuse_factor * light->colour.green);
-	res_diffuse.blue = (light->brightness * diffuse_factor * light->colour.blue);
-	return (res_diffuse);
-}
-
-static t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
-		t_XYZ *viewdirection)
-{
-	t_XYZ		reflection;
-	double		spec;
-	t_colour	res_spec;
-
-	reflection = vec_subtraction(vec_multiplication(2 * dot_vec(*normal, *dir),
-				*normal), *dir);
-	spec = pow(fmax(dot_vec(reflection, *viewdirection), 0.0), SHINE);
-	res_spec.red = (light->brightness * spec * light->colour.red);
-	res_spec.green = (light->brightness * spec * light->colour.green);
-	res_spec.blue = (light->brightness * spec * light->colour.blue);
-	return (res_spec);
-}
-
 void	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 {
 	double		denominator;
@@ -78,7 +37,7 @@ void	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 		hit_point = vec_addition(ray->origin, vec_multiplication(t, ray->dir));
 		viewdirection = vec_multiplication(-1, ray->dir);
 		norm_vec(&viewdirection);
-		res_ambient = ambient_lighting(&rt->scene->amb, plane);
+		res_ambient = ambient_lighting(&rt->scene->amb, &plane->colour);
 		res_colour.red = fmin(255, res_ambient.red);
 		res_colour.green = fmin(255, res_ambient.green);
 		res_colour.blue = fmin(255, res_ambient.blue);
@@ -115,8 +74,8 @@ void	draw_plane(t_rt *rt, t_geometry *geom, int id)
 	t_ray	ray;
 	t_plane	transformedplane;
 
-	transformedplane.point = base_transform(rt->camtransform, ((t_plane *)geom->elem)->point);
-	transformedplane.normal = base_transform(rt->camtransform, ((t_plane *)geom->elem)->normal);
+	transformedplane.point = base_transform(rt->camtransform, &((t_plane *)geom->elem)->point);
+	transformedplane.normal = base_transform(rt->camtransform, &((t_plane *)geom->elem)->normal);
 	transformedplane.colour = ((t_plane *)geom->elem)->colour;
 	y = 0;
 	while (y < rt->height)
