@@ -25,6 +25,18 @@ static t_colour	ambient_lighting(t_ambient *ambient, t_plane *plane)
 	return (res_ambient);
 }
 
+// static t_colour	diffuse_lighting(t_lighting *light, t_XYZ dir, t_XYZ normal)
+// {
+// 	double	diffuse_factor;
+// 	t_colour	res_diffuse;
+
+// 	diffuse_factor = fmax(dot_vec(normal, dir), 0.0);
+// 	res_diffuse.red = (light->brightness * diffuse_factor * light->colour.red);
+// 	res_diffuse.green = (light->brightness * diffuse_factor * light->colour.green);
+// 	res_diffuse.blue = (light->brightness * diffuse_factor * light->colour.blue);
+// 	return (res_diffuse);
+// }
+
 // static t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
 // 		t_XYZ *viewdirection)
 // {
@@ -53,7 +65,7 @@ void  hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 	t_XYZ		viewdirection;
 	// t_lighting	**spots;
 	// t_XYZ		light_dir;
-	// t_colour	res_diffuse = {0, 0, 0, 0};
+	// t_colour	res_diffuse;
 	// t_colour	res_spec;
 
     denominator = dot_vec(ray->dir, plane->normal); 
@@ -76,7 +88,7 @@ void  hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 		// {
 		// 	light_dir = vec_subtraction(spots[i]->direction, hit_point);
 		// 	norm_vec(&light_dir);
-		// 	// res_diffuse = diffuse_lighting(spots[i], light_dir, normal, *sphere);
+		// 	res_diffuse = diffuse_lighting(spots[i], light_dir, normal);
 		// 	res_spec = specular_lighting(spots[i], &light_dir, &plane->normal,
 		// 			&viewdirection);
 		// 	res_colour.red = fmin(255, res_colour.red + res_diffuse.red

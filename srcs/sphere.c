@@ -53,21 +53,17 @@ static t_colour	ambient_lighting(t_ambient *ambient, t_sphere *sphere)
 	return (res_ambient);
 }
 
-/*t_colour	diffuse_lighting(t_lighting *light, t_XYZ dir, t_XYZ normal,
-		t_sphere sphere)
+static t_colour	diffuse_lighting(t_lighting *light, t_XYZ dir, t_XYZ normal)
 {
-	double		diffuse_factor;
+	double	diffuse_factor;
 	t_colour	res_diffuse;
 
 	diffuse_factor = fmax(dot_vec(normal, dir), 0.0);
-	res_diffuse.red = (light->brightness * diffuse_factor * light->colour.red
-			* sphere.colour.red);
-	res_diffuse.green = (light->brightness * diffuse_factor * light->colour.green
-			* sphere.colour.green);
-	res_diffuse.blue = (light->brightness * diffuse_factor * light->colour.blue
-			* sphere.colour.blue);
+	res_diffuse.red = (light->brightness * diffuse_factor * light->colour.red);
+	res_diffuse.green = (light->brightness * diffuse_factor * light->colour.green);
+	res_diffuse.blue = (light->brightness * diffuse_factor * light->colour.blue);
 	return (res_diffuse);
-}*/
+}
 
 static t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
 		t_XYZ *viewdirection)
@@ -96,7 +92,7 @@ void	pixel_colour(t_sphere *sphere, t_ray *ray, int x, int y, t_rt *rt, int id)
 	t_colour	res_ambient;
 	t_lighting	**spots;
 	t_XYZ		light_dir;
-	t_colour	res_diffuse = {0, 0, 0, 0};
+	t_colour	res_diffuse;
 	t_colour	res_spec;
 
 	t = hit_sphere(*sphere, ray);
@@ -117,7 +113,7 @@ void	pixel_colour(t_sphere *sphere, t_ray *ray, int x, int y, t_rt *rt, int id)
 		{
 			light_dir = vec_subtraction(spots[i]->direction, hit_point);
 			norm_vec(&light_dir);
-			// res_diffuse = diffuse_lighting(spots[i], light_dir, normal, *sphere);
+			res_diffuse = diffuse_lighting(spots[i], light_dir, normal);
 			res_spec = specular_lighting(spots[i], &light_dir, &normal,
 					&viewdirection);
 			res_colour.red = fmin(255, res_colour.red + res_diffuse.red
