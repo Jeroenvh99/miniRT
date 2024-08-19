@@ -74,8 +74,8 @@ void	draw_plane(t_rt *rt, t_geometry *geom, int id)
 	t_ray	ray;
 	t_plane	transformedplane;
 
-	transformedplane.point = base_transform(rt->camtransform, ((t_plane *)geom->elem)->point);
-	transformedplane.normal = base_transform(rt->camtransform, ((t_plane *)geom->elem)->normal);
+	transformedplane.point = base_transform(rt->camtransform, &((t_plane *)geom->elem)->point);
+	transformedplane.normal = base_transform(rt->camtransform, &((t_plane *)geom->elem)->normal);
 	transformedplane.colour = ((t_plane *)geom->elem)->colour;
 	y = 0;
 	while (y < rt->height)

@@ -73,7 +73,7 @@ double			mag_vec(t_XYZ *vector);
 void			norm_vec(t_XYZ *vector);
 void			default_matrix(t_rt *rt);
 void			default_matrix_rotate(t_rt *rt, double xrotation, double yrotation, double zrotation);
-t_XYZ			base_transform(double matrix[3][3], t_XYZ dir);
+t_XYZ			base_transform(double matrix[3][3], t_XYZ *dir);
 
 // resize geometry functions
 void			resize_elements(t_rt *rt, int i);

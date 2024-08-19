@@ -113,7 +113,7 @@ void	draw_sphere(t_rt *rt, t_geometry *geom, int id)
 	t_sphere	transformedsphere;
 
 	transformedsphere.centre = base_transform(rt->camtransform,
-			((t_sphere *)geom->elem)->centre);
+			&((t_sphere *)geom->elem)->centre);
 	transformedsphere.radius = ((t_sphere *)geom->elem)->radius;
 	transformedsphere.colour = ((t_sphere *)geom->elem)->colour;
 	y = 0;

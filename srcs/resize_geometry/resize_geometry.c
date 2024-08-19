@@ -19,7 +19,7 @@ static void	resize_plane(t_plane *plane)
 	char	*selection;
 
 	printf("P to change the point\nN to change the normal direction\n"
-			"C to change the colour\n");
+		"C to change the colour\n");
 	selection = get_next_line(0);
 	if (*selection == 'P' && ft_strlen(selection) == 2)
 	{
@@ -41,7 +41,7 @@ static void	resize_sphere(t_sphere *sphere)
 	char	*selection;
 
 	printf("X to change the centre\nR to change the radius\n"
-			"C to change the colour\n");
+		"C to change the colour\n");
 	selection = get_next_line(0);
 	if (*selection == 'X' && ft_strlen(selection) == 2)
 	{
@@ -63,8 +63,8 @@ static void	resize_cylinder(t_cylinder *cylinder)
 	char	*selection;
 
 	printf("X to change the centre\nA to change the axis\n"
-			"D to change the diameter\nR to change the radius\n"
-			"H to change the height\nC to change the colour\n");
+		"D to change the diameter\nR to change the radius\n"
+		"H to change the height\nC to change the colour\n");
 	selection = get_next_line(0);
 	if (*selection == 'X' && ft_strlen(selection) == 2)
 	{

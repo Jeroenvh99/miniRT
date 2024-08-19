@@ -326,8 +326,8 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 	t_ray		ray;
 	t_cylinder	transformedcylinder;
 
-	transformedcylinder.centre = base_transform(rt->camtransform, ((t_cylinder *)geom->elem)->centre);
-	transformedcylinder.axis = base_transform(rt->camtransform, ((t_cylinder *)geom->elem)->axis);
+	transformedcylinder.centre = base_transform(rt->camtransform, &((t_cylinder *)geom->elem)->centre);
+	transformedcylinder.axis = base_transform(rt->camtransform, &((t_cylinder *)geom->elem)->axis);
 	transformedcylinder.radius = ((t_cylinder *)geom->elem)->radius;
 	transformedcylinder.height = ((t_cylinder *)geom->elem)->height;
 	transformedcylinder.colour = ((t_cylinder *)geom->elem)->colour;
