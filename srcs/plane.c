@@ -17,7 +17,6 @@ void	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 	double		denominator;
 	t_XYZ		diff;
 	double		t;
-	t_colour	res_ambient;
 	t_colour	res_colour;
 	int			i;
 	t_XYZ		hit_point;
@@ -37,10 +36,7 @@ void	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 		hit_point = vec_addition(ray->origin, vec_multiplication(t, ray->dir));
 		viewdirection = vec_multiplication(-1, ray->dir);
 		norm_vec(&viewdirection);
-		res_ambient = ambient_lighting(&rt->scene->amb, &plane->colour);
-		res_colour.red = fmin(255, res_ambient.red);
-		res_colour.green = fmin(255, res_ambient.green);
-		res_colour.blue = fmin(255, res_ambient.blue);
+		res_colour = ambient_lighting(&rt->scene->amb, &plane->colour);
 		spots = rt->scene->lighting.array;
 		i = 0;
 		while (spots[i])

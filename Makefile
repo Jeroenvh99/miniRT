@@ -29,7 +29,8 @@ SRC_FILES	:= main.c\
 				plane.c\
 				cylinder.c\
 				light_utils.c\
-				scene_check.c
+				scene_check.c\
+				object_utils.c
 
 OBJ_FILES	:= $(patsubst %.c,%.o,$(SRC_FILES))
 HDR_FILES	:= miniRT.h\
