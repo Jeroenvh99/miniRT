@@ -40,7 +40,7 @@ int	searchcoord(t_rt *rt, int posx, int posy)
 				if (x == posx && y == posy)
 					return (rt->pixeldata[y * rt->width + x].elemid);
 			}
-			x++; 
+			x++;
 		}
 		y++;
 	}
@@ -114,7 +114,7 @@ void	resize_rt(int32_t width, int32_t height, void *param)
 
 void	resize_render(void *param)
 {
-	t_rt		*local_rt;
+	t_rt	*local_rt;
 
 	local_rt = (t_rt *)param;
 	if (local_rt->lastresize > 0 && (mlx_get_time() - local_rt->lastresize) > 0.1)

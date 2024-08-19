@@ -44,18 +44,18 @@ static t_colour	ambient_lighting(t_ambient *ambient, t_sphere *sphere)
 {
 	t_colour	res_ambient;
 
-	res_ambient.red = ((ambient->intensity * ambient->colour.red
-				+ sphere->colour.red) / 255);
-	res_ambient.green = ((ambient->intensity * ambient->colour.green
-				+ sphere->colour.green) / 255);
-	res_ambient.blue = ((ambient->intensity * ambient->colour.blue
-				+ sphere->colour.blue) / 255);
+	res_ambient.red = (ambient->intensity * ambient->colour.red
+				+ sphere->colour.red);
+	res_ambient.green = (ambient->intensity * ambient->colour.green
+				+ sphere->colour.green);
+	res_ambient.blue = (ambient->intensity * ambient->colour.blue
+				+ sphere->colour.blue);
 	return (res_ambient);
 }
 
 static t_colour	diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal)
 {
-	double	diffuse_factor;
+	double		diffuse_factor;
 	t_colour	res_diffuse;
 
 	diffuse_factor = fmax(dot_vec(*normal, *dir), 0.0);
@@ -68,8 +68,8 @@ static t_colour	diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal)
 static t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
 		t_XYZ *viewdirection)
 {
-	t_XYZ reflection;
-	double spec;
+	t_XYZ		reflection;
+	double		spec;
 	t_colour	res_spec;
 
 	reflection = vec_subtraction(vec_multiplication(2 * dot_vec(*normal, *dir),
@@ -104,9 +104,9 @@ void	pixel_colour(t_sphere *sphere, t_ray *ray, int x, int y, t_rt *rt, int id)
 		viewdirection = vec_multiplication(-1, ray->dir);
 		norm_vec(&viewdirection);
 		res_ambient = ambient_lighting(&rt->scene->amb, sphere);
-		res_colour.red = fmin(255, 255 * res_ambient.red);
-		res_colour.green = fmin(255, 255 * res_ambient.green);
-		res_colour.blue = fmin(255, 255 * res_ambient.blue);
+		res_colour.red = fmin(255, res_ambient.red);
+		res_colour.green = fmin(255, res_ambient.green);
+		res_colour.blue = fmin(255, res_ambient.blue);
 		spots = rt->scene->lighting.array;
 		i = 0;
 		while (spots[i])

@@ -50,7 +50,7 @@ t_XYZ	base_transform(double matrix[3][3], t_XYZ dir)
 
 void	ray_launcher(t_rt *rt, t_ray *ray, double x, double y)
 {
-	double scale;
+	double	scale;
 
 	scale = tan((double)rt->scene->cam.fov * 0.5 * M_PI / 180);
 	ray->origin = rt->scene->cam.pos;
