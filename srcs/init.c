@@ -28,8 +28,8 @@ void	draw_objects(t_rt *rt)
 {
 	t_drawfunc const	drawfuncs[3] = {draw_sphere, draw_plane, draw_cylinder};
 	t_geometry			**objects;
-	int	x;
-	int	y;
+	int					x;
+	int					y;
 
 	if (rt->image)
 	{
@@ -41,7 +41,6 @@ void	draw_objects(t_rt *rt)
 		mlx_terminate(rt->mlx);
 		exit(1);
 	}
-
 	y = 0;
 	while (y < rt->height)
 	{
@@ -61,7 +60,6 @@ void	draw_objects(t_rt *rt)
 		drawfuncs[objects[y]->elemtype - 1](rt, objects[y], y);
 		++y;
 	}
-
 	y = 0;
 	while (y < rt->height)
 	{
@@ -72,7 +70,7 @@ void	draw_objects(t_rt *rt)
 			{
 				mlx_put_pixel(rt->image, x, y, rt->pixeldata[y * rt->width + x].colour);
 			}
-			x++; 
+			x++;
 		}
 		y++;
 	}

@@ -16,18 +16,18 @@ static t_colour	ambient_lighting(t_ambient *ambient, t_plane *plane)
 {
 	t_colour	res_ambient;
 
-	res_ambient.red = ((ambient->intensity * ambient->colour.red
-				+ plane->colour.red) / 255);
-	res_ambient.green = ((ambient->intensity * ambient->colour.green
-				+ plane->colour.green) / 255);
-	res_ambient.blue = ((ambient->intensity * ambient->colour.blue
-				+ plane->colour.blue) / 255);
+	res_ambient.red = (ambient->intensity * ambient->colour.red
+				+ plane->colour.red);
+	res_ambient.green = (ambient->intensity * ambient->colour.green
+				+ plane->colour.green);
+	res_ambient.blue = (ambient->intensity * ambient->colour.blue
+				+ plane->colour.blue);
 	return (res_ambient);
 }
 
 static t_colour	diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal)
 {
-	double	diffuse_factor;
+	double		diffuse_factor;
 	t_colour	res_diffuse;
 
 	diffuse_factor = fmax(dot_vec(*normal, *dir), 0.0);
@@ -40,8 +40,8 @@ static t_colour	diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal)
 static t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
 		t_XYZ *viewdirection)
 {
-	t_XYZ reflection;
-	double spec;
+	t_XYZ		reflection;
+	double		spec;
 	t_colour	res_spec;
 
 	reflection = vec_subtraction(vec_multiplication(2 * dot_vec(*normal, *dir),
@@ -53,11 +53,11 @@ static t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
 	return (res_spec);
 }
 
-void  hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
+void	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 {
-    double  denominator;
-    t_XYZ   diff;
-	double	t;
+	double		denominator;
+	t_XYZ		diff;
+	double		t;
 	t_colour	res_ambient;
 	t_colour	res_colour;
 	int			i;
@@ -68,20 +68,20 @@ void  hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 	t_colour	res_diffuse;
 	t_colour	res_spec;
 
-    denominator = dot_vec(ray->dir, plane->normal); 
-    if (fabs(denominator) < 1e-10)
-        return;
-    diff = vec_subtraction(plane->point, ray->origin);
-    t = dot_vec(diff, plane->normal) / denominator;
+	denominator = dot_vec(ray->dir, plane->normal);
+	if (fabs(denominator) < 1e-10)
+		return ;
+	diff = vec_subtraction(plane->point, ray->origin);
+	t = dot_vec(diff, plane->normal) / denominator;
 	if (t >= 0)
 	{
 		hit_point = vec_addition(ray->origin, vec_multiplication(t, ray->dir));
 		viewdirection = vec_multiplication(-1, ray->dir);
 		norm_vec(&viewdirection);
 		res_ambient = ambient_lighting(&rt->scene->amb, plane);
-		res_colour.red = fmin(255, 255 * res_ambient.red);
-		res_colour.green = fmin(255, 255 * res_ambient.green);
-		res_colour.blue = fmin(255, 255 * res_ambient.blue);
+		res_colour.red = fmin(255, res_ambient.red);
+		res_colour.green = fmin(255, res_ambient.green);
+		res_colour.blue = fmin(255, res_ambient.blue);
 		spots = rt->scene->lighting.array;
 		i = 0;
 		while (spots[i])
