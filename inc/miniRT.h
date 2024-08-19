@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:20:05 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/08/09 15:26:58 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/19 15:37:10 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,6 @@ void			escape_hook(void *param);
 void			resize_rt(int32_t width, int32_t height, void *param);
 void			resize_render(void *param);
 void			rotate_camera(void *param);
-
-// light and color
-
 
 // draw functions
 void			draw_objects(t_rt *rt);

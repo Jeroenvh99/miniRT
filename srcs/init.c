@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 15:40:24 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/08/06 14:12:24 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/19 15:46:12 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	draw_objects(t_rt *rt)
 		while (x < rt->width)
 		{
 			rt->pixeldata[y * rt->width + x].dist = DBL_MAX;
+			rt->pixeldata[y * rt->width + x].colour = 0x000000FF;
 			x++;
 		}
 		y++;
