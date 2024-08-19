@@ -97,4 +97,10 @@ void			draw_cylinder(t_rt *rt, t_geometry *geom, int id);
 uint32_t		pack_colour(t_colour *colour);
 void			ray_launcher(t_rt *rt, t_ray *ray, double x, double y);
 
+// lighting functions
+t_colour		ambient_lighting(t_ambient *ambient, t_colour *colour);
+t_colour		diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal);
+t_colour		specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
+		t_XYZ *viewdirection);
+
 #endif

@@ -40,47 +40,6 @@ double	hit_sphere(t_sphere sphere, t_ray *ray)
 		return (-1.0);
 }
 
-static t_colour	ambient_lighting(t_ambient *ambient, t_sphere *sphere)
-{
-	t_colour	res_ambient;
-
-	res_ambient.red = (ambient->intensity * ambient->colour.red
-				+ sphere->colour.red);
-	res_ambient.green = (ambient->intensity * ambient->colour.green
-				+ sphere->colour.green);
-	res_ambient.blue = (ambient->intensity * ambient->colour.blue
-				+ sphere->colour.blue);
-	return (res_ambient);
-}
-
-static t_colour	diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal)
-{
-	double		diffuse_factor;
-	t_colour	res_diffuse;
-
-	diffuse_factor = fmax(dot_vec(*normal, *dir), 0.0);
-	res_diffuse.red = (light->brightness * diffuse_factor * light->colour.red);
-	res_diffuse.green = (light->brightness * diffuse_factor * light->colour.green);
-	res_diffuse.blue = (light->brightness * diffuse_factor * light->colour.blue);
-	return (res_diffuse);
-}
-
-static t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
-		t_XYZ *viewdirection)
-{
-	t_XYZ		reflection;
-	double		spec;
-	t_colour	res_spec;
-
-	reflection = vec_subtraction(vec_multiplication(2 * dot_vec(*normal, *dir),
-				*normal), *dir);
-	spec = pow(fmax(dot_vec(reflection, *viewdirection), 0.0), SHINE);
-	res_spec.red = (light->brightness * spec * light->colour.red);
-	res_spec.green = (light->brightness * spec * light->colour.green);
-	res_spec.blue = (light->brightness * spec * light->colour.blue);
-	return (res_spec);
-}
-
 void	pixel_colour(t_sphere *sphere, t_ray *ray, int x, int y, t_rt *rt, int id)
 {
 	t_colour	res_colour;
@@ -103,7 +62,7 @@ void	pixel_colour(t_sphere *sphere, t_ray *ray, int x, int y, t_rt *rt, int id)
 		norm_vec(&normal);
 		viewdirection = vec_multiplication(-1, ray->dir);
 		norm_vec(&viewdirection);
-		res_ambient = ambient_lighting(&rt->scene->amb, sphere);
+		res_ambient = ambient_lighting(&rt->scene->amb, &sphere->colour);
 		res_colour.red = fmin(255, res_ambient.red);
 		res_colour.green = fmin(255, res_ambient.green);
 		res_colour.blue = fmin(255, res_ambient.blue);
