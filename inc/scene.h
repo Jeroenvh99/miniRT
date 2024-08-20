@@ -110,6 +110,7 @@ typedef struct s_scene
 }					t_scene;
 
 t_scene				*initscene(void);
+void				free_geom(void *geometry);
 void				free_scene(t_scene *scene, int isarr);
 int					checkscene(t_scene *scene);
 int					spherecollision(t_XYZ *lightpos, t_sphere *sphere);

@@ -13,6 +13,13 @@
 #include "miniRT.h"
 #include <stdlib.h>
 
+int	comment(char *str)
+{
+	while (*str && ft_isspace(*str))
+		++str;
+	return (*str == '#');
+}
+
 char	*skipspace(char *in)
 {
 	if (!in)

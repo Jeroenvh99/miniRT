@@ -54,6 +54,7 @@ int	parseplane(t_scene *scene, char *line)
 	}
 	parse_xyz(parts[1], &plane->point);
 	parse_xyz(parts[2], &plane->normal);
+	norm_vec(&plane->normal);
 	parse_colour(parts[3], &plane->colour);
 	geom->elemtype = 2;
 	geom->elem = plane;
@@ -78,6 +79,7 @@ int	parsecylinder(t_scene *scene, char *line)
 	}
 	parse_xyz(parts[1], &cylinder->centre);
 	parse_xyz(parts[2], &cylinder->axis);
+	norm_vec(&cylinder->axis);
 	cylinder->radius = ft_atof(parts[3]) * 0.5;
 	cylinder->height = ft_atof(parts[4]);
 	parse_colour(parts[5], &cylinder->colour);

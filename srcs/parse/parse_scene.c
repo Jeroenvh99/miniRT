@@ -55,6 +55,7 @@ static int	parsecamera(t_scene *scene, char *line)
 	}
 	parse_xyz(parts[1], &scene->cam.pos);
 	parse_xyz(parts[2], &scene->cam.viewdirection);
+	norm_vec(&scene->cam.viewdirection);
 	scene->cam.fov = ft_atoi(parts[3]);
 	free_split(parts);
 	return (1);
@@ -73,6 +74,7 @@ static int	parselight(t_scene *scene, char *line)
 		return (0);
 	}
 	parse_xyz(parts[1], &spot->direction);
+	norm_vec(&spot->direction);
 	spot->brightness = ft_atof(parts[2]);
 	parse_colour(parts[3], &spot->colour);
 	ft_lstadd_back(&scene->lighting.list, ft_lstnew(spot));
@@ -118,7 +120,7 @@ void	readscene(t_scene *scene, char *scenefile)
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (*(skipspace(line)) != '\0')
+		if (*(skipspace(line)) != '\0' && !comment(line))
 		{
 			tabtospace(line);
 			if (parseline(scene, line) == 0)

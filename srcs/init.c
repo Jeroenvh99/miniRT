@@ -80,25 +80,20 @@ void	draw_objects(t_rt *rt)
 void	init_rt(t_rt *rt)
 {
 	int			i;
-	t_geometry	**objects;
 
-	i = 0;
 	rt->width = 1280;
 	rt->height = 720;
 	rt->totalpixels = 1280 * 720;
+	rt->mlx = mlx_init(rt->width, rt->height, "miniRT", true);
+	rt->pixeldata = malloc(rt->totalpixels * sizeof(t_hit));
+	if (!rt->mlx || !rt->pixeldata)
+		exit(1);
 	rt->lastresize = 0;
 	rt->aspectratio = (double)rt->width / (double)rt->height;
 	rt->xrotation = 0;
 	rt->yrotation = 0;
 	rt->zrotation = 0;
-	rt->mlx = mlx_init(rt->width, rt->height, "miniRT", true);
-	if (!rt->mlx)
-		exit(1);
-	rt->pixeldata = malloc(rt->totalpixels * sizeof(t_hit));
-	if (!rt->pixeldata)
-		exit(1);
 	rt->image = NULL;
-	objects = rt->scene->geometry.array;
 	i = 0;
 	while (i < HISTORYSIZE)
 	{
@@ -119,9 +114,7 @@ void	exit_rt(t_rt *rt)
 		write(1, "Do you want to save the updated scene[Y/N]:", 43);
 		res = get_next_line(0);
 		if (*res == 'y' || *res == 'Y')
-		{
 			write_scene(rt->scene);
-		}
 		free(res);
 	}
 	free_scene(rt->scene, 1);
@@ -131,8 +124,7 @@ void	exit_rt(t_rt *rt)
 	{
 		if (rt->history[i].geom)
 		{
-			free(rt->history[i].geom->elem);
-			free(rt->history[i].geom);
+			free_geom(rt->history[i].geom);
 		}
 		++i;
 	}

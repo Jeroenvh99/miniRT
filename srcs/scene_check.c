@@ -25,16 +25,12 @@ int	planecollission(t_XYZ *lightpos, t_plane *plane)
 	double	left;
 
 	if (same_point(lightpos, &plane->point))
-	{
 		return (1);
-	}
 	right = (lightpos->x * plane->normal.x + lightpos->y * plane->normal.y
 			+ lightpos->z * plane->normal.z);
 	left = dot_vec(plane->point, plane->normal);
 	if (right >= left * 0.99 && right <= left * 1.01)
-	{
 		return (1);
-	}
 	return (0);
 }
 
@@ -46,9 +42,7 @@ int	cylindercollission(t_XYZ *lightpos, t_cylinder *cylinder)
 
 	if (distancetoline(lightpos, &cylinder->centre,
 			&cylinder->axis) == cylinder->radius)
-	{
 		return (1);
-	}
 	halfheight = cylinder->height * 0.5;
 	cap1.normal = cylinder->axis;
 	cap1.point = vector(cylinder->centre.x + (cylinder->axis.x * halfheight),
@@ -61,42 +55,32 @@ int	cylindercollission(t_XYZ *lightpos, t_cylinder *cylinder)
 	if (distancetoline(lightpos, &cylinder->centre,
 			&cylinder->axis) <= cylinder->radius && (planecollission(lightpos,
 				&cap1) || planecollission(lightpos, &cap2)))
-	{
 		return (1);
-	}
 	return (0);
 }
 
 int	checklightcollision(t_scene *scene)
 {
 	t_list		*lights;
-	t_lighting	*spot;
 	t_list		*geometry;
 	t_geometry	*geom;
 
 	lights = scene->lighting.list;
 	while (lights)
 	{
-		spot = (t_lighting *)lights->content;
 		geometry = scene->geometry.list;
 		while (geometry)
 		{
 			geom = (t_geometry *)geometry->content;
-			if (geom->elemtype == 1 && spherecollision(&spot->direction,
-					(t_sphere *)geom->elem))
-			{
+			if (geom->elemtype == 1 && spherecollision(&((t_lighting *)lights
+						->content)->direction, (t_sphere *)geom->elem))
 				return (1);
-			}
-			else if (geom->elemtype == 2 && planecollission(&spot->direction,
-					(t_plane *)geom->elem))
-			{
+			else if (geom->elemtype == 2 && planecollission(&((t_lighting *)
+						lights->content)->direction, (t_plane *)geom->elem))
 				return (1);
-			}
-			else if (geom->elemtype == 3 && cylindercollission(&spot->direction,
-					(t_cylinder *)geom->elem))
-			{
+			else if (geom->elemtype == 3 && cylindercollission(&((t_lighting *)
+						lights->content)->direction, (t_cylinder *)geom->elem))
 				return (1);
-			}
 			geometry = geometry->next;
 		}
 		lights = lights->next;
@@ -107,29 +91,16 @@ int	checklightcollision(t_scene *scene)
 int	checkscene(t_scene *scene)
 {
 	if (scene->amb.intensity == 101)
-	{
-		write(2, "Error\nThe scene doesn't contain ambient lighting\n", 49);
-		return (0);
-	}
+		return (write(2, "Error\nThe scene contains no ambient lighting\n",
+				45));
 	if (scene->cam.fov > 180)
-	{
-		write(2, "Error\nThe scene doesn't contain a camera\n", 41);
-		return (0);
-	}
+		return (write(2, "Error\nThe scene doesn't contain a camera\n", 41));
 	if (ft_lstsize(scene->lighting.list) == 0)
-	{
-		write(2, "Error\nThe scene doesn't contain any lights\n", 43);
-		return (0);
-	}
+		return (write(2, "Error\nThe scene doesn't contain any lights\n", 43));
 	if (ft_lstsize(scene->geometry.list) == 0)
-	{
-		write(2, "Error\nThe scene doesn't contain any elements\n", 44);
-		return (0);
-	}
+		return (write(2, "Error\nThe scene doesn't contain any elements\n",
+				44));
 	if (checklightcollision(scene))
-	{
-		write(2, "one of the lights lies in an object\n", 36);
-		return (0);
-	}
-	return (1);
+		return (write(2, "one of the lights lies in an object\n", 36));
+	return (0);
 }
