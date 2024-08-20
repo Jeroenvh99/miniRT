@@ -68,7 +68,8 @@ void	draw_objects(t_rt *rt)
 		{
 			if (rt->pixeldata[y * rt->width + x].dist != DBL_MAX)
 			{
-				mlx_put_pixel(rt->image, x, y, rt->pixeldata[y * rt->width + x].colour);
+				mlx_put_pixel(rt->image, x, y,
+					rt->pixeldata[y * rt->width + x].colour);
 			}
 			x++;
 		}

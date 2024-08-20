@@ -25,7 +25,8 @@ void	default_matrix(t_rt *rt)
 	rt->camtransform[2][2] = 1;
 }
 
-void	default_matrix_rotate(t_rt *rt, double xrotation, double yrotation, double zrotation)
+void	default_matrix_rotate(t_rt *rt, double xrotation, double yrotation,
+	double zrotation)
 {
 	rt->camtransform[0][0] = cos(xrotation + yrotation);
 	rt->camtransform[0][1] = sin(xrotation);
@@ -42,9 +43,12 @@ t_XYZ	base_transform(double matrix[3][3], t_XYZ *dir)
 {
 	t_XYZ	res;
 
-	res.x = dir->x * matrix[0][0] + dir->y * matrix[0][1] + dir->z * matrix[0][2];
-	res.y = dir->x * matrix[1][0] + dir->y * matrix[1][1] + dir->z * matrix[1][2];
-	res.z = dir->x * matrix[2][0] + dir->y * matrix[2][1] + dir->z * matrix[2][2];
+	res.x = dir->x * matrix[0][0] + dir->y * matrix[0][1] + dir->z
+		* matrix[0][2];
+	res.y = dir->x * matrix[1][0] + dir->y * matrix[1][1] + dir->z
+		* matrix[1][2];
+	res.z = dir->x * matrix[2][0] + dir->y * matrix[2][1] + dir->z
+		* matrix[2][2];
 	return (res);
 }
 

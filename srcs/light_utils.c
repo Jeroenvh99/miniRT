@@ -16,12 +16,12 @@ t_colour	ambient_lighting(t_ambient *ambient, t_colour *colour)
 {
 	t_colour	res_ambient;
 
-	res_ambient.red = (ambient->intensity * ambient->colour.red
-			+ colour->red);
-	res_ambient.green = (ambient->intensity * ambient->colour.green
-			+ colour->green);
-	res_ambient.blue = (ambient->intensity * ambient->colour.blue
-			+ colour->blue);
+	res_ambient.red = fmin(255, (ambient->intensity * ambient->colour.red
+			+ colour->red));
+	res_ambient.green = fmin(255, (ambient->intensity * ambient->colour.green
+			+ colour->green));
+	res_ambient.blue = fmin(255, (ambient->intensity * ambient->colour.blue
+			+ colour->blue));
 	return (res_ambient);
 }
 

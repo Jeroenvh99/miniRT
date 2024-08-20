@@ -24,17 +24,8 @@ void	escape_hook(void *param)
 		exit_rt(rt);
 }
 
-void	rotate_camera(void *param)
+static void	rotate_camera_xy(t_rt *rt)
 {
-	t_rt	*rt;
-	double	prevxrot;
-	double	prevyrot;
-	double	prevzrot;
-
-	rt = (t_rt *)param;
-	prevxrot = rt->xrotation;
-	prevyrot = rt->yrotation;
-	prevzrot = rt->zrotation;
 	if (mlx_is_key_down(rt->mlx, MLX_KEY_LEFT))
 	{
 		rt->xrotation += 5 * (M_PI / 180.0);
@@ -51,7 +42,21 @@ void	rotate_camera(void *param)
 	{
 		rt->yrotation -= 5 * (M_PI / 180.0);
 	}
-	else if (mlx_is_key_down(rt->mlx, MLX_KEY_W))
+}
+
+void	rotate_camera(void *param)
+{
+	t_rt	*rt;
+	double	prevxrot;
+	double	prevyrot;
+	double	prevzrot;
+
+	rt = (t_rt *)param;
+	prevxrot = rt->xrotation;
+	prevyrot = rt->yrotation;
+	prevzrot = rt->zrotation;
+	rotate_camera_xy(rt);
+	if (mlx_is_key_down(rt->mlx, MLX_KEY_W))
 	{
 		rt->zrotation += 5 * (M_PI / 180.0);
 	}
@@ -59,7 +64,8 @@ void	rotate_camera(void *param)
 	{
 		rt->zrotation -= 5 * (M_PI / 180.0);
 	}
-	if (rt->xrotation != prevxrot || rt->yrotation != prevyrot || prevzrot != rt->zrotation)
+	if (rt->xrotation != prevxrot || rt->yrotation != prevyrot
+		|| prevzrot != rt->zrotation)
 	{
 		default_matrix_rotate(rt, rt->xrotation, rt->yrotation, rt->zrotation);
 		draw_objects(rt);
