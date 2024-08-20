@@ -25,6 +25,7 @@ int						isint(char *str);
 int						isdouble(char *str);
 int						is_colour(char *str);
 int						is_xyz(char *str);
+int						comment(char *str);
 char					*skipspace(char *in);
 void					tabtospace(char *str);
 int						splitsize(char **split);
