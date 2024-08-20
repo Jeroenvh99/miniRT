@@ -34,7 +34,7 @@ int	main(int argc, char **argv)
 	}
 	rt.scene = initscene();
 	readscene(rt.scene, argv[1]);
-	if (checkscene(rt.scene) == 0)
+	if (checkscene(rt.scene))
 	{
 		free_scene(rt.scene, 0);
 		return (1);
