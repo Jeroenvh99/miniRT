@@ -62,26 +62,24 @@ int	cylindercollission(t_XYZ *lightpos, t_cylinder *cylinder)
 int	checklightcollision(t_scene *scene)
 {
 	t_list		*lights;
-	t_lighting	*spot;
 	t_list		*geometry;
 	t_geometry	*geom;
 
 	lights = scene->lighting.list;
 	while (lights)
 	{
-		spot = (t_lighting *)lights->content;
 		geometry = scene->geometry.list;
 		while (geometry)
 		{
 			geom = (t_geometry *)geometry->content;
-			if (geom->elemtype == 1 && spherecollision(&spot->direction,
-					(t_sphere *)geom->elem))
+			if (geom->elemtype == 1 && spherecollision(&((t_lighting *)lights
+						->content)->direction, (t_sphere *)geom->elem))
 				return (1);
-			else if (geom->elemtype == 2 && planecollission(&spot->direction,
-					(t_plane *)geom->elem))
+			else if (geom->elemtype == 2 && planecollission(&((t_lighting *)
+						lights->content)->direction, (t_plane *)geom->elem))
 				return (1);
-			else if (geom->elemtype == 3 && cylindercollission(&spot->direction,
-					(t_cylinder *)geom->elem))
+			else if (geom->elemtype == 3 && cylindercollission(&((t_lighting *)
+						lights->content)->direction, (t_cylinder *)geom->elem))
 				return (1);
 			geometry = geometry->next;
 		}

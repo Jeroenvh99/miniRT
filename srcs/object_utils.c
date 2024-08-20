@@ -25,11 +25,11 @@ void	colour_3d_object(t_rt *rt, t_ray *ray, t_colour *colour, t_XYZ *centre, int
 	colours[0] = ambient_lighting(&rt->scene->amb, colour);
 	spots = rt->scene->lighting.array;
 	i = 0;
+	hit_point = vec_addition(ray->origin, vec_multiplication(t, ray->dir));
+	normal = vec_subtraction(hit_point, *centre);
+	norm_vec(&normal);
 	while (spots[i])
 	{
-		hit_point = vec_addition(ray->origin, vec_multiplication(t, ray->dir));
-		normal = vec_subtraction(hit_point, *centre);
-		norm_vec(&normal);
 		light_dir = vec_subtraction(spots[i]->direction, hit_point);
 		norm_vec(&light_dir);
 		colours[1] = diffuse_lighting(spots[i], &light_dir, &normal);
