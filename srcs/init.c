@@ -131,6 +131,7 @@ void	exit_rt(t_rt *rt)
 	{
 		if (rt->history[i].geom)
 		{
+			free(rt->history[i].geom->elem);
 			free(rt->history[i].geom);
 		}
 		++i;
