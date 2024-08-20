@@ -12,7 +12,7 @@
 
 #include "miniRT.h"
 
-void	colour_object(t_rt *rt, t_ray *ray, t_colour *colour, t_XYZ *centre, int x, int y, double t, int id)
+void	colour_3d_object(t_rt *rt, t_ray *ray, t_colour *colour, t_XYZ *centre, int x, int y, double t, int id)
 {
 	t_colour	res_colour;
 	int			i;

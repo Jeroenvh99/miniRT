@@ -182,7 +182,7 @@ void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int 
 	t = closest_inter;
 	if (t > 0)
 	{
-		colour_object(rt, ray, &cylinder->colour, &cylinder->centre, x, y, t, id);
+		colour_3d_object(rt, ray, &cylinder->colour, &cylinder->centre, x, y, t, id);
 	}
 }
 
