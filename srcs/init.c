@@ -15,32 +15,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	write_scene(t_scene *scene)
+void	reset_pixeldata(t_rt *rt)
 {
-	int	fd;
+	int	x;
+	int	y;
 
-	fd = open(scene->filename, O_RDONLY | O_WRONLY | O_TRUNC);
-	print_scene(fd, scene);
-	close(fd);
-}
-
-void	draw_objects(t_rt *rt)
-{
-	t_drawfunc const	drawfuncs[3] = {draw_sphere, draw_plane, draw_cylinder};
-	t_geometry			**objects;
-	int					x;
-	int					y;
-
-	if (rt->image)
-	{
-		mlx_delete_image(rt->mlx, rt->image);
-	}
-	rt->image = mlx_new_image(rt->mlx, rt->width, rt->height);
-	if (!rt->image || mlx_image_to_window(rt->mlx, rt->image, 0, 0) < 0)
-	{
-		mlx_terminate(rt->mlx);
-		exit(1);
-	}
 	y = 0;
 	while (y < rt->height)
 	{
@@ -53,13 +32,43 @@ void	draw_objects(t_rt *rt)
 		}
 		y++;
 	}
+}
+
+void	render_objects(t_rt *rt)
+{
+	t_drawfunc const	drawfuncs[3] = {draw_sphere, draw_plane, draw_cylinder};
+	t_geometry			**objects;
+	int					i;
+
 	objects = rt->scene->geometry.array;
-	y = 0;
-	while (y < rt->scene->geomsize)
+	i = 0;
+	while (i < rt->scene->geomsize)
 	{
-		drawfuncs[objects[y]->elemtype - 1](rt, objects[y], y);
-		++y;
+		drawfuncs[objects[i]->elemtype - 1](rt, objects[i], i);
+		++i;
 	}
+}
+
+void	reset_image(t_rt *rt)
+{
+	if (rt->image)
+		mlx_delete_image(rt->mlx, rt->image);
+	rt->image = mlx_new_image(rt->mlx, rt->width, rt->height);
+	if (!rt->image || mlx_image_to_window(rt->mlx, rt->image, 0, 0) < 0)
+	{
+		mlx_terminate(rt->mlx);
+		exit(1);
+	}
+}
+
+void	draw_objects(t_rt *rt)
+{
+	int					x;
+	int					y;
+
+	reset_image(rt);
+	reset_pixeldata(rt);
+	render_objects(rt);
 	y = 0;
 	while (y < rt->height)
 	{
@@ -101,32 +110,4 @@ void	init_rt(t_rt *rt)
 		++i;
 	}
 	default_matrix_rotate(rt, 0, 0, 0);
-}
-
-void	exit_rt(t_rt *rt)
-{
-	char	*res;
-	int		i;
-
-	mlx_terminate(rt->mlx);
-	if (rt->scene->isresized)
-	{
-		write(1, "Do you want to save the updated scene[Y/N]:", 43);
-		res = get_next_line(0);
-		if (*res == 'y' || *res == 'Y')
-			write_scene(rt->scene);
-		free(res);
-	}
-	free_scene(rt->scene, 1);
-	free(rt->pixeldata);
-	i = 0;
-	while (i < HISTORYSIZE)
-	{
-		if (rt->history[i].geom)
-		{
-			free_geom(rt->history[i].geom);
-		}
-		++i;
-	}
-	exit(0);
 }

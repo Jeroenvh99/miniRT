@@ -9,6 +9,7 @@ SRC_FILES	:= main.c\
 				print_geometry.c\
 				print_scene.c\
 				init.c\
+				exit_rt.c\
 				hooks.c\
 				hooks_2.c\
 				parse/parse_geometry.c\
