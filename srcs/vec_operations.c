@@ -22,18 +22,18 @@ t_XYZ	vector(double x, double y, double z)
 	return (vec);
 }
 
-double	dot_vec(t_XYZ vec1, t_XYZ vec2)
+double	dot_vec(t_XYZ *vec1, t_XYZ *vec2)
 {
-	return (vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z);
+	return (vec1->x * vec2->x + vec1->y * vec2->y + vec1->z * vec2->z);
 }
 
-t_XYZ	cross_vec(t_XYZ vec1, t_XYZ vec2)
+t_XYZ	cross_vec(t_XYZ *vec1, t_XYZ *vec2)
 {
 	t_XYZ	res;
 
-	res.x = vec1.y * vec2.z - vec1.z * vec2.y;
-	res.y = vec1.z * vec2.x - vec1.x * vec2.z;
-	res.z = vec1.x * vec2.y - vec1.y * vec2.x;
+	res.x = vec1->y * vec2->z - vec1->z * vec2->y;
+	res.y = vec1->z * vec2->x - vec1->x * vec2->z;
+	res.z = vec1->x * vec2->y - vec1->y * vec2->x;
 	return (res);
 }
 

@@ -67,8 +67,8 @@ int				same_point(t_XYZ *p1, t_XYZ *p2);
 t_XYZ			vec_addition(t_XYZ vec1, t_XYZ vec2);
 t_XYZ			vec_multiplication(double factor, t_XYZ vector);
 t_XYZ			vec_subtraction(t_XYZ vec1, t_XYZ vec2);
-double			dot_vec(t_XYZ vec1, t_XYZ vec2);
-t_XYZ			cross_vec(t_XYZ vec1, t_XYZ vec2);
+double			dot_vec(t_XYZ *vec1, t_XYZ *vec2);
+t_XYZ			cross_vec(t_XYZ *vec1, t_XYZ *vec2);
 double			mag_vec(t_XYZ *vector);
 void			norm_vec(t_XYZ *vector);
 void			default_matrix(t_rt *rt);
@@ -103,7 +103,8 @@ void			draw_plane(t_rt *rt, t_geometry *geom, int id);
 void			draw_cylinder(t_rt *rt, t_geometry *geom, int id);
 uint32_t		pack_colour(t_colour *colour);
 void			ray_launcher(t_rt *rt, t_ray *ray, double x, double y);
-void			colour_3d_object(t_rt *rt, t_ray *ray, t_colour *colour, t_XYZ *centre, int x, int y, double t, int id);
+void			colour_2d_object(t_rt *rt, t_ray *ray, t_colour *colour, t_XYZ *normal, int coordinate[2], double t, int id);
+void			colour_3d_object(t_rt *rt, t_ray *ray, t_colour *colour, t_XYZ *centre, int coordinate[2], double t, int id);
 
 // lighting functions
 t_colour		ambient_lighting(t_ambient *ambient, t_colour *colour);
