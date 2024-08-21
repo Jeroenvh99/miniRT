@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:35:43 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/21 18:25:17 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/21 19:53:51 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // objectinfo[0] = hit_point, objectinfo[1] = normal,
 // objectinfo[2] = viewdirection
 
-void	spot_colour(t_lighting **spots, t_XYZ objectinfo[3], t_colour *res)
+void	spot_colour(t_lighting **spots, t_XYZ objectinfo[3], t_colour *res, t_ray *ray, t_rt *rt)
 {
 	t_colour	res_diffuse;
 	t_colour	res_spec;
@@ -25,19 +25,19 @@ void	spot_colour(t_lighting **spots, t_XYZ objectinfo[3], t_colour *res)
 	i = 0;
 	while (spots[i])
 	{
-		if(shadow_checker(ray, rt, x, y, id) == 0)
+		if(shadow_checker(ray, rt) == 0)
 		{
-			light_dir = vec_subtraction(spots[i]->direction, hit_point);
+			light_dir = vec_subtraction(spots[i]->direction, objectinfo[0]);
 			norm_vec(&light_dir);
-			colours[1] = diffuse_lighting(spots[i], &light_dir, &normal);
-			colours[2] = specular_lighting(spots[i], &light_dir, &normal,
-					&viewdirection);
-			colours[0].red = fmin(255, colours[0].red + colours[1].red
-					+ colours[2].red);
-			colours[0].green = fmin(255, colours[0].green + colours[1].green
-					+ colours[2].green);
-			colours[0].blue = fmin(255, colours[0].blue + colours[1].blue
-					+ colours[2].blue);
+			res_diffuse = diffuse_lighting(spots[i], &light_dir, &objectinfo[1]);
+			res_spec = specular_lighting(spots[i], &light_dir, &objectinfo[1],
+					&objectinfo[2]);
+			res->red = fmin(255, res->red + res_diffuse.red
+					+ res_spec.red);
+			res->green = fmin(255, res->green + res_diffuse.green
+					+ res_spec.green);
+			res->blue = fmin(255, res->blue + res_diffuse.blue
+					+ res_spec.blue);
 		}
 		++i;
 	}
@@ -56,7 +56,7 @@ void	colour_3d_object(t_rt *rt, t_colour_3d_object_info *info, int coordinate[2]
 	norm_vec(&objectinfo[1]);
 	objectinfo[2] = vec_multiplication(-1, info->ray.dir);
 	norm_vec(&objectinfo[2]);
-	spot_colour(spots, objectinfo, &res);
+	spot_colour(spots, objectinfo, &res, &info->ray, rt);
 	if (t < rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist)
 	{
 		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist = t;
@@ -78,7 +78,7 @@ void	colour_2d_object(t_rt *rt, t_colour_2d_object_info *info, int coordinate[2]
 	norm_vec(&objectinfo[2]);
 	res = ambient_lighting(&rt->scene->amb, info->colour);
 	spots = rt->scene->lighting.array;
-	spot_colour(spots, objectinfo, &res);
+	spot_colour(spots, objectinfo, &res, &info->ray, rt);
 	if (t < rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist)
 	{
 		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist = t;

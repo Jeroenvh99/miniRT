@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:20:05 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/08/21 18:32:20 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/21 19:54:33 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,14 +119,12 @@ void			draw_plane(t_rt *rt, t_geometry *geom, int id);
 void			draw_cylinder(t_rt *rt, t_geometry *geom, int id);
 uint32_t		pack_colour(t_colour *colour);
 void			ray_launcher(t_rt *rt, t_ray *ray, double x, double y);
-int				shadow_checker(t_ray *ray, t_rt *rt, int x, int y, int id);
-void			colour_3d_object(t_rt *rt, t_ray *ray, t_colour *colour, t_XYZ *centre, int x, int y, double t, int id);
+int				shadow_checker(t_ray *ray, t_rt *rt);
+double			hit_plane(t_plane *plane, t_ray *ray);
 double			hit_sphere(t_sphere *sphere, t_ray *ray);
-double			hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int id);
-double			hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id);
 void			colour_2d_object(t_rt *rt, t_colour_2d_object_info *info, int coordinate[2], double t);
 void			colour_3d_object(t_rt *rt, t_colour_3d_object_info *info, int coordinate[2], double t);
-
+double			hit_cylinder(t_cylinder *cylinder, t_ray *ray);
 // lighting functions
 t_colour		ambient_lighting(t_ambient *ambient, t_colour *colour);
 t_colour		diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal);
