@@ -26,8 +26,10 @@ double	distance(t_XYZ *p1, t_XYZ *p2)
 double	distancetoline(t_XYZ *p, t_XYZ *linepoint, t_XYZ *dir)
 {
 	t_XYZ	nominator;
+	t_XYZ	temp;
 
-	nominator = cross_vec(vec_subtraction(*p, *linepoint), *dir);
+	temp = vec_subtraction(*p, *linepoint);
+	nominator = cross_vec(&temp, dir);
 	return (mag_vec(&nominator) / mag_vec(dir));
 }
 

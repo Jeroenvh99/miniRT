@@ -30,7 +30,7 @@ t_colour	diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal)
 	double		diffuse_factor;
 	t_colour	res_diffuse;
 
-	diffuse_factor = fmax(dot_vec(*normal, *dir), 0.0);
+	diffuse_factor = fmax(dot_vec(normal, dir), 0.0);
 	res_diffuse.red = (light->brightness * diffuse_factor * light->colour.red);
 	res_diffuse.green = (light->brightness * diffuse_factor
 			* light->colour.green);
@@ -46,9 +46,9 @@ t_colour	specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
 	double		spec;
 	t_colour	res_spec;
 
-	reflection = vec_subtraction(vec_multiplication(2 * dot_vec(*normal, *dir),
+	reflection = vec_subtraction(vec_multiplication(2 * dot_vec(normal, dir),
 				*normal), *dir);
-	spec = pow(fmax(dot_vec(reflection, *viewdirection), 0.0), SHINE);
+	spec = pow(fmax(dot_vec(&reflection, viewdirection), 0.0), SHINE);
 	res_spec.red = (light->brightness * spec * light->colour.red);
 	res_spec.green = (light->brightness * spec * light->colour.green);
 	res_spec.blue = (light->brightness * spec * light->colour.blue);

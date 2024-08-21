@@ -34,6 +34,22 @@ typedef struct s_hit
 	int			elemid;
 }				t_hit;
 
+typedef struct s_colour_3d_object_info
+{
+	t_ray		ray;
+	t_colour	*colour;
+	t_XYZ		*centre;
+	int			id;
+}				t_colour_3d_object_info;
+
+typedef struct s_colour_2d_object_info
+{
+	t_ray		ray;
+	t_colour	*colour;
+	t_XYZ		*normal;
+	int			id;
+}				t_colour_2d_object_info;
+
 typedef struct s_rt
 {
 	mlx_t		*mlx;
@@ -67,8 +83,8 @@ int				same_point(t_XYZ *p1, t_XYZ *p2);
 t_XYZ			vec_addition(t_XYZ vec1, t_XYZ vec2);
 t_XYZ			vec_multiplication(double factor, t_XYZ vector);
 t_XYZ			vec_subtraction(t_XYZ vec1, t_XYZ vec2);
-double			dot_vec(t_XYZ vec1, t_XYZ vec2);
-t_XYZ			cross_vec(t_XYZ vec1, t_XYZ vec2);
+double			dot_vec(t_XYZ *vec1, t_XYZ *vec2);
+t_XYZ			cross_vec(t_XYZ *vec1, t_XYZ *vec2);
 double			mag_vec(t_XYZ *vector);
 void			norm_vec(t_XYZ *vector);
 void			default_matrix(t_rt *rt);
@@ -108,6 +124,8 @@ void			colour_3d_object(t_rt *rt, t_ray *ray, t_colour *colour, t_XYZ *centre, i
 double			hit_sphere(t_sphere *sphere, t_ray *ray);
 double			hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int id);
 double			hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id);
+void			colour_2d_object(t_rt *rt, t_colour_2d_object_info *info, int coordinate[2], double t);
+void			colour_3d_object(t_rt *rt, t_colour_3d_object_info *info, int coordinate[2], double t);
 
 // lighting functions
 t_colour		ambient_lighting(t_ambient *ambient, t_colour *colour);

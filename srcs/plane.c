@@ -12,21 +12,15 @@
 
 #include "miniRT.h"
 
-double	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
-{
-	double		denominator;
-	t_XYZ		diff;
-	double		t;
-	t_colour	res_colour;
-	int			i;
-	t_XYZ		hit_point;
-	t_XYZ		viewdirection;
-	t_lighting	**spots;
-	t_XYZ		light_dir;
-	t_colour	res_diffuse;
-	t_colour	res_spec;
+//coordinate[0] = x, coordinate[1] = y
 
-	denominator = dot_vec(ray->dir, plane->normal);
+double	hit_plane(t_plane *plane, t_colour_2d_object_info *info, t_rt *rt, int coordinate[2])
+{
+	double	denominator;
+	t_XYZ	diff;
+	double	t;
+
+	denominator = dot_vec(&info->ray.dir, info->normal);
 	if (fabs(denominator) < 1e-10)
 		return (-1.0);
 	diff = vec_subtraction(plane->point, ray->origin);
@@ -61,30 +55,33 @@ double	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 			rt->pixeldata[y * rt->width + x].elemid = id;
 		}
 		return (t);
-	}
 	return (-1.0);
 }
 
 void	draw_plane(t_rt *rt, t_geometry *geom, int id)
 {
-	int		x;
-	int		y;
-	t_ray	ray;
-	t_plane	transformedplane;
+	int						coordinate[2];
+	t_plane					transformedplane;
+	t_colour_2d_object_info	info;
 
-	transformedplane.point = base_transform(rt->camtransform, &((t_plane *)geom->elem)->point);
-	transformedplane.normal = base_transform(rt->camtransform, &((t_plane *)geom->elem)->normal);
+	transformedplane.point = base_transform(rt->camtransform,
+			&((t_plane *)geom->elem)->point);
+	transformedplane.normal = base_transform(rt->camtransform,
+			&((t_plane *)geom->elem)->normal);
 	transformedplane.colour = ((t_plane *)geom->elem)->colour;
-	y = 0;
-	while (y < rt->height)
+	coordinate[1] = 0;
+	info.id = id;
+	info.colour = &transformedplane.colour;
+	info.normal = &transformedplane.normal;
+	while (coordinate[1] < rt->height)
 	{
-		x = 0;
-		while (x < rt->width)
+		coordinate[0] = 0;
+		while (coordinate[0] < rt->width)
 		{
-			ray_launcher(rt, &ray, x, y);
-			hit_plane(&transformedplane, &ray, rt, x, y, id);
-			x++;
+			ray_launcher(rt, &info.ray, coordinate[0], coordinate[1]);
+			hit_plane(&transformedplane, &info, rt, coordinate);
+			coordinate[0]++;
 		}
-		y++;
+		coordinate[1]++;
 	}
 }
