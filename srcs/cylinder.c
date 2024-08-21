@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:35:43 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/19 15:34:25 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/21 18:31:02 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@
 	}
 }*/
 
-void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int id)
+double	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int id)
 {
 	t_XYZ		diff;
 	t_XYZ		point_disc;
@@ -183,7 +183,9 @@ void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int 
 	if (t > 0)
 	{
 		colour_3d_object(rt, ray, &cylinder->colour, &cylinder->centre, x, y, t, id);
+		return (t);
 	}
+	return (-1.0);
 }
 
 /*t_XYZ cylinder_normal(t_cylinder *cylinder, t_XYZ point, t_XYZ ray_origin, double t) {
@@ -220,7 +222,13 @@ t_colour pixel_colour_cylinder(t_cylinder *cylinder, t_ray *ray, t_ambient ambie
 	t_colour ambient_color = ambient_lighting_cyl(ambient, *cylinder);
 	t_colour diffuse_color = diffuse_lighting(light, light_dir, normal);
 	t_colour specular_color = specular_lighting(light, light_dir, normal, view_dir, shininess);
-
+The direction of the ray is not (V−O)
+(
+𝑉
+−
+𝑂
+)
+ but L
 	t_colour final_color;
 	final_color.red = fmin(255, ambient_color.red + diffuse_color.red + specular_color.red);
 	final_color.green = fmin(255, ambient_color.green + diffuse_color.green + specular_color.green);

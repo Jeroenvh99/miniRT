@@ -6,13 +6,13 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 20:32:04 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/04 17:08:36 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/21 18:32:54 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-void	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
+double	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 {
 	double		denominator;
 	t_XYZ		diff;
@@ -28,7 +28,7 @@ void	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 
 	denominator = dot_vec(ray->dir, plane->normal);
 	if (fabs(denominator) < 1e-10)
-		return ;
+		return (-1.0);
 	diff = vec_subtraction(plane->point, ray->origin);
 	t = dot_vec(diff, plane->normal) / denominator;
 	if (t >= 0)
@@ -60,7 +60,9 @@ void	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int x, int y, int id)
 			rt->pixeldata[y * rt->width + x].colour = pack_colour(&res_colour);
 			rt->pixeldata[y * rt->width + x].elemid = id;
 		}
+		return (t);
 	}
+	return (-1.0);
 }
 
 void	draw_plane(t_rt *rt, t_geometry *geom, int id)
