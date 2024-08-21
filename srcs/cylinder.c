@@ -15,21 +15,21 @@
 
 void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int coordinate[2], int id)
 {
-	t_XYZ		diff;
-	t_XYZ		point_disc;
-	t_XYZ		vec_disc;
-	double		a;
-	double		b;
-	double		c;
-	double		delta;
-	double		sol1;
-	double		sol2;
-	double		holder;
-	double		inter1;
-	double		inter2;
-	double		closest_inter = -1; // Initialize closest_inter to -1
-	double		disc;
-	double		t;
+	t_XYZ					diff;
+	t_XYZ					point_disc;
+	t_XYZ					vec_disc;
+	double					a;
+	double					b;
+	double					c;
+	double					delta;
+	double					sol1;
+	double					sol2;
+	double					holder;
+	double					inter1;
+	double					inter2;
+	double					closest_inter = -1; // Initialize closest_inter to -1
+	double					disc;
+	t_colour_3d_object_info	info;
 
 	diff = vec_subtraction(ray->origin, cylinder->centre);
 	a = dot_vec(&ray->dir, &ray->dir) - dot_vec(&ray->dir, &cylinder->axis) * dot_vec(&ray->dir, &cylinder->axis);
@@ -77,10 +77,13 @@ void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int coordinate[2],
 			closest_inter = disc;
 		}
 	}
-	t = closest_inter;
-	if (t > 0)
+	info.ray = *ray;
+	info.colour = &cylinder->colour;
+	info.centre = &cylinder->centre;
+	info.id = id;
+	if (closest_inter > 0)
 	{
-		colour_3d_object(rt, ray, &cylinder->colour, &cylinder->centre, coordinate, t, id);
+		colour_3d_object(rt, &info, coordinate, closest_inter);
 	}
 }
 
