@@ -84,12 +84,6 @@ typedef struct s_geometry
 	void			*elem;
 }					t_geometry;
 
-typedef struct	s_closest_geom
-{
-	t_geometry	*close_geometry;
-	double		closest_t;
-}	t_closest_geom;
-
 typedef struct s_ray
 {
 	t_XYZ			origin;
