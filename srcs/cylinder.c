@@ -6,18 +6,19 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:35:43 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/21 18:31:02 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/21 19:36:30 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include <stdio.h>
 
-double	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int coordinate[2], int id)
+double	hit_cylinder(t_cylinder *cylinder, t_ray *ray)
 {
 	t_XYZ		diff;
 	t_XYZ		point_disc;
 	t_XYZ		vec_disc;
+	double		disc;
 	double		a;
 	double		b;
 	double		c;
@@ -27,10 +28,7 @@ double	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int coordinate[2
 	double		holder;
 	double		inter1;
 	double		inter2;
-	double		closest_inter = -1; // Initialize closest_inter to -1
-	double		disc;
-	double		t;
-	t_colour_3d_object_info	info;
+	double		closest_inter = -1;
 
 	diff = vec_subtraction(ray->origin, cylinder->centre);
 	a = dot_vec(&ray->dir, &ray->dir) - dot_vec(&ray->dir, &cylinder->axis) * dot_vec(&ray->dir, &cylinder->axis);
@@ -78,23 +76,19 @@ double	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int coordinate[2
 			closest_inter = disc;
 		}
 	}
-	info.ray = *ray;
+	/*info.ray = *ray;
 	info.colour = &cylinder->colour;
 	info.centre = &cylinder->centre;
-	info.id = id;
-	if (closest_inter > 0)
-	{
-		colour_3d_object(rt, ray, &cylinder->colour, &cylinder->centre, x, y, t, id);
-		return (t);
-	}
-	return (-1.0);
+	info.id = id;*/
+	return (closest_inter);
 }
 
 void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 {
 	int			coordinate[2];
-	t_ray		ray;
+	double		t;
 	t_cylinder	transformedcylinder;
+	t_colour_3d_object_info	info;
 
 	transformedcylinder.centre = base_transform(rt->camtransform, &((t_cylinder *)geom->elem)->centre);
 	transformedcylinder.axis = base_transform(rt->camtransform, &((t_cylinder *)geom->elem)->axis);
@@ -102,13 +96,18 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 	transformedcylinder.height = ((t_cylinder *)geom->elem)->height;
 	transformedcylinder.colour = ((t_cylinder *)geom->elem)->colour;
 	coordinate[1] = 0;
+	info.colour = &transformedcylinder.colour;
+	info.centre = &transformedcylinder.centre;
+	info.id = id;
 	while (coordinate[1] < rt->height)
 	{
 		coordinate[0] = 0;
 		while (coordinate[0] < rt->width)
 		{
-			ray_launcher(rt, &ray, coordinate[0], coordinate[1]);
-			hit_cylinder(&transformedcylinder, &ray, rt, coordinate, id);
+			ray_launcher(rt, &info.ray, coordinate[0], coordinate[1]);
+			t = hit_cylinder(&transformedcylinder, &info.ray);
+			if (t >0)
+				colour_3d_object(rt, &info, coordinate, t);
 			coordinate[0]++;
 		}
 		coordinate[1]++;

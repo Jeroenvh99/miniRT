@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 20:32:04 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/21 18:32:54 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/21 19:32:59 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 //coordinate[0] = x, coordinate[1] = y
 
-double	hit_plane(t_plane *plane, t_colour_2d_object_info *info, t_rt *rt, int coordinate[2])
+double	hit_plane(t_plane *plane, t_ray *ray)
 {
 	double	denominator;
 	t_XYZ	diff;
 	double	t;
 
-	denominator = dot_vec(&info->ray.dir, info->normal);
+	denominator = dot_vec(&ray->dir, &plane->normal);
 	if (fabs(denominator) < 1e-10)
 		return (-1.0);
 	diff = vec_subtraction(plane->point, ray->origin);
-	t = dot_vec(diff, plane->normal) / denominator;
-	if (t >= 0)
+	t = dot_vec(&diff, &plane->normal) / denominator;
+	/*if (t >= 0)
 	{
 		hit_point = vec_addition(ray->origin, vec_multiplication(t, ray->dir));
 		viewdirection = vec_multiplication(-1, ray->dir);
@@ -53,7 +53,8 @@ double	hit_plane(t_plane *plane, t_colour_2d_object_info *info, t_rt *rt, int co
 			rt->pixeldata[y * rt->width + x].dist = t;
 			rt->pixeldata[y * rt->width + x].colour = pack_colour(&res_colour);
 			rt->pixeldata[y * rt->width + x].elemid = id;
-		}
+		}*/
+	if (t >= 0)
 		return (t);
 	return (-1.0);
 }
@@ -61,6 +62,7 @@ double	hit_plane(t_plane *plane, t_colour_2d_object_info *info, t_rt *rt, int co
 void	draw_plane(t_rt *rt, t_geometry *geom, int id)
 {
 	int						coordinate[2];
+	double					t;
 	t_plane					transformedplane;
 	t_colour_2d_object_info	info;
 
@@ -79,7 +81,11 @@ void	draw_plane(t_rt *rt, t_geometry *geom, int id)
 		while (coordinate[0] < rt->width)
 		{
 			ray_launcher(rt, &info.ray, coordinate[0], coordinate[1]);
-			hit_plane(&transformedplane, &info, rt, coordinate);
+			t = hit_plane(&transformedplane, &info.ray);
+			if (t > 0)
+			{
+				colour_2d_object(rt, &info, coordinate, t);
+			}
 			coordinate[0]++;
 		}
 		coordinate[1]++;
