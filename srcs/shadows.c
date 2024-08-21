@@ -24,30 +24,28 @@ double	hit_object(t_geometry *geom, t_ray *ray)
 		return (-1.0);
 
 }
+
 int	shadow_checker(t_ray *ray, t_rt *rt)
 {
-	t_closest_geom	res;
 	int				i;
 	t_geometry		*geom;
+	double			closest_t;
 	double			t;
+	int				ret;
 
-	res.close_geometry = NULL;
-	res.closest_t = 1.0;
+	closest_t = 1.0;
+	ret = 0;
 	i = 0;
 	while (i < rt->scene->geomsize)
 	{
 		geom = rt->scene->geometry.array[i];
 		t = hit_object(geom, ray);
-		if (t >= 1e-10 && t <= 1 && t < res.closest_t)
+		if (t >= 1e-10 && t <= 1 && t < closest_t)
 		{
-			res.closest_t = t;
-			res.close_geometry = geom;
+			closest_t = t;
+			ret = 1;
 		}
 		i++;
 	}
-	if (res.close_geometry != NULL)
-		return (1);
-	else
-		return (0);
-
+	return (ret);
 }

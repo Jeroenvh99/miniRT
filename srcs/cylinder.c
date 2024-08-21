@@ -76,10 +76,6 @@ double	hit_cylinder(t_cylinder *cylinder, t_ray *ray)
 			closest_inter = disc;
 		}
 	}
-	/*info.ray = *ray;
-	info.colour = &cylinder->colour;
-	info.centre = &cylinder->centre;
-	info.id = id;*/
 	return (closest_inter);
 }
 

@@ -122,9 +122,10 @@ void			ray_launcher(t_rt *rt, t_ray *ray, double x, double y);
 int				shadow_checker(t_ray *ray, t_rt *rt);
 double			hit_plane(t_plane *plane, t_ray *ray);
 double			hit_sphere(t_sphere *sphere, t_ray *ray);
+double			hit_cylinder(t_cylinder *cylinder, t_ray *ray);
 void			colour_2d_object(t_rt *rt, t_colour_2d_object_info *info, int coordinate[2], double t);
 void			colour_3d_object(t_rt *rt, t_colour_3d_object_info *info, int coordinate[2], double t);
-double			hit_cylinder(t_cylinder *cylinder, t_ray *ray);
+
 // lighting functions
 t_colour		ambient_lighting(t_ambient *ambient, t_colour *colour);
 t_colour		diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal);

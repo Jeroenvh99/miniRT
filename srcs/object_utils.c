@@ -15,13 +15,15 @@
 // objectinfo[0] = hit_point, objectinfo[1] = normal,
 // objectinfo[2] = viewdirection
 
-void	spot_colour(t_lighting **spots, t_XYZ objectinfo[3], t_colour *res, t_ray *ray, t_rt *rt)
+void	spot_colour(t_XYZ objectinfo[3], t_colour *res, t_ray *ray, t_rt *rt)
 {
 	t_colour	res_diffuse;
 	t_colour	res_spec;
 	int			i;
 	t_XYZ		light_dir;
+	t_lighting	**spots;
 
+	spots = rt->scene->lighting.array;
 	i = 0;
 	while (spots[i])
 	{
@@ -47,16 +49,14 @@ void	colour_3d_object(t_rt *rt, t_colour_3d_object_info *info, int coordinate[2]
 {
 	t_colour	res;
 	t_XYZ		objectinfo[3];
-	t_lighting	**spots;
 
 	res = ambient_lighting(&rt->scene->amb, info->colour);
-	spots = rt->scene->lighting.array;
 	objectinfo[0] = vec_addition(info->ray.origin, vec_multiplication(t, info->ray.dir));
 	objectinfo[1] = vec_subtraction(objectinfo[0], *info->centre);
 	norm_vec(&objectinfo[1]);
 	objectinfo[2] = vec_multiplication(-1, info->ray.dir);
 	norm_vec(&objectinfo[2]);
-	spot_colour(spots, objectinfo, &res, &info->ray, rt);
+	spot_colour(objectinfo, &res, &info->ray, rt);
 	if (t < rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist)
 	{
 		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist = t;
@@ -70,15 +70,13 @@ void	colour_2d_object(t_rt *rt, t_colour_2d_object_info *info, int coordinate[2]
 {
 	t_colour	res;
 	t_XYZ		objectinfo[3];
-	t_lighting	**spots;
 
 	objectinfo[0] = vec_addition(info->ray.origin, vec_multiplication(t, info->ray.dir));
 	objectinfo[1] = *info->normal;
 	objectinfo[2] = vec_multiplication(-1, info->ray.dir);
 	norm_vec(&objectinfo[2]);
 	res = ambient_lighting(&rt->scene->amb, info->colour);
-	spots = rt->scene->lighting.array;
-	spot_colour(spots, objectinfo, &res, &info->ray, rt);
+	spot_colour(objectinfo, &res, &info->ray, rt);
 	if (t < rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist)
 	{
 		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist = t;
