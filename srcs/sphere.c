@@ -53,10 +53,10 @@ uint32_t	pack_colour(t_colour *colour)
 
 void	draw_sphere(t_rt *rt, t_geometry *geom, int id)
 {
-	int			coordinate[2];
-	double		t;
-	t_ray		ray;
-	t_sphere	transformedsphere;
+	int						coordinate[2];
+	double					t;
+	t_colour_3d_object_info	info;
+	t_sphere				transformedsphere;
 
 	transformedsphere.centre = base_transform(rt->camtransform,
 			&((t_sphere *)geom->elem)->centre);
@@ -68,11 +68,14 @@ void	draw_sphere(t_rt *rt, t_geometry *geom, int id)
 		coordinate[0] = 0;
 		while (coordinate[0] < rt->width)
 		{
-			ray_launcher(rt, &ray, coordinate[0], coordinate[1]);
-			t = hit_sphere(&transformedsphere, &ray);
+			ray_launcher(rt, &info.ray, coordinate[0], coordinate[1]);
+			t = hit_sphere(&transformedsphere, &info.ray);
+			info.colour = &transformedsphere.colour;
+			info.centre = &transformedsphere.centre;
+			info.id = id;
 			if (t > 0)
 			{
-				colour_3d_object(rt, &ray, &transformedsphere.colour, &transformedsphere.centre, coordinate, t, id);
+				colour_3d_object(rt, &info, coordinate, t);
 			}
 			coordinate[0]++;
 		}
