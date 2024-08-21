@@ -20,11 +20,11 @@ void	hit_plane(t_plane *plane, t_ray *ray, t_rt *rt, int coordinate[2], int id)
 	t_XYZ	diff;
 	double	t;
 
-	denominator = dot_vec(ray->dir, plane->normal);
+	denominator = dot_vec(&ray->dir, &plane->normal);
 	if (fabs(denominator) < 1e-10)
 		return ;
 	diff = vec_subtraction(plane->point, ray->origin);
-	t = dot_vec(diff, plane->normal) / denominator;
+	t = dot_vec(&diff, &plane->normal) / denominator;
 	if (t >= 0)
 	{
 		colour_2d_object(rt, ray, &plane->colour, &plane->normal, coordinate, t, id);

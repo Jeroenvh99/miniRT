@@ -22,9 +22,9 @@ double	hit_sphere(t_sphere *sphere, t_ray *ray)
 	t_XYZ	diff;
 
 	diff = vec_subtraction(ray->origin, sphere->centre);
-	a = dot_vec(ray->dir, ray->dir);
-	b = 2 * dot_vec(diff, ray->dir);
-	delta = b * b - 4 * a * (dot_vec(diff, diff) - sphere->radius
+	a = dot_vec(&ray->dir, &ray->dir);
+	b = 2 * dot_vec(&diff, &ray->dir);
+	delta = b * b - 4 * a * (dot_vec(&diff, &diff) - sphere->radius
 			* sphere->radius);
 	if (delta < 0)
 		return (-1.0);
