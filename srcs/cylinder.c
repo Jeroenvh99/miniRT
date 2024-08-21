@@ -115,7 +115,7 @@
 	}
 }*/
 
-void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int id)
+void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int coordinate[2], int id)
 {
 	t_XYZ		diff;
 	t_XYZ		point_disc;
@@ -182,7 +182,7 @@ void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int x, int y, int 
 	t = closest_inter;
 	if (t > 0)
 	{
-		colour_3d_object(rt, ray, &cylinder->colour, &cylinder->centre, x, y, t, id);
+		colour_3d_object(rt, ray, &cylinder->colour, &cylinder->centre, coordinate, t, id);
 	}
 }
 
@@ -281,8 +281,7 @@ t_colour	calculate_lighting(t_cylinder *cylinder, t_ray *ray, double t, t_lighti
 
 void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 {
-	int			x;
-	int			y;
+	int			coordinate[2];
 	t_ray		ray;
 	t_cylinder	transformedcylinder;
 
@@ -291,16 +290,16 @@ void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 	transformedcylinder.radius = ((t_cylinder *)geom->elem)->radius;
 	transformedcylinder.height = ((t_cylinder *)geom->elem)->height;
 	transformedcylinder.colour = ((t_cylinder *)geom->elem)->colour;
-	y = 0;
-	while (y < rt->height)
+	coordinate[1] = 0;
+	while (coordinate[1] < rt->height)
 	{
-		x = 0;
-		while (x < rt->width)
+		coordinate[0] = 0;
+		while (coordinate[0] < rt->width)
 		{
-			ray_launcher(rt, &ray, x, y);
-			hit_cylinder(&transformedcylinder, &ray, rt, x, y, id);
-			x++;
+			ray_launcher(rt, &ray, coordinate[0], coordinate[1]);
+			hit_cylinder(&transformedcylinder, &ray, rt, coordinate, id);
+			coordinate[0]++;
 		}
-		y++;
+		coordinate[1]++;
 	}
 }
