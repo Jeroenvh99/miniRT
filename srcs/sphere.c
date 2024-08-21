@@ -17,8 +17,7 @@ double	hit_sphere(t_sphere *sphere, t_ray *ray)
 	double	a;
 	double	b;
 	double	delta;
-	double	sol1;
-	double	sol2;
+	double	sol[2];
 	t_XYZ	diff;
 
 	diff = vec_subtraction(ray->origin, sphere->centre);
@@ -28,14 +27,14 @@ double	hit_sphere(t_sphere *sphere, t_ray *ray)
 			* sphere->radius);
 	if (delta < 0)
 		return (-1.0);
-	sol1 = (-b - sqrt(delta)) / (2.0 * a);
-	sol2 = (-b + sqrt(delta)) / (2.0 * a);
-	if (sol1 > 0 && sol2 > 0)
+	sol[0] = (-b - sqrt(delta)) / (2.0 * a);
+	sol[1] = (-b + sqrt(delta)) / (2.0 * a);
+	if (sol[0] > 0 && sol[1] > 0)
 	{
-		return (fmin(sol1, sol2));
+		return (fmin(sol[0], sol[1]));
 	}
-	else if (sol1 > 0 || sol2 > 0)
-		return (fmax(sol1, sol2));
+	else if (sol[0] > 0 || sol[1] > 0)
+		return (fmax(sol[0], sol[1]));
 	else
 		return (-1.0);
 }

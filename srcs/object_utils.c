@@ -12,7 +12,8 @@
 
 #include "miniRT.h"
 
-// objectinfo[0] = hit_point, objectinfo[1] = normal, objectinfo[2] = viewdirection
+// objectinfo[0] = hit_point, objectinfo[1] = normal,
+// objectinfo[2] = viewdirection
 
 void	spot_colour(t_lighting **spots, t_XYZ objectinfo[3], t_colour *res)
 {
@@ -56,7 +57,8 @@ void	colour_3d_object(t_rt *rt, t_ray *ray, t_colour *colour, t_XYZ *centre, int
 	if (t < rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist)
 	{
 		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist = t;
-		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].colour = pack_colour(&res);
+		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].colour
+			= pack_colour(&res);
 		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].elemid = id;
 	}
 }
@@ -77,7 +79,8 @@ void	colour_2d_object(t_rt *rt, t_ray *ray, t_colour *colour, t_XYZ *normal, int
 	if (t < rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist)
 	{
 		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].dist = t;
-		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].colour = pack_colour(&res);
+		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].colour
+			= pack_colour(&res);
 		rt->pixeldata[coordinate[1] * rt->width + coordinate[0]].elemid = id;
 	}
 }
