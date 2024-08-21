@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cylinder.c                                         :+:      :+:    :+:   */
+/*   object_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:35:43 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/19 15:34:25 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/21 18:25:17 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,20 @@ void	spot_colour(t_lighting **spots, t_XYZ objectinfo[3], t_colour *res)
 	i = 0;
 	while (spots[i])
 	{
-		light_dir = vec_subtraction(spots[i]->direction, objectinfo[0]);
-		norm_vec(&light_dir);
-		res_diffuse = diffuse_lighting(spots[i], &light_dir, &objectinfo[1]);
-		res_spec = specular_lighting(spots[i], &light_dir, &objectinfo[1],
-				&objectinfo[2]);
-		res->red = fmin(255, res->red + res_diffuse.red
-				+ res_spec.red);
-		res->green = fmin(255, res->green + res_diffuse.green
-				+ res_spec.green);
-		res->blue = fmin(255, res->blue + res_diffuse.blue
-				+ res_spec.blue);
+		if(shadow_checker(ray, rt, x, y, id) == 0)
+		{
+			light_dir = vec_subtraction(spots[i]->direction, hit_point);
+			norm_vec(&light_dir);
+			colours[1] = diffuse_lighting(spots[i], &light_dir, &normal);
+			colours[2] = specular_lighting(spots[i], &light_dir, &normal,
+					&viewdirection);
+			colours[0].red = fmin(255, colours[0].red + colours[1].red
+					+ colours[2].red);
+			colours[0].green = fmin(255, colours[0].green + colours[1].green
+					+ colours[2].green);
+			colours[0].blue = fmin(255, colours[0].blue + colours[1].blue
+					+ colours[2].blue);
+		}
 		++i;
 	}
 }

@@ -6,29 +6,30 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:35:43 by sjeddi            #+#    #+#             */
-/*   Updated: 2024/08/19 15:34:25 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/21 18:31:02 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include <stdio.h>
 
-void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int coordinate[2], int id)
+double	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int coordinate[2], int id)
 {
-	t_XYZ					diff;
-	t_XYZ					point_disc;
-	t_XYZ					vec_disc;
-	double					a;
-	double					b;
-	double					c;
-	double					delta;
-	double					sol1;
-	double					sol2;
-	double					holder;
-	double					inter1;
-	double					inter2;
-	double					closest_inter = -1; // Initialize closest_inter to -1
-	double					disc;
+	t_XYZ		diff;
+	t_XYZ		point_disc;
+	t_XYZ		vec_disc;
+	double		a;
+	double		b;
+	double		c;
+	double		delta;
+	double		sol1;
+	double		sol2;
+	double		holder;
+	double		inter1;
+	double		inter2;
+	double		closest_inter = -1; // Initialize closest_inter to -1
+	double		disc;
+	double		t;
 	t_colour_3d_object_info	info;
 
 	diff = vec_subtraction(ray->origin, cylinder->centre);
@@ -83,8 +84,10 @@ void	hit_cylinder(t_cylinder *cylinder, t_ray *ray, t_rt *rt, int coordinate[2],
 	info.id = id;
 	if (closest_inter > 0)
 	{
-		colour_3d_object(rt, &info, coordinate, closest_inter);
+		colour_3d_object(rt, ray, &cylinder->colour, &cylinder->centre, x, y, t, id);
+		return (t);
 	}
+	return (-1.0);
 }
 
 void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)

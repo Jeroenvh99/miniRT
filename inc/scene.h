@@ -6,7 +6,7 @@
 /*   By: sjeddi <sjeddi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:20:28 by jvan-hal          #+#    #+#             */
-/*   Updated: 2024/08/08 16:37:24 by sjeddi           ###   ########.fr       */
+/*   Updated: 2024/08/21 17:33:25 by sjeddi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,12 @@ typedef struct s_geometry
 	int				elemtype;
 	void			*elem;
 }					t_geometry;
+
+typedef struct	s_closest_geom
+{
+	t_geometry	*close_geometry;
+	double		closest_t;
+}	t_closest_geom;
 
 typedef struct s_ray
 {
