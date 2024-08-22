@@ -21,7 +21,8 @@ static void	resize_plane(t_plane *plane)
 	printf("P to change the point\nN to change the normal direction\n"
 		"C to change the colour\n");
 	selection = get_next_line(0);
-	if (ft_strlen(selection) != 2 || *selection != 'P' || *selection != 'N' || *selection != 'C')
+	if (ft_strlen(selection) != 2 || *selection != 'P' || *selection != 'N'
+		|| *selection != 'C')
 	{
 		free(selection);
 		return ;
@@ -42,7 +43,8 @@ static void	resize_sphere(t_sphere *sphere)
 	printf("X to change the centre\nR to change the radius\n"
 		"C to change the colour\n");
 	selection = get_next_line(0);
-	if (ft_strlen(selection) != 2 || *selection != 'X' || *selection != 'R' || *selection != 'C')
+	if (ft_strlen(selection) != 2 || *selection != 'X' || *selection != 'R'
+		|| *selection != 'C')
 	{
 		free(selection);
 		return ;
@@ -64,7 +66,8 @@ static void	resize_cylinder(t_cylinder *cylinder)
 		"D to change the diameter\nR to change the radius\n"
 		"H to change the height\nC to change the colour\n");
 	selection = get_next_line(0);
-	if (ft_strlen(selection) != 2 || *selection != 'X' || *selection != 'A' || *selection != 'R' || *selection != 'H' || *selection != 'C')
+	if (ft_strlen(selection) != 2 || *selection != 'X' || *selection != 'A'
+		|| *selection != 'R' || *selection != 'H' || *selection != 'C')
 	{
 		free(selection);
 		return ;
