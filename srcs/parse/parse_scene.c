@@ -24,13 +24,13 @@ static int	parseambient(t_scene *scene, char *line)
 	if (scene->amb.intensity <= 100)
 	{
 		write(2, "Error\nAmbient lighting is already defined\n", 42);
-		return (0);
+		exit(1);
 	}
 	parts = ft_split(line, ' ');
 	if (!checkambient(parts))
 	{
 		free_split(parts);
-		return (0);
+		exit(1);
 	}
 	scene->amb.intensity = ft_atof(parts[1]);
 	parse_colour(parts[2], &scene->amb.colour);
@@ -45,13 +45,13 @@ static int	parsecamera(t_scene *scene, char *line)
 	if (scene->cam.fov <= 180)
 	{
 		write(2, "Error\nThis scene already has a camera\n", 38);
-		return (0);
+		exit(1);
 	}
 	parts = ft_split(line, ' ');
 	if (!checkcamera(parts))
 	{
 		free_split(parts);
-		return (0);
+		exit(1);
 	}
 	parse_xyz(parts[1], &scene->cam.pos);
 	parse_xyz(parts[2], &scene->cam.viewdirection);
@@ -71,7 +71,7 @@ static int	parselight(t_scene *scene, char *line)
 	if (!spot || !checklight(parts))
 	{
 		free_split(parts);
-		return (0);
+		exit(1);
 	}
 	parse_xyz(parts[1], &spot->direction);
 	norm_vec(&spot->direction);

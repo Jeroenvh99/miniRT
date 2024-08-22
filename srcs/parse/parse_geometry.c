@@ -26,7 +26,7 @@ int	parsesphere(t_scene *scene, char *line)
 	if (!geom || !sphere || !checksphere(parts))
 	{
 		free_split(parts);
-		return (0);
+		exit(1);
 	}
 	parse_xyz(parts[1], &sphere->centre);
 	sphere->radius = ft_atof(parts[2]) * 0.5;
@@ -50,7 +50,7 @@ int	parseplane(t_scene *scene, char *line)
 	if (!geom || !plane || !checkplane(parts))
 	{
 		free_split(parts);
-		return (0);
+		exit(1);
 	}
 	parse_xyz(parts[1], &plane->point);
 	parse_xyz(parts[2], &plane->normal);
@@ -75,7 +75,7 @@ int	parsecylinder(t_scene *scene, char *line)
 	if (!cylinder || !checkcylinder(parts))
 	{
 		free_split(parts);
-		return (0);
+		exit(1);
 	}
 	parse_xyz(parts[1], &cylinder->centre);
 	parse_xyz(parts[2], &cylinder->axis);
