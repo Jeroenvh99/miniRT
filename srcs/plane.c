@@ -28,10 +28,20 @@ double	hit_plane(t_plane *plane, t_ray *ray)
 	return (t);
 }
 
+void	draw_plane_2(t_rt *rt, t_colour_2d_object_info *info,
+	int coordinate[2], t_plane *transformedplane)
+{
+	double	t;
+
+	ray_launcher(rt, &info->ray, coordinate[0], coordinate[1]);
+	t = hit_plane(transformedplane, &info->ray);
+	if (t > 0)
+		colour_2d_object(rt, info, coordinate, t);
+}
+
 void	draw_plane(t_rt *rt, t_geometry *geom, int id)
 {
 	int						coordinate[2];
-	double					t;
 	t_plane					transformedplane;
 	t_colour_2d_object_info	info;
 
@@ -39,22 +49,16 @@ void	draw_plane(t_rt *rt, t_geometry *geom, int id)
 			&((t_plane *)geom->elem)->point);
 	transformedplane.normal = base_transform(rt->camtransform,
 			&((t_plane *)geom->elem)->normal);
-	transformedplane.colour = ((t_plane *)geom->elem)->colour;
-	coordinate[1] = 0;
 	info.id = id;
-	info.colour = &transformedplane.colour;
+	info.colour = &((t_plane *)geom->elem)->colour;
 	info.normal = &transformedplane.normal;
+	coordinate[1] = 0;
 	while (coordinate[1] < rt->height)
 	{
 		coordinate[0] = 0;
 		while (coordinate[0] < rt->width)
 		{
-			ray_launcher(rt, &info.ray, coordinate[0], coordinate[1]);
-			t = hit_plane(&transformedplane, &info.ray);
-			if (t > 0)
-			{
-				colour_2d_object(rt, &info, coordinate, t);
-			}
+			draw_plane_2(rt, &info, coordinate, &transformedplane);
 			coordinate[0]++;
 		}
 		coordinate[1]++;
