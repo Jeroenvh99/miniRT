@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 void	*copysphere(void *sourceelem)
 {

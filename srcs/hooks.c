@@ -12,8 +12,6 @@
 
 #include "miniRT.h"
 #include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
 
 int	searchcoord(t_rt *rt, int posx, int posy)
 {

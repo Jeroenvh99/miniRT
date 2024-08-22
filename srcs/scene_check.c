@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include <stdlib.h>
 #include <unistd.h>
 
 int	spherecollision(t_XYZ *lightpos, t_sphere *sphere)

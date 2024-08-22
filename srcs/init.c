@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include <fcntl.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 void	reset_pixeldata(t_rt *rt)
 {
