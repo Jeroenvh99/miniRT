@@ -26,7 +26,7 @@ void	reset_pixeldata(t_rt *rt)
 		x = 0;
 		while (x < rt->width)
 		{
-			rt->pixeldata[y * rt->width + x].dist = DBL_MAX;
+			rt->pixeldata[y * rt->width + x].dist = 1.7976931348623157E+308;
 			rt->pixeldata[y * rt->width + x].colour = 0x000000FF;
 			x++;
 		}
@@ -75,7 +75,8 @@ void	draw_objects(t_rt *rt)
 		x = 0;
 		while (x < rt->width)
 		{
-			if (rt->pixeldata[y * rt->width + x].dist != DBL_MAX)
+			if (rt->pixeldata[y * rt->width + x].dist
+				!= 1.7976931348623157E+308)
 			{
 				mlx_put_pixel(rt->image, x, y,
 					rt->pixeldata[y * rt->width + x].colour);

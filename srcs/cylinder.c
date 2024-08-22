@@ -11,99 +11,93 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include <stdio.h>
 
-double	hit_cylinder(t_cylinder *cylinder, t_ray *ray)
+double	solve_abc(double abc[3], t_ray *ray, t_cylinder *cylinder, t_XYZ *diff)
 {
-	t_XYZ		diff;
-	t_XYZ		point_disc;
-	t_XYZ		vec_disc;
-	double		disc;
-	double		a;
-	double		b;
-	double		c;
-	double		delta;
-	double		sol1;
-	double		sol2;
-	double		holder;
-	double		inter1;
-	double		inter2;
-	double		closest_inter = -1;
+	double	sol1;
+	double	sol2;
+	double	delta;
+	double	closest_inter;
 
-	diff = vec_subtraction(ray->origin, cylinder->centre);
-	a = dot_vec(&ray->dir, &ray->dir) - dot_vec(&ray->dir, &cylinder->axis) * dot_vec(&ray->dir, &cylinder->axis);
-	b = 2 * (dot_vec(&ray->dir, &diff) - dot_vec(&ray->dir, &cylinder->axis) * dot_vec(&diff, &cylinder->axis));
-	c = dot_vec(&diff, &diff) - dot_vec(&diff, &cylinder->axis) * dot_vec(&diff, &cylinder->axis) - cylinder->radius * cylinder->radius;
-	delta = b * b - 4 * a * c;
+	closest_inter = -1;
+	delta = abc[1] * abc[1] - 4 * abc[0] * abc[2];
 	if (delta >= 0)
 	{
-		sol1 = (-b - sqrt(delta)) / (2 * a);
-		sol2 = (-b + sqrt(delta)) / (2 * a);
+		sol1 = (-abc[1] - sqrt(delta)) / (2 * abc[0]);
+		sol2 = (-abc[1] + sqrt(delta)) / (2 * abc[0]);
 		if (sol1 > sol2)
 		{
-			holder = sol1;
+			delta = sol1;
 			sol1 = sol2;
-			sol2 = holder;
+			sol2 = delta;
 		}
-		inter1 = dot_vec(&ray->dir, &cylinder->axis) * sol1 + dot_vec(&diff, &cylinder->axis);
-		inter2 = dot_vec(&ray->dir, &cylinder->axis) * sol2 + dot_vec(&diff, &cylinder->axis);
-		if ((inter1 >= 0 && inter1 <= cylinder->height) && (sol1 >= 0 && (closest_inter == -1 || sol1 < closest_inter)))
-		{
-			closest_inter = sol1;
-		}
-		if ((inter2 >= 0 && inter2 <= cylinder->height) && (sol2 >= 0 && (closest_inter == -1 || sol2 < closest_inter)))
-		{
-			closest_inter = sol2;
-		}
-	}
-	disc = -dot_vec(&diff, &cylinder->axis) / dot_vec(&ray->dir, &cylinder->axis);
-	if (disc >= 0)
-	{
-		point_disc = vec_addition(ray->origin, vec_multiplication(disc, ray->dir));
-		vec_disc = vec_subtraction(point_disc, cylinder->centre);
-		if ((dot_vec(&vec_disc, &vec_disc) <= cylinder->radius * cylinder->radius) && (closest_inter == -1 || disc < closest_inter))
-		{
-			closest_inter = disc;
-		}
-	}
-	disc = (cylinder->height - dot_vec(&diff, &cylinder->axis)) / dot_vec(&ray->dir, &cylinder->axis);
-	if (disc >= 0)
-	{
-		point_disc = vec_addition(ray->origin, vec_multiplication(disc, ray->dir));
-		vec_disc = vec_subtraction(point_disc, vec_addition(cylinder->centre, vec_multiplication(cylinder->height, cylinder->axis)));
-		if ((dot_vec(&vec_disc, &vec_disc) <= cylinder->radius * cylinder->radius) && (closest_inter == -1 || disc < closest_inter))
-		{
-			closest_inter = disc;
-		}
+		closest_inter = hit_tube(dot_vec(&ray->dir, &cylinder->axis) * sol1
+				+ dot_vec(diff, &cylinder->axis), closest_inter, sol1,
+				cylinder);
+		closest_inter = hit_tube(dot_vec(&ray->dir, &cylinder->axis) * sol2
+				+ dot_vec(diff, &cylinder->axis), closest_inter, sol2,
+				cylinder);
 	}
 	return (closest_inter);
 }
 
+double	hit_cylinder(t_cylinder *cylinder, t_ray *ray)
+{
+	t_XYZ		diff;
+	double		abc[3];
+	double		closest_inter;
+
+	closest_inter = -1;
+	diff = vec_subtraction(ray->origin, cylinder->centre);
+	abc[0] = dot_vec(&ray->dir, &ray->dir) - dot_vec(&ray->dir,
+			&cylinder->axis) * dot_vec(&ray->dir, &cylinder->axis);
+	abc[1] = 2 * (dot_vec(&ray->dir, &diff) - dot_vec(&ray->dir,
+				&cylinder->axis) * dot_vec(&diff, &cylinder->axis));
+	abc[2] = dot_vec(&diff, &diff) - dot_vec(&diff, &cylinder->axis)
+		* dot_vec(&diff, &cylinder->axis) - pow(cylinder->radius, 2);
+	closest_inter = solve_abc(abc, ray, cylinder, &diff);
+	closest_inter = hit_cap_1(-dot_vec(&diff, &cylinder->axis)
+			/ dot_vec(&ray->dir, &cylinder->axis), closest_inter, ray,
+			cylinder);
+	closest_inter = hit_cap_2((cylinder->height - dot_vec(&diff,
+					&cylinder->axis)) / dot_vec(&ray->dir, &cylinder->axis),
+			closest_inter, ray, cylinder);
+	return (closest_inter);
+}
+
+void	draw_cylinder_2(t_rt *rt, t_colour_3d_object_info *info,
+	int coordinate[2], t_cylinder *transformedcylinder)
+{
+	double	t;
+
+	ray_launcher(rt, &info->ray, coordinate[0], coordinate[1]);
+	t = hit_cylinder(transformedcylinder, &info->ray);
+	if (t > 0)
+		colour_3d_object(rt, info, coordinate, t);
+}
+
 void	draw_cylinder(t_rt *rt, t_geometry *geom, int id)
 {
-	int			coordinate[2];
-	double		t;
-	t_cylinder	transformedcylinder;
+	int						coordinate[2];
+	t_cylinder				transformedcylinder;
 	t_colour_3d_object_info	info;
 
-	transformedcylinder.centre = base_transform(rt->camtransform, &((t_cylinder *)geom->elem)->centre);
-	transformedcylinder.axis = base_transform(rt->camtransform, &((t_cylinder *)geom->elem)->axis);
+	transformedcylinder.centre = base_transform(rt->camtransform,
+			&((t_cylinder *)geom->elem)->centre);
+	transformedcylinder.axis = base_transform(rt->camtransform,
+			&((t_cylinder *)geom->elem)->axis);
 	transformedcylinder.radius = ((t_cylinder *)geom->elem)->radius;
 	transformedcylinder.height = ((t_cylinder *)geom->elem)->height;
-	transformedcylinder.colour = ((t_cylinder *)geom->elem)->colour;
-	coordinate[1] = 0;
-	info.colour = &transformedcylinder.colour;
+	info.colour = &((t_cylinder *)geom->elem)->colour;
 	info.centre = &transformedcylinder.centre;
 	info.id = id;
+	coordinate[1] = 0;
 	while (coordinate[1] < rt->height)
 	{
 		coordinate[0] = 0;
 		while (coordinate[0] < rt->width)
 		{
-			ray_launcher(rt, &info.ray, coordinate[0], coordinate[1]);
-			t = hit_cylinder(&transformedcylinder, &info.ray);
-			if (t >0)
-				colour_3d_object(rt, &info, coordinate, t);
+			draw_cylinder_2(rt, &info, coordinate, &transformedcylinder);
 			coordinate[0]++;
 		}
 		coordinate[1]++;

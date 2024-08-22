@@ -12,11 +12,12 @@
 
 #ifndef PARSE_H
 # define PARSE_H
+# include "scene.h"
 # define N_ELEMENTS 6
 
-typedef struct s_scene	t_scene;
-typedef struct s_colour	t_colour;
-typedef struct s_XYZ	t_XYZ;
+// typedef struct s_scene	t_scene;
+// typedef struct s_colour	t_colour;
+// typedef struct s_XYZ	t_XYZ;
 
 typedef int				(*t_parsef)(t_scene *, char *line);
 

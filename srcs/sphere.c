@@ -41,42 +41,46 @@ double	hit_sphere(t_sphere *sphere, t_ray *ray)
 
 uint32_t	pack_colour(t_colour *colour)
 {
-	unsigned int	r;
-	unsigned int	g;
-	unsigned int	b;
+	int	r;
+	int	g;
+	int	b;
 
-	r = (unsigned int)colour->red;
-	g = (unsigned int)colour->green;
-	b = (unsigned int)colour->blue;
+	r = (int)colour->red;
+	g = (int)colour->green;
+	b = (int)colour->blue;
 	return (r << 24 | g << 16 | b << 8 | 255);
+}
+
+void	draw_sphere_2(t_rt *rt, t_colour_3d_object_info *info,
+	int coordinate[2], t_sphere *transformedsphere)
+{
+	double	t;
+
+	ray_launcher(rt, &info->ray, coordinate[0], coordinate[1]);
+	t = hit_sphere(transformedsphere, &info->ray);
+	if (t > 0)
+		colour_3d_object(rt, info, coordinate, t);
 }
 
 void	draw_sphere(t_rt *rt, t_geometry *geom, int id)
 {
 	int						coordinate[2];
-	double					t;
 	t_colour_3d_object_info	info;
 	t_sphere				transformedsphere;
 
 	transformedsphere.centre = base_transform(rt->camtransform,
 			&((t_sphere *)geom->elem)->centre);
 	transformedsphere.radius = ((t_sphere *)geom->elem)->radius;
-	transformedsphere.colour = ((t_sphere *)geom->elem)->colour;
+	info.colour = &((t_sphere *)geom->elem)->colour;
+	info.centre = &transformedsphere.centre;
+	info.id = id;
 	coordinate[1] = 0;
 	while (coordinate[1] < rt->height)
 	{
 		coordinate[0] = 0;
 		while (coordinate[0] < rt->width)
 		{
-			ray_launcher(rt, &info.ray, coordinate[0], coordinate[1]);
-			t = hit_sphere(&transformedsphere, &info.ray);
-			info.colour = &transformedsphere.colour;
-			info.centre = &transformedsphere.centre;
-			info.id = id;
-			if (t > 0)
-			{
-				colour_3d_object(rt, &info, coordinate, t);
-			}
+			draw_sphere_2(rt, &info, coordinate, &transformedsphere);
 			coordinate[0]++;
 		}
 		coordinate[1]++;

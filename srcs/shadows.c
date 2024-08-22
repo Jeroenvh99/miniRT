@@ -15,14 +15,13 @@
 double	hit_object(t_geometry *geom, t_ray *ray)
 {
 	if (geom->elemtype == 1)
-		return (hit_sphere((t_sphere*)geom->elem, ray));
+		return (hit_sphere((t_sphere *)geom->elem, ray));
 	else if (geom->elemtype == 2)
-		return (hit_plane((t_plane*)geom->elem, ray));
+		return (hit_plane((t_plane *)geom->elem, ray));
 	else if (geom->elemtype == 3)
-		return (hit_cylinder((t_cylinder*)geom->elem, ray));
+		return (hit_cylinder((t_cylinder *)geom->elem, ray));
 	else
 		return (-1.0);
-
 }
 
 int	shadow_checker(t_ray *ray, t_rt *rt)
