@@ -26,7 +26,8 @@ int	searchcoord(t_rt *rt, int posx, int posy)
 		x = 0;
 		while (x < rt->width)
 		{
-			if (rt->pixeldata[y * rt->width + x].dist != DBL_MAX)
+			if (rt->pixeldata[y * rt->width + x].dist
+				!= 1.7976931348623157E+308)
 			{
 				if (x == posx && y == posy)
 					return (rt->pixeldata[y * rt->width + x].elemid);

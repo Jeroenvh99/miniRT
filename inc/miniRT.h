@@ -17,7 +17,6 @@
 # include "libft.h"
 # include "scene.h"
 # include <math.h>
-# include <float.h>
 # define SHINE 80
 # define HISTORYSIZE 3
 
@@ -88,7 +87,8 @@ t_XYZ			cross_vec(t_XYZ *vec1, t_XYZ *vec2);
 double			mag_vec(t_XYZ *vector);
 void			norm_vec(t_XYZ *vector);
 void			default_matrix(t_rt *rt);
-void			default_matrix_rotate(t_rt *rt, double xrotation, double yrotation, double zrotation);
+void			default_matrix_rotate(t_rt *rt, double xrotation,
+					double yrotation, double zrotation);
 t_XYZ			base_transform(double matrix[3][3], t_XYZ *dir);
 
 // resize geometry functions
@@ -122,14 +122,22 @@ void			ray_launcher(t_rt *rt, t_ray *ray, double x, double y);
 int				shadow_checker(t_ray *ray, t_rt *rt);
 double			hit_plane(t_plane *plane, t_ray *ray);
 double			hit_sphere(t_sphere *sphere, t_ray *ray);
+double			hit_cap_1(double disc, double closest_inter, t_ray *ray,
+					t_cylinder *cylinder);
+double			hit_cap_2(double disc, double closest_inter, t_ray *ray,
+					t_cylinder *cylinder);
+double			hit_tube(double inter, double closest_inter, double sol,
+					t_cylinder *cylinder);
 double			hit_cylinder(t_cylinder *cylinder, t_ray *ray);
-void			colour_2d_object(t_rt *rt, t_colour_2d_object_info *info, int coordinate[2], double t);
-void			colour_3d_object(t_rt *rt, t_colour_3d_object_info *info, int coordinate[2], double t);
+void			colour_2d_object(t_rt *rt, t_colour_2d_object_info *info,
+					int coordinate[2], double t);
+void			colour_3d_object(t_rt *rt, t_colour_3d_object_info *info,
+					int coordinate[2], double t);
 
 // lighting functions
 t_colour		ambient_lighting(t_ambient *ambient, t_colour *colour);
 t_colour		diffuse_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal);
 t_colour		specular_lighting(t_lighting *light, t_XYZ *dir, t_XYZ *normal,
-		t_XYZ *viewdirection);
+					t_XYZ *viewdirection);
 
 #endif

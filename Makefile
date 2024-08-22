@@ -29,6 +29,7 @@ SRC_FILES	:= main.c\
 				ray_launcher.c\
 				plane.c\
 				cylinder.c\
+				cylinder_2.c\
 				light_utils.c\
 				scene_check.c\
 				object_utils.c\

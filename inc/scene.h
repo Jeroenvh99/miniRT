@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef SCENE_H
+# include "libft.h"
 # define SCENE_H
 
 enum				e_input_parts
