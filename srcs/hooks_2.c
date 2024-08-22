@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
 
 void	escape_hook(void *param)
 {
