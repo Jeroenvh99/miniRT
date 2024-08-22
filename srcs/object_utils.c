@@ -22,15 +22,19 @@ void	spot_colour(t_XYZ objectinfo[3], t_colour *res, t_ray *ray, t_rt *rt)
 	int			i;
 	t_XYZ		light_dir;
 	t_lighting	**spots;
+	t_ray		shadow;
 
+	(void)ray;
 	spots = rt->scene->lighting.array;
 	i = 0;
 	while (spots[i])
 	{
-		if(shadow_checker(ray, rt) == 0)
+		light_dir = vec_subtraction(spots[i]->direction, objectinfo[0]);
+		shadow.dir = light_dir;
+		shadow.origin = objectinfo[0];
+		norm_vec(&light_dir);
+		if (shadow_checker(&shadow, rt) == 0)
 		{
-			light_dir = vec_subtraction(spots[i]->direction, objectinfo[0]);
-			norm_vec(&light_dir);
 			res_diffuse = diffuse_lighting(spots[i], &light_dir, &objectinfo[1]);
 			res_spec = specular_lighting(spots[i], &light_dir, &objectinfo[1],
 					&objectinfo[2]);

@@ -41,13 +41,13 @@ double	hit_sphere(t_sphere *sphere, t_ray *ray)
 
 uint32_t	pack_colour(t_colour *colour)
 {
-	unsigned int	r;
-	unsigned int	g;
-	unsigned int	b;
+	int	r;
+	int	g;
+	int	b;
 
-	r = (unsigned int)colour->red;
-	g = (unsigned int)colour->green;
-	b = (unsigned int)colour->blue;
+	r = (int)colour->red;
+	g = (int)colour->green;
+	b = (int)colour->blue;
 	return (r << 24 | g << 16 | b << 8 | 255);
 }
 
