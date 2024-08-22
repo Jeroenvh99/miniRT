@@ -24,7 +24,7 @@ void	changedimension(double *param, char *dimension)
 	if (!isdouble(new))
 	{
 		free(new);
-		return ;
+		exit(1);
 	}
 	*param = ft_atof(new);
 	if (*param < 0)
@@ -43,7 +43,7 @@ void	changexyz(t_XYZ *xyz, char *type)
 	if (!is_xyz(new))
 	{
 		free(new);
-		return ;
+		exit(1);
 	}
 	parse_xyz(new, xyz);
 	free(new);
@@ -58,7 +58,7 @@ void	changecolour(t_colour *colour)
 	if (!is_colour(new))
 	{
 		free(new);
-		return ;
+		exit(1);
 	}
 	parse_colour(new, colour);
 	free(new);

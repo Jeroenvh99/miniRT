@@ -21,11 +21,16 @@ static void	resize_plane(t_plane *plane)
 	printf("P to change the point\nN to change the normal direction\n"
 		"C to change the colour\n");
 	selection = get_next_line(0);
-	if (*selection == 'P' && ft_strlen(selection) == 2)
+	if (ft_strlen(selection) != 2 || *selection != 'P' || *selection != 'N' || *selection != 'C')
+	{
+		free(selection);
+		return ;
+	}
+	if (*selection == 'P')
 		changexyz(&plane->point, "point");
-	else if (*selection == 'N' && ft_strlen(selection) == 2)
+	else if (*selection == 'N')
 		changexyz(&plane->normal, "normal");
-	else if (*selection == 'C' && ft_strlen(selection) == 2)
+	else if (*selection == 'C')
 		changecolour(&plane->colour);
 	free(selection);
 }
@@ -37,11 +42,16 @@ static void	resize_sphere(t_sphere *sphere)
 	printf("X to change the centre\nR to change the radius\n"
 		"C to change the colour\n");
 	selection = get_next_line(0);
-	if (*selection == 'X' && ft_strlen(selection) == 2)
+	if (ft_strlen(selection) != 2 || *selection != 'X' || *selection != 'R' || *selection != 'C')
+	{
+		free(selection);
+		return ;
+	}
+	if (*selection == 'X')
 		changexyz(&sphere->centre, "centre");
-	else if (*selection == 'R' && ft_strlen(selection) == 2)
+	else if (*selection == 'R')
 		changedimension(&sphere->radius, "radius");
-	else if (*selection == 'C' && ft_strlen(selection) == 2)
+	else if (*selection == 'C')
 		changecolour(&sphere->colour);
 	free(selection);
 }
@@ -54,15 +64,20 @@ static void	resize_cylinder(t_cylinder *cylinder)
 		"D to change the diameter\nR to change the radius\n"
 		"H to change the height\nC to change the colour\n");
 	selection = get_next_line(0);
-	if (*selection == 'X' && ft_strlen(selection) == 2)
+	if (ft_strlen(selection) != 2 || *selection != 'X' || *selection != 'A' || *selection != 'R' || *selection != 'H' || *selection != 'C')
+	{
+		free(selection);
+		return ;
+	}
+	if (*selection == 'X')
 		changexyz(&cylinder->centre, "centre");
-	else if (*selection == 'A' && ft_strlen(selection) == 2)
+	else if (*selection == 'A')
 		changexyz(&cylinder->axis, "axis");
-	else if (*selection == 'R' && ft_strlen(selection) == 2)
+	else if (*selection == 'R')
 		changedimension(&cylinder->radius, "radius");
-	else if (*selection == 'H' && ft_strlen(selection) == 2)
+	else if (*selection == 'H')
 		changedimension(&cylinder->height, "height");
-	else if (*selection == 'C' && ft_strlen(selection) == 2)
+	else if (*selection == 'C')
 		changecolour(&cylinder->colour);
 	free(selection);
 }

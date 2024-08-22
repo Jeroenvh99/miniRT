@@ -13,6 +13,7 @@
 #include "libft.h"
 #include "parse.h"
 #include <unistd.h>
+#include <stdlib.h>
 
 int	isint(char *str)
 {
@@ -52,12 +53,12 @@ int	is_colour(char *str)
 	if (splitsize(parts) != 3)
 	{
 		free_split(parts);
-		return (0);
+		exit(1);
 	}
 	if (!isint(parts[0]) || !isint(parts[1]) || !isint(parts[2]))
 	{
 		free_split(parts);
-		return (0);
+		exit(1);
 	}
 	free_split(parts);
 	return (1);
@@ -71,12 +72,12 @@ int	is_xyz(char *str)
 	if (splitsize(parts) != 3)
 	{
 		free_split(parts);
-		return (0);
+		exit(1);
 	}
 	if (!isdouble(parts[0]) || !isdouble(parts[1]) || !isdouble(parts[2]))
 	{
 		free_split(parts);
-		return (0);
+		exit(1);
 	}
 	free_split(parts);
 	return (1);
@@ -87,17 +88,17 @@ int	checkambient(char **parts)
 	if (splitsize(parts) != 3)
 	{
 		write(2, "Error\nToo little information for ambient lighting\n", 50);
-		return (0);
+		exit(1);
 	}
 	if (!isdouble(parts[1]))
 	{
 		write(2, "Error\nIncorrect lighting ratio for ambient lighting\n", 52);
-		return (0);
+		exit(1);
 	}
 	if (!is_colour(parts[2]))
 	{
 		write(2, "Error\nIncorrect color for ambient lighting\n", 43);
-		return (0);
+		exit(1);
 	}
 	return (1);
 }
