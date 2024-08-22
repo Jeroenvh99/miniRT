@@ -29,10 +29,7 @@ void	print_scene(int fd, t_scene *scene)
 		print_xyz(fd, &scene->cam.viewdirection);
 		dprintf(fd, " %i\n", scene->cam.fov);
 	}
-	if (scene->lighting.array)
-		print_lighting(fd, scene->lighting.array);
-	else
-		dprintf(fd, "There is no lighting in this scene\n");
+	print_lighting(fd, scene->lighting.array);
 	if (scene->geometry.array)
 		print_geometry(fd, scene->geometry.array);
 }

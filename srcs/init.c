@@ -61,8 +61,8 @@ void	reset_image(t_rt *rt)
 
 void	draw_objects(t_rt *rt)
 {
-	int					x;
-	int					y;
+	int	x;
+	int	y;
 
 	reset_image(rt);
 	reset_pixeldata(rt);
@@ -87,7 +87,7 @@ void	draw_objects(t_rt *rt)
 
 void	init_rt(t_rt *rt)
 {
-	int			i;
+	int	i;
 
 	rt->width = 1280;
 	rt->height = 720;
